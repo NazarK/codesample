@@ -66,26 +66,13 @@ end
 
 desc "Deploys the current version to the server."
 task :deploy => :environment do
-  to :before_hook do
-    # Put things to run locally before ssh
-  end
-  deploy do
-    # Put things that will set up an empty directory into a fully set-up
-    # instance of your project.
-    invoke :'git:clone'
-    invoke :'deploy:link_shared_paths'
-    invoke :'bundle:install'
-    invoke :'rails:db_migrate'
-    invoke :'rails:assets_precompile'
-    invoke :'deploy:cleanup'
-
-    to :launch do
-      queue "mkdir -p #{deploy_to}/#{current_path}/tmp/"
-      queue "touch #{deploy_to}/#{current_path}/tmp/restart.txt"
-    end
-  end
+  comment = ARGV[1] || '-'
+  system "git add ."
+  system "git commit -am \"#{comment}\""
+  system "git push origin master&"
+  system "git push prod master"
+  #system "heroku run rake db:migrate"
 end
-
 # For help in making your deploy script, see the Mina documentation:
 #
 #  - http://nadarei.co/mina
