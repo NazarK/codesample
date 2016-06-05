@@ -14,7 +14,16 @@ YARNTALE.attach_to = function(selector) {
     this.el = $(selector)
 
     this.el.append(
-      '<img class="slide"><div class="caption"></div><div class="timeline"></div><audio class="audio"></audio>'
+      '<div class="nav prev"><i class="fa fa-chevron-left" aria-hidden="true"></i></div>'+
+      '<div class="nav next"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>'+
+      '<img class="slide"><div class="caption"></div><div class="timeline">'+
+      '<img class="slide"><div class="caption"></div><div class="timeline">'+
+      '<div class="control">'+
+      '<div class="pause"><i class="fa fa-pause" aria-hidden="true"></i></div>'+
+      '<div class="play"><i class="fa fa-play" aria-hidden="true"></i></div>'+
+      '</div>'+
+      '<div class="slides"></div>'+
+      '</div><audio class="audio"></audio>'
     )
 
     var self = this;
@@ -23,7 +32,7 @@ YARNTALE.attach_to = function(selector) {
     console.log("building timeline")
     $.each(this.slides,function(i,slide) {
       console.log(slide)
-      timeline.append("<img class='slide' data-index="+i+" src="+slide.image+">")
+      timeline.find(".slides").append("<img class='slide' data-index="+i+" src="+slide.image.thumb+">")
     })
 
 
@@ -38,6 +47,15 @@ YARNTALE.attach_to = function(selector) {
 
     $(document).on("click",".yarntale .nav.prev",function() {
         YARNTALE.prev()
+    })
+
+
+    $(document).on("click",".yarntale .control .play",function() {
+        YARNTALE.play()
+    })
+
+    $(document).on("click",".yarntale .control .pause",function() {
+        YARNTALE.pause()
     })
 
     $(".yarntale .audio")[0].onended = function() {
@@ -70,7 +88,7 @@ YARNTALE.setSlideIndex = function(i) {
     this.el.find(".timeline img.slide").removeClass("current")
     this.el.find(".timeline img.slide[data-index="+i+"]").addClass("current")
 
-    this.el.find("> .slide").attr('src',this.slides[i].image)
+    this.el.find("> .slide").attr('src',this.slides[i].image.original)
 
     if(this.playing) {
         this.play()
@@ -92,12 +110,17 @@ YARNTALE.play = function() {
     media = this.el.find(".audio")[0]
     media.volume = localStorage['YARN_VOL'] || 1;
     media.play()
+    this.el.find(".control .play").hide()
+    this.el.find(".control .pause").show()
     return this;
 }
 
 YARNTALE.pause = function() {
   this.playing = false
   this.el.find(".audio")[0].pause()
+  this.el.find(".control .play").show()
+  this.el.find(".control .pause").hide()
+  return this;
 }
 
 

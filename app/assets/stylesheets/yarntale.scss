@@ -50,6 +50,24 @@
     font-size: 20px;
   }
 
+  .control {
+    position: absolute;
+    width: 100px;
+    bottom: 0px;
+    left: 0px;
+    font-size: 90px;
+    margin: 0 20px;
+    cursor: pointer;
+    div {
+      color: white;
+    }
+    .play {
+      display: block;
+    }
+    .pause {
+      display: none;
+    }
+  }
   .timeline {
     display: none;
     background: rgba(0,0,0,0.8);
@@ -59,6 +77,10 @@
     width: 960px;
     position: absolute;
     bottom: 0px;
+    .slides {
+      position: absolute;
+      left: 120px;
+    }
 
     img.slide {
       border: 4px solid #2E2F30;
