@@ -1,15 +1,46 @@
 .yarntale {
+
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   position: relative;
   background: #DADADA;
   width: 960px;
   height: 640px;
+  &:hover {
+    .nav i {
+      display: block;
+      color: rgba(0,0,0,0.5);
+    }
+    .caption {
+      bottom: 140px;
+    }
+    .timeline {
+      display: block;
+    }
+  }
+  > .nav {
+    position: absolute;
+    top: 25%;
+    &.next {
+      right: 10px;
+    }
+    i {
+      cursor: pointer;
+      display: none;
+      font-size: 80px;
+    }
+  }
   > .slide {
     width: 100%;
   }
   .caption {
     background: rgba(0,0,0,0.5);
     position: absolute;
-    bottom: 140px;
+    bottom: 0px;
     width: 960px;
     height: 140px;
     color: white;
@@ -18,16 +49,25 @@
     font-weight: bold;
     font-size: 20px;
   }
+
   .timeline {
-    background: #999999;
+    display: none;
+    background: rgba(0,0,0,0.8);
+    overflow-x: hidden;
+    overflow-y: hidden;
     height: 140px;
     width: 960px;
     position: absolute;
     bottom: 0px;
 
-    .slide {
+    img.slide {
+      border: 4px solid #2E2F30;
       height: 140px;
       cursor: pointer;
+      margin: 0px 2px;
+      &.current {
+        border: 4px solid #EFEFEF;
+      }
     }
   }
 }
