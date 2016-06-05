@@ -56,6 +56,8 @@ YARNTALE.setSlideIndex = function(i) {
 
     this.el.find(".audio").attr("src",this.slides[i].audio)
     this.el.find(".audio")[0].play()
+
+    this.el.find(".caption").html(this.slides[i].caption)
 }
 
 YARNTALE.start = function() {

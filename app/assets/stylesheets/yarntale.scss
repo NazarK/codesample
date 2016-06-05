@@ -6,6 +6,18 @@
   > .slide {
     width: 100%;
   }
+  .caption {
+    background: rgba(0,0,0,0.5);
+    position: absolute;
+    bottom: 140px;
+    width: 960px;
+    height: 140px;
+    color: white;
+    padding: 10px;
+    text-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+    font-weight: bold;
+    font-size: 20px;
+  }
   .timeline {
     background: #999999;
     height: 140px;
