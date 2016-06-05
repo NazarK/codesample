@@ -1,0 +1,23 @@
+<script>
+  $(function() {
+
+    YARNTALE.slides = [
+      <% @tale.slides.each do |slide| %>
+      {
+        image: "<%= slide.image.url %>",
+        audio: "<%= slide.audio.url %>",
+        caption: "<%= slide.caption %>"
+      },
+      <% end %>
+    ]
+
+
+    YARNTALE.attach_to(".yarntale").start()
+
+  })
+</script>
+
+
+
+<div class="yarntale">
+</div>

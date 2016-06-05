@@ -1,0 +1,19 @@
+%h1 Listing tales
+
+%table
+  %thead
+    %tr
+      %th
+      %th
+      %th
+
+  %tbody
+    - @tales.each do |tale|
+      %tr
+        %td= link_to 'Show', tale
+        %td= link_to 'Edit', edit_tale_path(tale)
+        %td= link_to 'Destroy', tale, :method => :delete, :data => { :confirm => 'Are you sure?' }
+
+%br
+
+= link_to 'New Tale', new_tale_path

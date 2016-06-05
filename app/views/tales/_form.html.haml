@@ -1,0 +1,10 @@
+= form_for @tale do |f|
+  - if @tale.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@tale.errors.count, "error")} prohibited this tale from being saved:"
+      %ul
+        - @tale.errors.full_messages.each do |msg|
+          %li= msg
+
+  .actions
+    = f.submit 'Save'

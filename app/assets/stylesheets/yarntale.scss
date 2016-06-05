@@ -1,0 +1,21 @@
+.yarntale {
+  position: relative;
+  background: #DADADA;
+  width: 960px;
+  height: 640px;
+  > .slide {
+    width: 100%;
+  }
+  .timeline {
+    background: #730E15;
+    height: 140px;
+    width: 960px;
+    position: absolute;
+    bottom: 0px;
+
+    .slide {
+      height: 140px;
+      cursor: pointer;
+    }
+  }
+}
