@@ -67,11 +67,7 @@ gem 'devise'
 gem 'protected_attributes'
 gem 'responders'
 gem 'haml-rails'
-<<<<<<< HEAD
 gem 'simple_form'
 gem 'cocoon'
 gem 'font-awesome-rails'
-=======
 gem 'faker'
-gem 'font-awesome-rails'
->>>>>>> 4ff59672bce9b475bb41e08356e2cf7a1b48a323
