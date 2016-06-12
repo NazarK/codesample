@@ -1,14 +1,17 @@
-.nested-fields{style:"margin-bottom:40px"}
+.nested-fields.margin-bottom-sm
   .row
+    = f.hidden_field :id
+    = f.hidden_field :position
     .col-sm-1
-      = link_to_remove_association "<i class='fa fa-2x fa-remove color-red margin-top-sm'></i>".html_safe, f
+      %i.sort-handle.cursor-pointer.color-gray.fa.fa-sort.fa-2x{"aria-hidden" => "true"}
+      = link_to_remove_association "<i class='fa fa-2x fa-remove color-red margin-top-sm'></i>".html_safe, f, data: { confirmation: "Delete slide?"}
     .col-sm-6
       = f.input :caption, input_html: { style: "vertical-align:top;width:90%;"}
     .col-sm-2
       = f.input :image
       - if f.object.image.present?
-        = image_tag f.object.image.url(:thumb)
+        .row= image_tag f.object.image.url(:thumb), style: "height:40px;"
     .col-sm-2  
       = f.input :audio
       - if f.object.audio.present?
-        %audio{src: f.object.audio.url, controls:true}
+        %audio.row{src: f.object.audio.url, controls:true}

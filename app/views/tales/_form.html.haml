@@ -3,9 +3,10 @@
     = f.input :name
     %h3 Slides
     #tasks
-      = f.simple_fields_for :slides do |slide|
-        = render 'slide_fields', f: slide
-      .links
-        = link_to_add_association '<i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i> add slide'.html_safe, f, :slides, class: "btn btn-primary"
+      .jquery-sortable
+        = f.simple_fields_for :slides, include_id: false do |slide|
+          = render 'slide_fields', f: slide
+        .links
+          = link_to_add_association '<i class="fa fa-plus-circle fa-2x" style="vertical-align:middle" aria-hidden="true"></i> add slide'.html_safe, f, :slides, class: "btn btn-primary"
     .margin-top    
     = f.submit "Save Changes", class: "btn btn-primary"

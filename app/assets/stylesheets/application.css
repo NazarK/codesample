@@ -17,7 +17,9 @@
  *= require yarntale
  */
 
- body {
-  padding: 20px;
- }
-
+.sort-handle {
+    padding: 0 5px;
+}
+i.sort-handle:hover {
+    color: #000 !important;
+}

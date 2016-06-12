@@ -12,6 +12,16 @@ ActiveAdmin.register Tale do
 #   permitted << :other if params[:action] == 'create' && current_user.admin?
 #   permitted
 # end
+  form do |f|
+    f.inputs do
+      f.has_many :slides, heading: false, allow_destroy: true, sortable: :position do |a,i|
+        a.input :caption
+        a.input :image
+        a.input :audio
+      end
+    end
+    f.actions
+  end
 
 
 end

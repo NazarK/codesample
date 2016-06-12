@@ -15,3 +15,41 @@
 //= require turbolinks
 //= require cocoon
 //= require_tree .
+
+function recompute_positions() {
+    console.log("recompute positions")
+    console.log(this)
+
+    var position = 1;
+    $(this).find(".nested-fields").each( function() {
+        console.log(position)
+        $(this).find("[name$='[position]']").val(position)
+        position++
+    })
+}
+
+var ready = function() {
+
+    $(".jquery-sortable").each(function() {
+
+        $(this).sortable({
+            handle: '.sort-handle',
+            stop: recompute_positions
+        });
+
+        recompute_positions.apply(this)
+
+        $(this).on('cocoon:after-insert cocoon:after-remove',recompute_positions)
+
+    })
+
+
+};
+
+
+$(function() {
+    ready();
+    $(document).on('page:load', ready);
+});
+
+

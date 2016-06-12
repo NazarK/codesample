@@ -49,7 +49,7 @@ YARNTALE.attach_to = function(selector) {
     })
 
     $(document).on('dragstart', '.yarntale *', function(event) { event.preventDefault(); });
-    
+
     $(".yarntale .audio")[0].onended = function() {
         YARNTALE.log('audio ended')
         YARNTALE.next()
