@@ -1,10 +1,14 @@
 .nested-fields{style:"margin-bottom:40px"}
   .row
+    .col-sm-1
+      = link_to_remove_association "<i class='fa fa-2x fa-remove color-red margin-top-sm'></i>".html_safe, f
     .col-sm-6
-      = f.input :caption, input_html: { style: "vertical-align:top;width:100%;"}
+      = f.input :caption, input_html: { style: "vertical-align:top;width:90%;"}
     .col-sm-2
       = f.input :image
+      - if f.object.image.present?
+        = image_tag f.object.image.url(:thumb)
     .col-sm-2  
       = f.input :audio
-    .col-sm-2  
-      = link_to_remove_association "<i class='fa fa-2x fa-remove color-red margin-top-sm'></i>".html_safe, f
+      - if f.object.audio.present?
+        %audio{src: f.object.audio.url, controls:true}
