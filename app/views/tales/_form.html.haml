@@ -6,5 +6,6 @@
       = f.simple_fields_for :slides do |slide|
         = render 'slide_fields', f: slide
       .links
-        = link_to_add_association '<i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i> add slide'.html_safe, f, :slides
+        = link_to_add_association '<i class="fa fa-plus-circle fa-2x" aria-hidden="true"></i> add slide'.html_safe, f, :slides, class: "btn btn-primary"
+    .margin-top    
     = f.submit "Save Changes", class: "btn btn-primary"
