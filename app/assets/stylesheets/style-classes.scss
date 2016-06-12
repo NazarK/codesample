@@ -1,0 +1,104 @@
+.font-xl {
+  font-size: 30px;
+}
+
+.font-lg {
+  font-size: 20px;
+}
+.font-md {
+  font-size: 15px;
+}
+.font-sm {
+  font-size: 10px;
+}
+
+
+.color-blue, a, a:hover {
+  color: #00adf2;
+}
+
+
+.color-red {
+  color: #b56 !important;
+}
+.color-orange {
+  color: #fa7446 !important;
+}
+
+.color-gray {
+  &, &:hover, &:focus, &:active {
+    color: #5e666c !important;
+  }
+}
+
+
+
+.color-light-gray {
+  &, &:hover, &:focus, &:active {
+    color: #888 !important;
+  }
+}
+
+.color-black {
+  color: #2e2e2e;
+}
+
+.color-yellow {
+  color: #fb1;
+}
+
+
+.margin-bottom {
+  margin-bottom: 60px;
+}
+
+.margin-bottom-sm {
+  margin-bottom: 20px;
+}
+
+.margin-top-md {
+  margin-top: 40px;
+}
+
+
+.margin-top-xs {
+  margin-top: 5px;
+}
+
+.bg-blue {
+  background-color: #03b3ee !important;
+}
+
+.bg-gray {
+  background-color: #f5f6f7 !important;
+}
+
+.bg-red {
+  background-color: red;
+}
+.color-white {
+  &, &:hover, &:focus, &:active, a {
+    color: #fff !important;
+  }
+}
+
+.color-green {
+  color: #31b744 !important;
+}
+
+.color-orange {
+  color: #ff7c34 !important;
+}
+
+.margin-top-lg {
+  margin-top: 100px;
+}
+
+.margin-top {
+  margin-top: 60px;
+}
+
+.margin-top-sm {
+  margin-top: 20px;
+}
+

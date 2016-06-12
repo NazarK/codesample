@@ -1,6 +1,6 @@
 %h1 Listing tales
 
-%table
+%table.table
   %thead
     %tr
       %th title
@@ -10,8 +10,10 @@
     - @tales.each do |tale|
       %tr
         %td= tale.name
-        %td= link_to 'Show', tale
-
+        %td
+          = link_to 'Show', tale, class: "btn btn-primary", target: "_blank"
+          = link_to 'Edit', edit_tale_path(tale), class: "btn btn-primary"
+          = link_to 'Destroy', tale_path(tale), method: :delete, class: "btn btn-warning"
 %br
 
--#= link_to 'New Tale', new_tale_path
+= link_to 'New Tale', new_tale_path, class: "btn btn-primary"

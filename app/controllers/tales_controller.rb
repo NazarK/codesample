@@ -9,7 +9,7 @@ class TalesController < ApplicationController
   end
 
   def show
-    respond_with(@tale)
+    render layout: "empty"
   end
 
   def new
@@ -22,13 +22,21 @@ class TalesController < ApplicationController
 
   def create
     @tale = Tale.new(tale_params)
-    flash[:notice] = 'Tale was successfully created.' if @tale.save
-    respond_with(@tale)
+    if @tale.save
+      flash[:notice] = 'Tale was successfully created.' 
+      redirect_to tales_path
+    else  
+      respond_with(@tale)
+    end  
   end
 
   def update
-    flash[:notice] = 'Tale was successfully updated.' if @tale.update(tale_params)
-    respond_with(@tale)
+    if @tale.update(tale_params)
+      flash[:notice] = 'Tale was successfully updated.'
+      redirect_to tales_path
+    else  
+      respond_with(@tale)
+    end
   end
 
   def destroy
