@@ -17,3 +17,7 @@
  *= require yarntale
  */
 
+ body {
+  padding: 20px;
+ }
+

@@ -1,15 +1,18 @@
-%h1 Listing tales
+%h1 Your Tales
 
 %table.table
   %thead
     %tr
       %th title
+      %th slides
       %th
 
   %tbody
     - @tales.each do |tale|
       %tr
         %td= tale.name
+        %td
+          = tale.slides.count
         %td
           = link_to 'Show', tale, class: "btn btn-primary", target: "_blank"
           = link_to 'Edit', edit_tale_path(tale), class: "btn btn-primary"
