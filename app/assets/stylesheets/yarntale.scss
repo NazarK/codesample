@@ -1,21 +1,134 @@
 .yarntale {
+
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   position: relative;
-  background: #DADADA;
+  background: #fff;
   width: 960px;
   height: 640px;
-  > .slide {
-    width: 100%;
-  }
-  .timeline {
-    background: #999999;
-    height: 140px;
-    width: 960px;
-    position: absolute;
-    bottom: 0px;
 
-    .slide {
-      height: 140px;
-      cursor: pointer;
+
+  .sensor {
+    position: absolute;
+
+    &.bottom {
+      width: 100%;
+      bottom: 0px;
+      height: 25%;
+
+
+      .caption {
+        background: rgba(0,0,0,0.5);
+        position: absolute;
+        bottom: 0px;
+        width: 100%;
+        height: 50%;
+        color: white;
+        padding: 10px;
+        text-shadow: 2px 2px 0px rgba(0, 0, 0, 1);
+        font-weight: bold;
+        font-size: 14px;
+      }
+
+      .timeline {
+        display: none;
+        background: rgba(0,0,0,0.8);
+        overflow-x: hidden;
+        overflow-y: hidden;
+        height: 50%;
+        width: 100%;
+        position: absolute;
+        bottom: 0px;
+
+        .control {
+          position: absolute;
+          width: 80px;
+          bottom: 0px;
+          left: 0px;
+          font-size: 55px;
+          margin: 0 20px;
+          cursor: pointer;
+          div {
+            color: white;
+          }
+          .play {
+            display: block;
+          }
+          .pause {
+            display: none;
+          }
+        }
+        .slides {
+          position: absolute;
+          left: 90px;
+
+          img.slide {
+            border: 4px solid #2E2F30;
+            height: 100%;
+            cursor: pointer;
+            margin: 0px 2px;
+            &.current {
+              border: 4px solid #EFEFEF;
+            }
+          }
+        }
+
+      }
+
+      &:hover {
+        .caption {
+          bottom: 50%;
+        }
+        .timeline {
+          display: block;
+        }
+      }
+    }
+
+    &.top {
+      width: 50%;
+      height: 75%;
+      &:hover {
+        .nav {
+          display: block;
+        }
+      }
+      .nav {
+        display: none;
+        position: absolute;
+        opacity: 0.8;
+        top: 25%;
+        padding: 2%;
+        &.next {
+          right: 10px;
+        }
+        i {
+          cursor: pointer;
+          font-size: 80px;
+          text-shadow:
+                  -1px -1px 0 #000,
+                  1px -1px 0 #000,
+                  -1px 1px 0 #000,
+                  1px 1px 0 #000;
+          color: #fff;
+        }
+      }
+      &.right {
+        right: 0px;
+      }
+      &.left {
+        left: 0px;
+      }
     }
   }
+
+  .cur_slide {
+    width: 100%;
+  }
+
+
 }
