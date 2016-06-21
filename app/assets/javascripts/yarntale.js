@@ -2,8 +2,30 @@ window.YARNTALE = {
     el: null, //hosting DOM element
     playng: false,
     cur_slide_index: 0,
+    cur_slide_line_offset: 0,
     audio: null,
     slides: [], //array of objects {image,audio,captions}
+}
+
+YARNTALE.set_cur_slide_line_offset = function(v) {
+  console.log("set cur slide line offset",v)
+  if(v<0) {
+      console.log("<0")
+      return false;
+  }
+  if(v>this.slides.length) {
+      console.log(">total slides")
+      return false;
+  }
+  this.cur_slide_line_offset = v;
+  var new_margin_left = -$(".slide").first().width()*v;
+  console.log("new margin left", new_margin_left)
+  $(".slides .platform").animate({ "margin-left": new_margin_left },50)
+  return true;
+}
+
+YARNTALE.slides_in_slide_line = function() {
+  return Math.ceil($(".slides").width() / $(".slide").first().width())
 }
 
 YARNTALE.log = function(s) {
@@ -22,7 +44,7 @@ YARNTALE.attach_to = function(selector) {
     console.log("building timeline")
     $.each(this.slides,function(i,slide) {
       console.log(slide)
-      timeline.find(".slides").append("<img class='slide' data-index="+i+" src="+slide.image.thumb+">")
+      timeline.find(".slides .platform").append("<img class='slide' data-index="+i+" src="+slide.image.thumb+">")
     })
 
 
@@ -47,6 +69,15 @@ YARNTALE.attach_to = function(selector) {
     $(document).on("click",".yarntale .control .pause",function() {
         YARNTALE.pause()
     })
+
+    $(document).on("click",".yarntale .slides_line_nav.prev",function() {
+        YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset - YARNTALE.slides_in_slide_line())
+    })
+
+    $(document).on("click",".yarntale .slides_line_nav.next",function() {
+        YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset + YARNTALE.slides_in_slide_line())
+    })
+
 
     $(document).on('dragstart', '.yarntale *', function(event) { event.preventDefault(); });
 
@@ -88,10 +119,10 @@ YARNTALE.setSlideIndex = function(i) {
     this.el.find(".caption").html(this.slides[i].caption)
     $(".nav").attr("style","")
     if(i==0) {
-        $(".nav.prev").attr("style","display:none");
+        $(".top .nav.prev").attr("style","display:none");
     }
     if(i==this.slides.length-1) {
-        $(".nav.next").attr("style","display:none");
+        $(".top .nav.next").attr("style","display:none");
     }
     return this;
 }
@@ -125,7 +156,8 @@ YARNTALE.pause = function() {
 
 $(function() {
 
-
-
+    if (localStorage['TIMELINE_FORCE']=='true') {
+      $(".timeline").css("display", "inline-block");
+    }
 
 })

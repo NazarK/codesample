@@ -48,13 +48,16 @@
         bottom: 0px;
 
         .control {
-          position: absolute;
-          width: 80px;
+          position: relative;
+          display: inline-block;
+          float: left;
+          width: 100px;
           bottom: 0px;
           left: 0px;
           font-size: 55px;
-          margin: 0 20px;
+          padding: 0 20px;
           cursor: pointer;
+          margin: 0;
           div {
             color: white;
           }
@@ -65,19 +68,51 @@
             display: none;
           }
         }
-        .slides {
-          position: absolute;
-          left: 90px;
 
-          img.slide {
-            border: 4px solid #2E2F30;
-            height: 100%;
+        .slides_line_nav {
+          position: relative;
+          width: 50px;
+          display: inline-block;
+          float: left;
+          font-size: 40px;
+          padding-top: 10px;
+          i {
+            text-shadow:
+                    -1px -1px 0 #000,
+                    1px -1px 0 #000,
+                    -1px 1px 0 #000,
+                    1px 1px 0 #000;
+
+          }
+          &:hover {
             cursor: pointer;
-            margin: 0px 2px;
-            &.current {
-              border: 4px solid #EFEFEF;
+            i {
+              color: white;
             }
           }
+        }
+
+        .slides {
+          position: relative;
+          overflow: hidden;
+          height: 100%;
+          width: calc(100% - 200px);
+          float: left;
+          .platform {
+            position: relative;
+            white-space: nowrap;
+            img.slide {
+              border: 4px solid #2E2F30;
+              width: 98px;
+              cursor: pointer;
+              display: inline-block;
+              margin: 0px 2px;
+              &.current {
+                border: 4px solid #EFEFEF;
+              }
+            }
+          }
+
         }
 
       }
@@ -96,11 +131,11 @@
       width: 50%;
       height: 75%;
       &:hover {
-        .nav {
+        > .nav {
           display: block;
         }
       }
-      .nav {
+      > .nav {
         display: none;
         position: absolute;
         opacity: 0.8;
