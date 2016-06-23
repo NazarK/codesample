@@ -11,11 +11,23 @@ window.YARNTALE = {
     slides: [], //array of objects {image,audio,captions}
 }
 
-YARNTALE.volume = function(value,update_control=true, update_indicator=true) {
+YARNTALE.volume = function(value,update_control, update_indicator) {
   if(typeof(value)=='undefined') {
     return localStorage['YARN_VOL']
   }
+  if(typeof(update_control)=='undefined') {
+    update_control = true;
+  }
+  if(typeof(update_indicator)=='undefined') {
+    update_indicator = true;
+  }
 
+  if(value<0) {
+    value = 0;
+  }
+  if(value>1) {
+    value = 1;
+  }
   console.log('set volume', value)
   localStorage['YARN_VOL'] = value;
   media = this.el.find(".audio")[0]

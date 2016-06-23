@@ -22,29 +22,65 @@
       width: 100%;
       bottom: 0px;
       height: 30%;
+      &:hover {
+        .volume_sensor {
+          display: block;
+        }
+      }
 
-
-      .volume_slider {
+      .volume_sensor {
         width: 50px;
-        height: 90px;
         position: absolute;
         right: 65px;
-        bottom: 96px;
-        background: #888;
+        bottom: 0px;
+        height: 190px;
         z-index: 3;
-        .button {
-          width: 100%;
-          height: 20px;
-          position: absolute;
-          background: white;
-          cursor: pointer;
+        display: none;
+        .volume_slider {
+          display: none;
+          position: relative;
+          background: #888;
+          margin-top: 5px;
+          height: 88px;
+          z-index: 3;
+          .button {
+            width: 100%;
+            height: 20px;
+            position: absolute;
+            background: white;
+            cursor: pointer;
+            z-index: 4;
+          }
+          .line {
+            width: 4px;
+            margin: 0 auto;
+            top: 5px;
+            height: calc(100% - 10px);
+            background: #000;
+            position: relative;  
+            z-index: 3;    
+          }
         }
-        .line {
-          width: 4px;
-          margin: 0 auto;
-          margin-top: 10%;
-          height: 90%;
-          background: #000;          
+        .volume {
+          position: absolute;
+          width: 50px;
+          height: 100px;
+          font-size: 40px;
+          padding: 15px 12px;
+          bottom: 0px;
+          color: #eee;
+
+          &:hover {
+            cursor: pointer;
+            i {
+              color: white;
+            }
+          }
+        }        
+        &:hover {
+          .volume_slider {
+            display: block;
+          }
         }
       }
       .caption {
@@ -138,33 +174,19 @@
 
         }
 
-        .volume {
-          position: relative;
-          width: 50px;
-          font-size: 40px;
-          padding: 12px 0;
-          float: left;
-          color: #eee;
-
-          &:hover {
-            cursor: pointer;
-            i {
-              color: white;
-            }
-          }
-        }
 
         .cc {
           width: 40px;
-          position: relative;
-          float: left;
+          position: absolute;
           font-size: 20px;
           text-align: center;
           padding: 5px;
           color: white;
           border: 1px solid white;
-          margin: 20px 0;
+          margin: 20px;
           cursor: pointer;
+          bottom: 14px;;
+          right: 0px;
         }
 
       }
