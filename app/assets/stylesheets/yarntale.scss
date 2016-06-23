@@ -75,7 +75,7 @@
           display: inline-block;
           float: left;
           font-size: 40px;
-          padding-top: 10px;
+          padding: 13px 0;
           i {
             text-shadow:
                     -1px -1px 0 #000,
@@ -96,14 +96,14 @@
           position: relative;
           overflow: hidden;
           height: 100%;
-          width: calc(100% - 200px);
+          width: calc(100% - 300px);
           float: left;
           .platform {
             position: relative;
             white-space: nowrap;
             img.slide {
               border: 4px solid #2E2F30;
-              width: 98px;
+              width: 80px;
               cursor: pointer;
               display: inline-block;
               margin: 0px 2px;
@@ -113,6 +113,35 @@
             }
           }
 
+        }
+
+        .volume {
+          position: relative;
+          width: 50px;
+          font-size: 40px;
+          padding: 12px 0;
+          float: left;
+          color: #eee;
+
+          &:hover {
+            cursor: pointer;
+            i {
+              color: white;
+            }
+          }
+        }
+
+        .cc {
+          width: 40px;
+          position: relative;
+          float: left;
+          font-size: 20px;
+          text-align: center;
+          padding: 5px;
+          color: white;
+          border: 1px solid white;
+          margin: 20px 0;
+          cursor: pointer;
         }
 
       }
