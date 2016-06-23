@@ -11,6 +11,20 @@ window.YARNTALE = {
     slides: [], //array of objects {image,audio,captions}
 }
 
+YARNTALE.cc_enabled = function(value, update_controls) {
+    if(typeof(value) == 'undefined')
+        return localStorage['YARN_CC_ENABLED'] || true;
+
+
+    localStorage['YARN_CC_ENABLED'] = value;
+
+    this.el.find(".cc, .caption").removeClass("disabled")
+
+    if(!value) {
+        this.el.find(".cc, .caption").addClass("disabled")
+    }
+}
+
 YARNTALE.volume = function(value,update_control, update_indicator) {
   if(typeof(value)=='undefined')
     return localStorage['YARN_VOL']
@@ -167,7 +181,13 @@ YARNTALE.attach_to = function(selector) {
 
     })
 
+    $('.cc').click(function() {
+        YARNTALE.cc_enabled(!(YARNTALE.cc_enabled()=='true'))
+    })
+
     this.volume(localStorage['YARN_VOL'])
+
+    this.cc_enabled(this.cc_enabled()=='true')
 
     return this;
 }

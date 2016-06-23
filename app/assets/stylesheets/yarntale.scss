@@ -84,6 +84,9 @@
         }
       }
       .caption {
+        &.disabled {
+          display: none;
+        }
         background: rgba(0,0,0,0.5);
         position: absolute;
         bottom: 0px;
@@ -176,6 +179,10 @@
 
 
         .cc {
+          &.disabled {
+            border: 1px solid #888;
+            color: #888;
+          }
           width: 40px;
           position: absolute;
           font-size: 20px;
