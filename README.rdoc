@@ -3,3 +3,6 @@
 
 base on:
 http://www.vitalmtb.com/photos/features/Downhill-Finals-Race-Action-from-the-Cairns-World-Cup,10052/Slideshow,0/sspomer,2
+
+
+#TODO: problem: slides not showing on navigation - preload slide images
