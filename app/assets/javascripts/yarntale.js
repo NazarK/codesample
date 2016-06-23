@@ -12,23 +12,22 @@ window.YARNTALE = {
 }
 
 YARNTALE.volume = function(value,update_control, update_indicator) {
-  if(typeof(value)=='undefined') {
+  if(typeof(value)=='undefined')
     return localStorage['YARN_VOL']
-  }
-  if(typeof(update_control)=='undefined') {
+  
+  if(typeof(update_control)=='undefined')
     update_control = true;
-  }
-  if(typeof(update_indicator)=='undefined') {
+  
+  if(typeof(update_indicator)=='undefined')
     update_indicator = true;
-  }
+  
 
-  if(value<0) {
+  if(value<0)
     value = 0;
-  }
-  if(value>1) {
+  
+  if(value>1)
     value = 1;
-  }
-  console.log('set volume', value)
+  
   localStorage['YARN_VOL'] = value;
   media = this.el.find(".audio")[0]
   media.volume = localStorage['YARN_VOL'];
@@ -91,8 +90,7 @@ YARNTALE.log = function(s) {
 YARNTALE.attach_to = function(selector) {
     this.el = $(selector)
 
-    this.el.append( ""
-    )
+    this.el.append( "" )
 
     var self = this;
     var timeline = this.el.find(".timeline")
@@ -136,10 +134,10 @@ YARNTALE.attach_to = function(selector) {
 
 
 
-/*    $(document).on('dragstart', '.yarntale *', function(event) { 
-      if(!$(this).hasClass('ui-draggable'))
+   $(document).on('dragstart', '.yarntale *', function(event) { 
+      if(!$(this).hasClass("drag-enabled"))
         event.preventDefault(); 
-    });*/
+    });
 
     $(".yarntale .audio")[0].onended = function() {
         YARNTALE.log('audio ended')
