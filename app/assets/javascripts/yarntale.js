@@ -1,5 +1,7 @@
 //= require jquery
 //= require jquery-ui
+
+
 window.YARNTALE = {
     el: null, //hosting DOM element
     playng: false,
