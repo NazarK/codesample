@@ -286,6 +286,7 @@ DEPENDENCIES
   haml-rails
   jbuilder (~> 2.0)
   jquery-rails
+  jquery-ui-rails
   mina
   paperclip
   pg

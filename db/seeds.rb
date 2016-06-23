@@ -5,7 +5,7 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
-AdminUser.create!(email: 'admin@admin.com', password: '12345678')
+AdminUser.create(email: 'admin@admin.com', password: '12345678')
 
 
 (1..2).each do |i|
@@ -13,7 +13,8 @@ AdminUser.create!(email: 'admin@admin.com', password: '12345678')
 
   (1..10).each do |slide_num|
     j = 1 + (slide_num-1) % 3
-    tale.slides.create image: File.open("#{Rails.root}/public/sample_data/#{j}.png"), audio: File.open("#{Rails.root}/public/sample_data/#{j}.mp3"),
+    puts "image: #{j}.png"
+    tale.slides.create! image: File.open("#{Rails.root}/public/sample_data/#{j}.png"), audio: File.open("#{Rails.root}/public/sample_data/#{j}.mp3"),
                        caption: "slide number #{slide_num} - "+Faker::Hipster.paragraphs(1+rand(3)).first
   end
 end

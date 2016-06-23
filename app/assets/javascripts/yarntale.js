@@ -1,3 +1,5 @@
+//= require jquery
+//= require jquery-ui
 window.YARNTALE = {
     el: null, //hosting DOM element
     playng: false,
@@ -5,6 +7,46 @@ window.YARNTALE = {
     cur_slide_line_offset: 0,
     audio: null,
     slides: [], //array of objects {image,audio,captions}
+}
+
+YARNTALE.volume = function(value,update_control=true, update_indicator=true) {
+  if(typeof(value)=='undefined') {
+    return localStorage['YARN_VOL']
+  }
+
+  console.log('set volume', value)
+  localStorage['YARN_VOL'] = value;
+  media = this.el.find(".audio")[0]
+  media.volume = localStorage['YARN_VOL'];
+
+  vol = value
+
+  if(update_control) {
+
+    var button = this.el.find(".volume_slider .button")
+    var slider = this.el.find(".volume_slider")
+
+    console.log("changing volume button position")
+    console.log(vol)
+
+    button.css("top",(1-vol)*(slider.height()- button.height()))
+
+
+  }
+
+  if(update_indicator) {
+    var i = this.el.find(".volume i")
+    i.removeClass("fa-volume-up fa-volume-down fa-volume-off")
+    if(vol==1) {
+      i.addClass("fa-volume-up")
+    } else if(vol==0) {
+      i.addClass("fa-volume-off")
+    } else {
+      i.addClass("fa-volume-down")
+    }
+  }
+
+
 }
 
 YARNTALE.set_cur_slide_line_offset = function(v) {
@@ -79,12 +121,42 @@ YARNTALE.attach_to = function(selector) {
     })
 
 
-    $(document).on('dragstart', '.yarntale *', function(event) { event.preventDefault(); });
+
+/*    $(document).on('dragstart', '.yarntale *', function(event) { 
+      if(!$(this).hasClass('ui-draggable'))
+        event.preventDefault(); 
+    });*/
 
     $(".yarntale .audio")[0].onended = function() {
         YARNTALE.log('audio ended')
         YARNTALE.next()
     }
+
+    $('.yarntale .volume_slider .button').draggable({
+      containment: '.volume_slider',
+      drag: function() {
+        var top = $(this).position().top
+        var total = $(this).parent(".volume_slider").height() - $(this).height()
+
+        var volume = (total-top)/total;
+
+        YARNTALE.volume(volume,false)
+      }
+    })
+
+    $(".volume").click(function() {
+      if(YARNTALE.volume()>0) {
+        localStorage['YARN_VOL_SAVE'] = YARNTALE.volume()
+        YARNTALE.volume(0)
+      } else
+      if(YARNTALE.volume()==0) {
+        YARNTALE.volume(localStorage['YARN_VOL_SAVE'])
+      }
+
+    })
+
+    this.volume(localStorage['YARN_VOL'])
+
     return this;
 }
 
