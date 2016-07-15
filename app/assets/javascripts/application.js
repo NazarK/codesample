@@ -16,6 +16,10 @@
 //= require cocoon
 //= require_tree .
 
+
+/* JQUERY SORTABLE CLASS SUPPORT */
+/* just add class ".jquery-sortable" to elements that you plan to reorder */
+/* supposed to work with cocoon gem */
 function recompute_positions() {
     var position = 1;
     $(this).find(".nested-fields").each( function() {
@@ -25,8 +29,7 @@ function recompute_positions() {
     })
 }
 
-var ready = function() {
-
+function jquery_sortable_apply() {
     $(".jquery-sortable").each(function() {
         $(this).sortable({
             handle: '.sort-handle',
@@ -36,7 +39,12 @@ var ready = function() {
         $(this).on('cocoon:after-insert cocoon:after-remove',recompute_positions)
 
     })
+}
 
+
+/* ready function to be called on each load (and page:load turbolinks event) */
+var ready = function() {
+  jquery_sortable_apply()
 };
 
 

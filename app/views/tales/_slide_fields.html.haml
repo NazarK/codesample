@@ -8,9 +8,11 @@
     .col-sm-6
       = f.input :caption, input_html: { style: "vertical-align:top;width:90%;"}
     .col-sm-2
-      = f.input :image
+      = f.input :image, input_html: { style: "margin:0"}
       - if f.object.image.present?
-        .row= image_tag f.object.image.url(:thumb), style: "height:40px;"
+        .row
+          %a{href: f.object.image.url(:crop), target: "_blank",style:"cursor:pointer;"}
+            = image_tag f.object.image.url(:thumb), style: "height:60px;"
     .col-sm-2  
       = f.input :audio
       - if f.object.audio.present?
