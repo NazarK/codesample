@@ -56,8 +56,9 @@ YARNTALE.volume = function(value,update_control, update_indicator) {
     console.log("changing volume button position")
     console.log(vol)
 
-    button.css("top",(1-vol)*(slider.height()- button.height()))
-
+    var new_top =   (1-vol)*(slider.height()- button.height())
+    console.log("new top",new_top)
+    button.css("top",new_top)
 
   }
 
@@ -160,7 +161,11 @@ YARNTALE.attach_to = function(selector) {
 
     $('.yarntale .volume_slider .button').draggable({
       containment: '.volume_slider',
-      drag: function() {
+      axis: "y",
+      drag: function(e,ui) {
+        if(ui.position.top < 0)
+            ui.position.top = 0;
+
         var top = $(this).position().top
         var total = $(this).parent(".volume_slider").height() - $(this).height()
 
