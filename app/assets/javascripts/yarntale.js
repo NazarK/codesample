@@ -28,20 +28,20 @@ YARNTALE.cc_enabled = function(value, update_controls) {
 YARNTALE.volume = function(value,update_control, update_indicator) {
   if(typeof(value)=='undefined')
     return localStorage['YARN_VOL']
-  
+
   if(typeof(update_control)=='undefined')
     update_control = true;
-  
+
   if(typeof(update_indicator)=='undefined')
     update_indicator = true;
-  
+
 
   if(value<0)
     value = 0;
-  
+
   if(value>1)
     value = 1;
-  
+
   localStorage['YARN_VOL'] = value;
   media = this.el.find(".audio")[0]
   media.volume = localStorage['YARN_VOL'];
@@ -81,11 +81,13 @@ YARNTALE.set_cur_slide_line_offset = function(v) {
   console.log("set cur slide line offset",v)
   if(v<0) {
       console.log("<0")
-      return false;
+      v = 0;
+      //return false;
   }
-  if(v>this.slides.length) {
+  if(v>(this.slides.length-this.slides_in_slide_line()+2)) {
       console.log(">total slides")
-      return false;
+      v = this.slides.length-this.slides_in_slide_line()+2
+      //return false;
   }
   this.cur_slide_line_offset = v;
   var new_margin_left = -$(".slide").first().width()*v;
@@ -149,9 +151,9 @@ YARNTALE.attach_to = function(selector) {
 
 
 
-   $(document).on('dragstart', '.yarntale *', function(event) { 
+   $(document).on('dragstart', '.yarntale *', function(event) {
       if(!$(this).hasClass("drag-enabled"))
-        event.preventDefault(); 
+        event.preventDefault();
     });
 
     $(".yarntale .audio")[0].onended = function() {
@@ -233,6 +235,9 @@ YARNTALE.setSlideIndex = function(i) {
     if(i==this.slides.length-1) {
         $(".top .nav.next").attr("style","display:none");
     }
+
+    this.set_cur_slide_line_offset(this.cur_slide_index-Math.floor(this.slides_in_slide_line()/2-1))
+
     return this;
 }
 

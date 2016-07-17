@@ -6,3 +6,5 @@ http://www.vitalmtb.com/photos/features/Downhill-Finals-Race-Action-from-the-Cai
 
 
 #TODO: problem: slides not showing on navigation - preload slide images
+#TODO: active slide to be always visible
+#TODO: close captions div grow to up
