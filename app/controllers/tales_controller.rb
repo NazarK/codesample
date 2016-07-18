@@ -1,7 +1,11 @@
 class TalesController < ApplicationController
-  before_action :set_tale, only: [:show, :edit, :update, :destroy]
+  before_action :set_tale, only: [:show, :edit, :update, :destroy,:embed]
 
   respond_to :html
+
+  def embed
+
+  end
 
   def index
     @tales = Tale.all
@@ -23,18 +27,18 @@ class TalesController < ApplicationController
   def create
     @tale = Tale.new(tale_params)
     if @tale.save
-      flash[:notice] = 'Tale was successfully created.' 
+      flash[:notice] = 'Tale was successfully created.'
       redirect_to tales_path
-    else  
+    else
       respond_with(@tale)
-    end  
+    end
   end
 
   def update
     if @tale.update(tale_params)
       flash[:notice] = 'Tale was successfully updated.'
       redirect_to tales_path
-    else  
+    else
       respond_with(@tale)
     end
   end
