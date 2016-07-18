@@ -9,6 +9,7 @@ window.YARNTALE = {
     cur_slide_line_offset: 0,
     audio: null,
     TIMELINE_SLIDE_WIDTH: 132,
+    TIMELINE_SLIDES_WIDTH: 660,
     slides: [], //array of objects {image,audio,captions}
 }
 
@@ -98,7 +99,7 @@ YARNTALE.set_cur_slide_line_offset = function(v) {
 }
 
 YARNTALE.slides_in_slide_line = function() {
-  ret = Math.ceil(660 / this.TIMELINE_SLIDE_WIDTH)
+  ret = Math.ceil(this.TIMELINE_SLIDES_WIDTH / this.TIMELINE_SLIDE_WIDTH)
   this.log("slides_in_slide_line",ret)
   return ret;
 }
@@ -237,7 +238,7 @@ YARNTALE.setSlideIndex = function(i) {
     if(this.playing) {
         this.play()
     }
-    this.el.find(".caption").html(this.slides[i].caption)
+    this.el.find(".caption .text").html(this.slides[i].caption)
     $(".nav").attr("style","")
     if(i==0) {
         $(".top .nav.prev").attr("style","display:none");
@@ -284,5 +285,4 @@ $(function() {
     if (localStorage['TIMELINE_FORCE']=='true') {
       $(".timeline").css("display", "inline-block");
     }
-
 })

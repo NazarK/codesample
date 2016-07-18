@@ -8,7 +8,7 @@
                 thumb: "<%= slide.image.url(:thumb) %>",
                 medium: "<%= slide.image.url(:medium) %>"},
         audio: "<%= slide.audio.url %>",
-        caption: "<%= slide.caption %>"
+        caption: decodeURI("<%= URI.encode(slide.caption.gsub("\n","<br>")) %>")
       },
       <% end %>
     ]
@@ -25,11 +25,11 @@
   <div class="yarntale" style="margin:0 auto;">
 
     <div class="sensor top left">
-      <div class="nav prev"><i class="fa fa-chevron-left" aria-hidden="true"></i></div>
+      <div class="nav prev"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
     </div>
 
     <div class="sensor top right">
-      <div class="nav next"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>
+      <div class="nav next"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
     </div>
 
     <div class="sensor bottom drag-enabled">
@@ -40,18 +40,21 @@
         </div>
         <div class="volume"><i class="fa fa-volume-down" aria-hidden="true"></i></div>
       </div>
-      <div class="caption"></div>
+      <div class="caption">
+        <div class="text">
+        </div>
+      </div>
       <div class="timeline">
         <div class="control">
           <div class="pause"><i class="fa fa-pause" aria-hidden="true"></i></div>
           <div class="play"><i class="fa fa-play" aria-hidden="true"></i></div>
         </div>
-        <div class="slides_line_nav prev"><i class="fa fa-chevron-left" aria-hidden="true"></i></div>
+        <div class="slides_line_nav prev"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
         <div class="slides">
           <div class="platform">
           </div>
         </div>
-        <div class="slides_line_nav next"><i class="fa fa-chevron-right" aria-hidden="true"></i></div>
+        <div class="slides_line_nav next"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
         <div class="cc">
           <i class="fa fa-cc" aria-hidden="true"></i>
         </div>
