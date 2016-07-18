@@ -24,7 +24,11 @@
       height: 30%;
       &:hover {
         .volume_sensor {
-          display: block;
+          height: 190px;
+          .volume {
+            height: 96px;
+            transition: height 0.15s ease-out;
+          }
         }
       }
 
@@ -33,9 +37,10 @@
         position: absolute;
         right: 65px;
         bottom: 0px;
-        height: 190px;
+        height: 0px;
+        overflow: hidden;
         z-index: 3;
-        display: none;
+        display: block;
         .volume_slider {
           display: none;
           position: relative;
@@ -64,7 +69,8 @@
         .volume {
           position: absolute;
           width: 50px;
-          height: 96px;
+          height: 0px;//96px;
+          transition: height 0.15s ease-out;
           line-height: 100px;
           font-size: 40px;
           padding: 0px 12px;
@@ -91,7 +97,6 @@
         .text {
           width:100%;
           bottom: 0;
-          transition: bottom 0.15s ease-out;
           position: absolute;
           padding: 10px;
           color: white;
@@ -107,6 +112,7 @@
         //background: rgba(0,0,0,0.5);
         position: absolute;
         bottom: 0px;
+        transition: bottom 0.15s ease-out;
         width: 100%;
         height: 50%;
       }
@@ -233,13 +239,17 @@
       height: 70%;
       &:hover {
         > .nav {
-          display: block;
+          visibility: visible;
+          opacity: 0.8;
+          transition: visilibity 0s, opacity 0.15s ease-out;
         }
       }
       > .nav {
-        display: none;
+        visibility: hidden;
+        opacity: 0;
         position: absolute;
-        opacity: 0.8;
+        transition: visilibity 0s, opacity 0.15s ease-out;
+
         top: 40%;
         padding: 2%;
         &.next {
