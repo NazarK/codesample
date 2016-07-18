@@ -8,6 +8,7 @@ window.YARNTALE = {
     cur_slide_index: 0,
     cur_slide_line_offset: 0,
     audio: null,
+    TIMELINE_SLIDE_WIDTH: 132,
     slides: [], //array of objects {image,audio,captions}
 }
 
@@ -90,23 +91,26 @@ YARNTALE.set_cur_slide_line_offset = function(v) {
       //return false;
   }
   this.cur_slide_line_offset = v;
-  var new_margin_left = -$(".slide").first().width()*v;
+  var new_margin_left = -this.TIMELINE_SLIDE_WIDTH*v;
   console.log("new margin left", new_margin_left)
   $(".slides .platform").animate({ "margin-left": new_margin_left },50)
   return true;
 }
 
 YARNTALE.slides_in_slide_line = function() {
-  return Math.ceil($(".slides").width() / $(".slide").first().width())
+  ret = Math.ceil(660 / this.TIMELINE_SLIDE_WIDTH)
+  this.log("slides_in_slide_line",ret)
+  return ret;
 }
 
-YARNTALE.log = function(s) {
-    console.log("YARNTALE: "+s)
+YARNTALE.log = function() {
+    console.log("YARNTALE: ", arguments)
 }
 
 YARNTALE.attach_to = function(selector) {
     this.el = $(selector)
 
+    console.log("YARNTALE.attach_to")
     this.el.append( "" )
 
     var self = this;
@@ -114,8 +118,13 @@ YARNTALE.attach_to = function(selector) {
 
     console.log("building timeline")
     $.each(this.slides,function(i,slide) {
-      console.log(slide)
+      //console.log(slide)
+      self.el.find(".slides_wrapper").append("<img class='slide' data-index="+i+" src="+slide.image.original+">")
       timeline.find(".slides .platform").append("<img class='slide' data-index="+i+" src="+slide.image.thumb+">")
+    })
+
+    self.el.find(".slides_wrapper .slide").load(function() {
+      console.log("image loaded",$(this))
     })
 
 
@@ -216,13 +225,14 @@ YARNTALE.next = function() {
 }
 
 YARNTALE.setSlideIndex = function(i) {
-    this.log("set slide index")
+    this.log("set slide index",i)
     this.cur_slide_index = i;
 
     this.el.find(".timeline img.slide").removeClass("current")
     this.el.find(".timeline img.slide[data-index="+i+"]").addClass("current")
 
-    this.el.find("> .cur_slide").attr('src',this.slides[i].image.original)
+    this.el.find(".slides_wrapper .slide.active").removeClass("active")
+    $(this.el.find(".slides_wrapper .slide")[i]).addClass("active")
 
     if(this.playing) {
         this.play()
@@ -242,6 +252,7 @@ YARNTALE.setSlideIndex = function(i) {
 }
 
 YARNTALE.start = function() {
+  console.log("YARNTALE.start")
   this.setSlideIndex(0)
   this.play()
   return this;
