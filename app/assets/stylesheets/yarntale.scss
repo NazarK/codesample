@@ -91,6 +91,7 @@
         .text {
           width:100%;
           bottom: 0;
+          transition: bottom 0.15s ease-out;
           position: absolute;
           padding: 10px;
           color: white;
@@ -111,11 +112,12 @@
       }
 
       .timeline {
-        display: none;
+        display: block;
         background: rgba(0,0,0,0.8);
         overflow-x: hidden;
         overflow-y: hidden;
-        height: 50%;
+        height: 0;
+        transition: height 0.15s ease-out;
         width: 100%;
         position: absolute;
         bottom: 0px;
@@ -217,9 +219,11 @@
       &:hover {
         .caption {
           bottom: 50%;
+          transition: bottom 0.15s ease-out;
         }
         .timeline {
-          display: block;
+          height: 50%;
+          transition: height 0.15s ease-out;
         }
       }
     }
