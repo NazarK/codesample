@@ -10,13 +10,14 @@
   user-select: none;
 
   position: relative;
-  background: #fff;
+  background: #000;
   width: 960px;
   height: 640px;
 
 
   .sensor {
     position: absolute;
+    z-index: 2;
 
     &.bottom {
       width: 100%;
@@ -279,9 +280,15 @@
   .slides_wrapper {
     width: 100%;
     .slide {
-      display: none;
+      display: block;
+      opacity: 0;
+      transition: opacity 0.2s;
+      position: absolute;
+      z-index: 1;
       &.active {
         display: block;
+        opacity: 1;
+        transition: opacity 0.2s;
       }
     }
   }
