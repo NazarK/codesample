@@ -94,7 +94,7 @@ YARNTALE.set_cur_slide_line_offset = function(v) {
   this.cur_slide_line_offset = v;
   var new_margin_left = -this.TIMELINE_SLIDE_WIDTH*v;
   console.log("new margin left", new_margin_left)
-  $(".slides .platform").animate({ "margin-left": new_margin_left },50)
+  $(".slides .platform").css({ "margin-left": new_margin_left })
   return true;
 }
 

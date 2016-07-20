@@ -187,6 +187,7 @@
           width: calc(100% - 300px);
           float: left;
           .platform {
+            transition: margin-left 0.10s ease-out;
             position: relative;
             white-space: nowrap;
             img.slide {
