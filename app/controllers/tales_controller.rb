@@ -51,7 +51,11 @@ class TalesController < ApplicationController
 
   private
     def set_tale
-      @tale = current_user.tales.find(params[:id])
+      if params[:action] == "show"
+        @tale = Tale.find(params[:id])
+      else
+        @tale = current_user.tales.find(params[:id])
+      end
     end
 
     def tale_params

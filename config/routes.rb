@@ -4,6 +4,8 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   root 'tales#index'
 
+  get '/t:id' => "tales#show"
+
   resources :tales do
     member do
       get :embed
