@@ -1,12 +1,14 @@
-%div{style:"padding:40px"}
+.col-sm-12
   = simple_form_for(@tale, html: { class: 'form-horizontal' }) do |f|
-    = f.input :name
+    = f.input :name, label: "Title"
     %h3 Slides
     #tasks
       .jquery-sortable
         = f.simple_fields_for :slides, include_id: false do |slide|
           = render 'slide_fields', f: slide
         .links
-          = link_to_add_association '<i class="fa fa-plus-circle fa-2x" style="vertical-align:middle" aria-hidden="true"></i> add slide'.html_safe, f, :slides, class: "btn btn-primary"
-    .margin-top    
-    = f.submit "Save Changes", class: "btn btn-primary"
+          = link_to_add_association '<i class="fa fa-plus" style="vertical-align:middle" aria-hidden="true"></i> add slide'.html_safe, f, :slides, class: "btn btn-default"
+    .margin-top
+    %button.btn.btn-default{type: :submit}
+      %i.fa.fa-check
+      Save

@@ -6,10 +6,11 @@
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
 AdminUser.create(email: 'admin@admin.com', password: '12345678')
+User.create(email: "demo@demo.com", password: '12345678')
 
 
 (1..2).each do |i|
-  tale = Tale.create name: "test tale #{i}"
+  tale = User.find_by_email("demo@demo.com").tales.create name: "test tale #{i}"
 
   (1..10).each do |slide_num|
     j = 1 + (slide_num-1) % 3

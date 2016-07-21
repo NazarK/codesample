@@ -11,7 +11,7 @@
  * file per style scope.
  *
  *= require bootstrap
- *= require font-awesome 
+ *= require font-awesome
  *= require_self
  *= require style-classes
  *= require yarntale
@@ -22,4 +22,17 @@
 }
 i.sort-handle:hover {
     color: #000 !important;
+}
+
+
+body.devise_registrations, body.devise_sessions {
+  .wrapper {
+   width: 320px;
+   margin: 0 auto;
+  }
+}
+
+
+body.tales.index, body.tales.edit, body.tales.new  {
+  padding: 20px;
 }

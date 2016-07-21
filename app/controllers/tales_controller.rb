@@ -1,4 +1,5 @@
 class TalesController < ApplicationController
+  before_action :authenticate_user!, except: :show
   before_action :set_tale, only: [:show, :edit, :update, :destroy,:embed]
 
   respond_to :html
@@ -8,7 +9,7 @@ class TalesController < ApplicationController
   end
 
   def index
-    @tales = Tale.all
+    @tales = current_user.tales
     respond_with(@tales)
   end
 
@@ -17,7 +18,7 @@ class TalesController < ApplicationController
   end
 
   def new
-    @tale = Tale.new
+    @tale = current_user.tales.new
     respond_with(@tale)
   end
 
@@ -25,7 +26,7 @@ class TalesController < ApplicationController
   end
 
   def create
-    @tale = Tale.new(tale_params)
+    @tale = current_user.tales.new(tale_params)
     if @tale.save
       flash[:notice] = 'Tale was successfully created.'
       redirect_to tales_path
@@ -50,7 +51,7 @@ class TalesController < ApplicationController
 
   private
     def set_tale
-      @tale = Tale.find(params[:id])
+      @tale = current_user.tales.find(params[:id])
     end
 
     def tale_params
