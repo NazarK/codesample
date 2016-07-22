@@ -9,10 +9,26 @@ AdminUser.create(email: 'admin@admin.com', password: '12345678')
 User.create(email: "demo@demo.com", password: '12345678')
 
 
-(1..2).each do |i|
+(1..4).each do |i|
   tale = User.find_by_email("demo@demo.com").tales.create name: "test tale #{i}"
 
-  (1..10).each do |slide_num|
+  slides_num = 10
+  if i==1
+    slides_num = 30
+  end
+  
+  if i==3
+    slides_num = 1
+    tale.name = "with one slide"
+    tale.save
+  end
+  if i==4
+    slides_num = 3
+    tale.name = "with 3 slides"
+    tale.save
+  end
+
+  (1..slides_num).each do |slide_num|
     j = 1 + (slide_num-1) % 3
     puts "image: #{j}.png"
     tale.slides.create! image: File.open("#{Rails.root}/public/sample_data/#{j}.png"), audio: File.open("#{Rails.root}/public/sample_data/#{j}.mp3"),

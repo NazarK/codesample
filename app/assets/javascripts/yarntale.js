@@ -86,8 +86,7 @@ YARNTALE.set_cur_slide_line_offset = function(v) {
       console.log("<0")
       v = 0;
       //return false;
-  }
-  if(v>(this.slides.length-this.slides_in_slide_line()+1)) {
+  } else if(v>(this.slides.length-this.slides_in_slide_line()+1)) {
       console.log(">total slides")
       v = this.slides.length-this.slides_in_slide_line()+1
       //return false;
