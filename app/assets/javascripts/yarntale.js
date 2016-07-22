@@ -111,6 +111,9 @@ YARNTALE.log = function() {
 YARNTALE.attach_to = function(selector) {
     this.el = $(selector)
 
+    console.log("width: ", $(selector).width());
+    $(selector).css("height",$(selector).width()*2/3)
+
     console.log("YARNTALE.attach_to")
     this.el.append( "" )
 
