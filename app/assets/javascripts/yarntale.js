@@ -8,8 +8,9 @@ window.YARNTALE = {
     cur_slide_index: 0,
     cur_slide_line_offset: 0,
     audio: null,
-    TIMELINE_SLIDE_WIDTH: 132,
-    TIMELINE_SLIDES_WIDTH: 660,
+    TIMELINE_HEIGHT: null,
+    TIMELINE_SLIDE_WIDTH: null,
+    TIMELINE_SLIDES_WIDTH: null,
     slides: [], //array of objects {image,audio,captions}
 }
 
@@ -86,9 +87,9 @@ YARNTALE.set_cur_slide_line_offset = function(v) {
       v = 0;
       //return false;
   }
-  if(v>(this.slides.length-this.slides_in_slide_line()+2)) {
+  if(v>(this.slides.length-this.slides_in_slide_line()+1)) {
       console.log(">total slides")
-      v = this.slides.length-this.slides_in_slide_line()+2
+      v = this.slides.length-this.slides_in_slide_line()+1
       //return false;
   }
   this.cur_slide_line_offset = v;
@@ -111,8 +112,10 @@ YARNTALE.log = function() {
 YARNTALE.attach_to = function(selector) {
     this.el = $(selector)
 
-    console.log("width: ", $(selector).width());
-    $(selector).css("height",$(selector).width()*2/3)
+
+    var yarntale_width = $(selector).width()
+    console.log("yarntale width: ", yarntale_width);
+    $(selector).css("height",$(selector).width()*640/960)
 
     console.log("YARNTALE.attach_to")
     this.el.append( "" )
@@ -126,6 +129,15 @@ YARNTALE.attach_to = function(selector) {
       self.el.find(".slides_wrapper").append("<img class='slide' data-index="+i+" src="+slide.image.original+">")
       timeline.find(".slides .platform").append("<img class='slide' data-index="+i+" src="+slide.image.thumb+">")
     })
+    this.TIMELINE_HEIGHT = this.el.find("img.slide").outerHeight()
+    this.TIMELINE_SLIDE_WIDTH = Math.floor(this.TIMELINE_HEIGHT * 960/640);
+    this.TIMELINE_SLIDES_WIDTH = this.el.find(".slides .platform").width();
+
+
+    this.el.find(".timeline-height").css({
+        height: this.TIMELINE_HEIGHT + "px",
+        "line-height": this.TIMELINE_HEIGHT+"px",
+        "font-size":this.TIMELINE_HEIGHT+"px"})
 
     self.el.find(".slides_wrapper .slide").load(function() {
       console.log("image loaded",$(this))
@@ -299,6 +311,6 @@ YARNTALE.pause = function() {
 $(function() {
 
     if (localStorage['TIMELINE_FORCE']=='true') {
-      $(".timeline").css("display", "inline-block");
+      $(".timeline").css("height", "96px");
     }
 })

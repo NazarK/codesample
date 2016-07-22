@@ -1,6 +1,10 @@
 //*= require bootstrap
 //*= require font-awesome
 
+
+$timeline-height: 50px;
+
+
 .yarntale {
 
   -moz-user-select: none;
@@ -23,18 +27,18 @@
       height: 30%;
       &:hover {
         .volume_sensor {
-          height: 190px;
+          height: $timeline-height + 100px;
           .volume {
-            height: 96px;
+            height: $timeline-height;
             transition: height 0.15s ease-out;
           }
         }
       }
 
       .volume_sensor {
-        width: 50px;
+        width: $timeline-height;
         position: absolute;
-        right: 65px;
+        right: $timeline-height;
         bottom: 0px;
         height: 0px;
         overflow: hidden;
@@ -45,7 +49,7 @@
           position: relative;
           background: #888;
           margin-top: 5px;
-          height: 88px;
+          height: calc( 100% - #{$timeline-height} - 5px);
           z-index: 3;
           .button {
             width: 100%;
@@ -68,10 +72,10 @@
         .volume {
           position: absolute;
           width: 50px;
-          height: 0px;//96px;
+          height: 0px;
           transition: height 0.15s ease-out;
-          line-height: 100px;
-          font-size: 40px;
+          line-height: $timeline-height;
+          font-size: 250% !important;
           padding: 0px 12px;
           bottom: 0px;
           color: #eee;
@@ -117,11 +121,14 @@
       }
 
       .timeline {
+        height: $timeline-height;
+        line-height: $timeline-height;
+        font-size: $timeline-height;
         display: block;
         background: rgba(0,0,0,0.8);
         overflow-x: hidden;
         overflow-y: hidden;
-        height: 0;
+        height: 0 !important;
         transition: height 0.15s ease-out;
         width: 100%;
         position: absolute;
@@ -131,14 +138,13 @@
           position: relative;
           display: inline-block;
           float: left;
-          width: 80px;
+          font-size: 50%;
+          width: $timeline-height*1.2;
           bottom: 0px;
           left: 0px;
-          font-size: 55px;
-          padding-left:20px;
+          padding-left: $timeline-height/2;
           cursor: pointer;
           height: 100%;
-          line-height: 100px;
           vertical-align: middle;
           margin: 0;
           div {
@@ -154,12 +160,11 @@
 
         .slides_line_nav {
           position: relative;
-          width: 40px;
+          width: $timeline-height/2;
           display: inline-block;
           float: left;
-          font-size: 80px;
+          font-size: 80%;
           height: 100%;
-          line-height: 96px;
           &.next {
             padding-left: 10px;
           }
@@ -183,19 +188,20 @@
           position: relative;
           overflow: hidden;
           height: 100%;
-          width: calc(100% - 300px);
+          width: calc(100% - #{$timeline-height*1.2} - #{$timeline-height/2} - #{$timeline-height/2} - #{$timeline-height} - #{$timeline-height});
           float: left;
           .platform {
             transition: margin-left 0.10s ease-out;
             position: relative;
             white-space: nowrap;
+            height: 100%;
             img.slide {
-              width: 100%;
               border: 4px solid #2E2F30;
-              width: 140px;
               cursor: pointer;
               display: inline-block;
+              vertical-align: top;
               margin: 0px 2px;
+              height: $timeline-height;
               &.current {
                 border: 4px solid #EFEFEF;
               }
@@ -203,18 +209,17 @@
           }
         }
 
-
         .cc {
           &.disabled {
             color: #888;
           }
-          width: 40px;
+
+          width: $timeline-height;
           position: absolute;
-          font-size: 30px;
-          line-height: 100px;
+          font-size: 45%;
           height: 100%;
           text-align: center;
-          margin: 0 10px;
+          padding: 0 10px;
           color: white;
           cursor: pointer;
           bottom: 0px;
@@ -225,11 +230,11 @@
 
       &:hover {
         .caption {
-          bottom: 50%;
+          bottom: $timeline-height;
           transition: bottom 0.15s ease-out;
         }
         .timeline {
-          height: 50%;
+          height: $timeline-height !important;
           transition: height 0.15s ease-out;
         }
       }
@@ -278,11 +283,12 @@
 
   .slides_wrapper {
     width: 100%;
-    .slide {
+    img.slide {
       display: block;
       opacity: 0;
       transition: opacity 0.2s;
       position: absolute;
+      width: 100%;
       z-index: 1;
       &.active {
         display: block;
