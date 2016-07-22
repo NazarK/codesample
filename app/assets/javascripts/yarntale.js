@@ -4,7 +4,7 @@
 
 window.YARNTALE = {
     el: null, //hosting DOM element
-    playng: false,
+    playng: false, //triggered by play/pause button
     cur_slide_index: 0,
     cur_slide_line_offset: 0,
     audio: null,
@@ -130,6 +130,7 @@ YARNTALE.attach_to = function(selector) {
 
 
     $(document).on("click",".yarntale .timeline .slide",function() {
+        YARNTALE.pause()
         YARNTALE.setSlideIndex($(this).data("index"))
     })
 
@@ -220,6 +221,7 @@ YARNTALE.next = function() {
     this.log("next")
     if(this.cur_slide_index+1>=this.slides.length) {
         this.log("tale ended")
+        YARNTALE.pause()
     } else {
         this.setSlideIndex(this.cur_slide_index+1)
     }
@@ -262,10 +264,20 @@ YARNTALE.start = function() {
 
 YARNTALE.play = function() {
     this.playing = true
-    this.el.find(".audio").attr("src",this.slides[this.cur_slide_index].audio)
-    media = this.el.find(".audio")[0]
-    media.volume = localStorage['YARN_VOL'] || 1;
-    media.play()
+    //if there is audio
+    if(this.slides[this.cur_slide_index].audio) {
+      this.el.find(".audio").attr("src",this.slides[this.cur_slide_index].audio)
+      media = this.el.find(".audio")[0]
+      media.volume = localStorage['YARN_VOL'] || 1;
+      media.play()
+    //if no audio
+    } else {
+      this.trigger_next_timer = setTimeout(function() {
+        if(YARNTALE.playing) {
+          YARNTALE.next()
+        }
+      },2000)
+    }
     this.el.find(".control .play").hide()
     this.el.find(".control .pause").show()
     return this;
@@ -273,6 +285,7 @@ YARNTALE.play = function() {
 
 YARNTALE.pause = function() {
   this.playing = false
+  clearTimeout(this.trigger_next_timer)
   this.el.find(".audio")[0].pause()
   this.el.find(".control .play").show()
   this.el.find(".control .pause").hide()

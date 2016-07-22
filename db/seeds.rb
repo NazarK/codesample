@@ -18,3 +18,9 @@ AdminUser.create(email: 'admin@admin.com', password: '12345678')
                        caption: "slide number #{slide_num} - "+Faker::Hipster.paragraphs(1+rand(3)).first
   end
 end
+
+#creating slide with no audio
+slide = Tale.first.slides.second
+slide.caption = "no audio in this slide "+slide.caption
+slide.audio.destroy
+slide.save

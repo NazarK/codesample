@@ -13,6 +13,6 @@ class Slide < ActiveRecord::Base
 
   validates_attachment_content_type :audio, :content_type => /\Aaudio\/.*\Z/
 
-  validates_presence_of :image, :audio
+  validates_presence_of :image
 
 end
