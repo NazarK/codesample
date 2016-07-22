@@ -1,5 +1,14 @@
 %div{style:"padding:20px"}
-  Code for embeding:
-  <textarea class="form-control">
-  = "<iframe width='980' height='640' src='/t#{@tale.id}' frameborder='0' scrolling='0'></iframe>"
-  </textarea>
+  .col-sm-4
+    %input#id{type: :hidden, value: @tale.id}
+    width:
+    %input#width.form-control{type: :number, style: "width:80px;display:inline-block",value: 960}
+    px
+    height:
+    %input#height.form-control{type: :number, style: "width:80px;display:inline-block", value: 640}
+    px
+  .col-sm-8
+    Code for embeding:
+    %textarea#code.form-control{readonly: true}
+    %br
+  #preview

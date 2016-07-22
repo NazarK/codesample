@@ -42,10 +42,47 @@ function jquery_sortable_apply() {
 }
 
 
+
 /* ready function to be called on each load (and page:load turbolinks event) */
 var ready = function() {
   jquery_sortable_apply()
+
+
+  /* used in tales/:id/embed */
+  var iframe_reload_timer;
+  var code;
+  function embed_generate() {
+    console.log('embed generate')
+    var w = $("#width").val()
+    var h = $("#height").val()
+    var id = $("#id").val()
+    code = "<iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no'></iframe>"
+    $("textarea#code").html(code)
+    clearTimeout(iframe_reload_timer)
+    iframe_reload_timer = setTimeout(function() {
+      $("#preview").html(code)
+      setTimeout(function() {
+        //$("iframe")[0].contentDocument.location.reload(true)
+      },200)
+    },1000)
+  }
+
+  $(document).on("change, keyup, input",".tales.embed #width",function() {
+    $("#height").val(Math.floor($("#width").val()*640/960))
+    embed_generate()
+  })
+
+  $(document).on("change, keyup, input",".tales.embed #height",function() {
+    $("#width").val(Math.floor($("#height").val()*960/640))
+    embed_generate()
+  })
+
+  if($("body").is(".tales, .embed")) {
+    embed_generate()
+  }
+
 };
+
 
 
 $(function() {

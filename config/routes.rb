@@ -4,13 +4,14 @@ Rails.application.routes.draw do
   ActiveAdmin.routes(self)
   root 'tales#index'
 
-  get '/t:id' => "tales#show"
-
   resources :tales do
     member do
       get :embed
     end
   end
+
+  get '/t:id(/:mode)' => "tales#show"
+
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".

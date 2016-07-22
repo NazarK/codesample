@@ -14,7 +14,7 @@ class TalesController < ApplicationController
   end
 
   def show
-    render layout: "yarntale"
+    render layout: "show"
   end
 
   def new
