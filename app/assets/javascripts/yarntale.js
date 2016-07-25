@@ -8,6 +8,7 @@ window.YARNTALE = {
     cur_slide_index: 0,
     cur_slide_line_offset: 0,
     audio: null,
+    audio_volume: 100,
     TIMELINE_HEIGHT: null,
     TIMELINE_SLIDE_WIDTH: null,
     TIMELINE_SLIDES_WIDTH: null,
@@ -46,8 +47,11 @@ YARNTALE.volume = function(value,update_control, update_indicator) {
     value = 1;
 
   localStorage['YARN_VOL'] = value;
-  media = this.el.find(".audio")[0]
+  media = this.el.find(".slide_audio")[0]
   media.volume = localStorage['YARN_VOL'];
+
+  tale_background = this.el.find(".audio")[0]
+  tale_background.volume = localStorage['YARN_VOL']*this.audio_volume/100;
 
   vol = value
 
@@ -175,13 +179,12 @@ YARNTALE.attach_to = function(selector) {
     })
 
 
-
    $(document).on('dragstart', '.yarntale *', function(event) {
       if(!$(this).hasClass("drag-enabled"))
         event.preventDefault();
     });
 
-    $(".yarntale .audio")[0].onended = function() {
+    $(".yarntale .slide_audio")[0].onended = function() {
         YARNTALE.log('audio ended')
         YARNTALE.next()
     }
@@ -216,6 +219,10 @@ YARNTALE.attach_to = function(selector) {
     $('.cc').click(function() {
         YARNTALE.cc_enabled(!(YARNTALE.cc_enabled()=='true'))
     })
+
+    if(this.audio) {
+      this.el.find(".audio").attr("src",this.audio);
+    }
 
     this.volume(localStorage['YARN_VOL'])
 
@@ -280,8 +287,8 @@ YARNTALE.play = function() {
     this.playing = true
     //if there is audio
     if(this.slides[this.cur_slide_index].audio) {
-      this.el.find(".audio").attr("src",this.slides[this.cur_slide_index].audio)
-      media = this.el.find(".audio")[0]
+      this.el.find(".slide_audio").attr("src",this.slides[this.cur_slide_index].audio)
+      media = this.el.find(".slide_audio")[0]
       media.volume = localStorage['YARN_VOL'] || 1;
       media.play()
     //if no audio
@@ -292,14 +299,28 @@ YARNTALE.play = function() {
         }
       },2000)
     }
+
+    if(this.audio) {
+      tale_background = this.el.find(".audio")[0]
+      tale_background.volume = (localStorage['YARN_VOL'] || 1)*this.audio_volume/100;
+      tale_background.play()
+    }
+
+
+
     this.el.find(".control .play").hide()
     this.el.find(".control .pause").show()
+
+
+
+
     return this;
 }
 
 YARNTALE.pause = function() {
   this.playing = false
   clearTimeout(this.trigger_next_timer)
+  this.el.find(".slide_audio")[0].pause()
   this.el.find(".audio")[0].pause()
   this.el.find(".control .play").show()
   this.el.find(".control .pause").hide()

@@ -13,6 +13,8 @@
       <% end %>
     ]
 
+    YARNTALE.audio = "<%= @tale.audio.url %>"
+    YARNTALE.audio_volume = <%= @tale.audio_volume.to_i %>
 
     YARNTALE.attach_to(".yarntale").setSlideIndex(0)
 
@@ -68,6 +70,7 @@
     </div>
 
     <div class="slides_wrapper"></div>
-    <audio class="audio"></audio>
+    <audio class="audio" loop></audio>
+    <audio class="slide_audio"></audio>
   </div>
 </div>
