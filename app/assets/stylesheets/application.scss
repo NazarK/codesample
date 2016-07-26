@@ -36,3 +36,18 @@ body.devise_registrations, body.devise_sessions {
 body.tales.index, body.tales.edit, body.tales.new  {
   padding: 20px;
 }
+
+.player-wrap {
+    audio {
+      margin: 0;
+    }
+    position:relative;
+    top:10px;
+    width:205px;
+    overflow: hidden;
+    direction: ltl;
+    border-top-right-radius: 0.5em 0.5em;
+    border-top-left-radius: 0.5em 0.5em;
+    border-bottom-right-radius: 1em 0.7em;
+    border-bottom-left-radius: 1em 0.7em;
+}

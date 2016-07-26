@@ -5,7 +5,8 @@
       .col-sm-6
         = f.input :audio, label: "Background Audio"
         - if f.object.audio.present?
-          %audio.row{src: f.object.audio.url, controls:true}
+          .player-wrap
+            %audio{src: f.object.audio.url, controls:true}
       .col-sm-6
         = f.input :audio_volume, type: :number, input_html: { min: 0, max: 100 }, label: "Background Audio Volume (1-100)"
     %h3 Slides
