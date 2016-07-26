@@ -16,7 +16,11 @@
     YARNTALE.audio = "<%= @tale.audio.url %>"
     YARNTALE.audio_volume = <%= @tale.audio_volume.to_i %>
 
-    YARNTALE.attach_to(".yarntale").setSlideIndex(0)
+    YARNTALE.cover = {original: "<%= @tale.cover.url(:crop) %>",
+            thumb: "<%= @tale.cover.url(:thumb) %>",
+            medium: "<%= @tale.cover.url(:medium) %>"}
+
+    YARNTALE.attach_to(".yarntale")
 
   })
 </script>

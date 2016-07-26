@@ -2,12 +2,20 @@
   = simple_form_for(@tale, html: { class: 'form-horizontal' }) do |f|
     = f.input :name, label: "Title"
     .row
+      .col-sm-4
+        = f.input :cover, label: "Cover Image"
       .col-sm-6
+        - if f.object.cover.present?
+          %a{href: f.object.cover.url(:crop), target: "_blank",style:"cursor:pointer;"}
+            = image_tag f.object.cover.url(:thumb), style: "height:60px;"
+
+    .row
+      .col-sm-4
         = f.input :audio, label: "Background Audio"
         - if f.object.audio.present?
           .player-wrap
             %audio{src: f.object.audio.url, controls:true}
-      .col-sm-6
+      .col-sm-4
         = f.input :audio_volume, type: :number, input_html: { min: 0, max: 100 }, label: "Background Audio Volume (1-100)"
     %h3 Slides
     #tasks

@@ -38,6 +38,9 @@ User.create(email: "demo@demo.com", password: '12345678')
   if i==1
     tale.audio = File.open("#{Rails.root}/public/sample_data/background_audio.mp3")
     tale.audio_volume = 50
+    tale.name = tale.name + " - with background audio"
+
+    tale.cover = File.open("#{Rails.root}/public/sample_data/cover.jpg")
     tale.save
   end
 end

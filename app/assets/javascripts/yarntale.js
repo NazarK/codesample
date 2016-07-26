@@ -17,7 +17,7 @@ window.YARNTALE = {
 
 YARNTALE.cc_enabled = function(value, update_controls) {
     if(typeof(value) == 'undefined')
-        return localStorage['YARN_CC_ENABLED'] || true;
+      return localStorage['YARN_CC_ENABLED'] || true;
 
 
     localStorage['YARN_CC_ENABLED'] = value;
@@ -63,7 +63,7 @@ YARNTALE.volume = function(value,update_control, update_indicator) {
     console.log("changing volume button position")
     console.log(vol)
 
-    var new_top =   (1-vol)*(slider.height()- button.height())
+    var new_top = (1-vol)*(slider.height()- button.height())
     console.log("new top",new_top)
     button.css("top",new_top)
 
@@ -127,6 +127,10 @@ YARNTALE.attach_to = function(selector) {
     var timeline = this.el.find(".timeline")
 
     console.log("building timeline")
+    if(this.cover) {
+      self.el.find(".slides_wrapper").append("<img class='slide cover' src="+this.cover.original+">")
+    }
+
     $.each(this.slides,function(i,slide) {
       //console.log(slide)
       self.el.find(".slides_wrapper").append("<img class='slide' data-index="+i+" src="+slide.image.original+">")
@@ -142,8 +146,15 @@ YARNTALE.attach_to = function(selector) {
         "line-height": this.TIMELINE_HEIGHT+"px",
         "font-size":this.TIMELINE_HEIGHT+"px"})
 
+    var images_loaded = 0;
+    YARNTALE.showCover()
     self.el.find(".slides_wrapper .slide").load(function() {
-      console.log("image loaded",$(this))
+      images_loaded ++
+      console.log("image loaded",$(this),images_loaded)
+      if(images_loaded == YARNTALE.slides.length) {
+        console.log("all loadeded")
+        YARNTALE.setSlideIndex(0)
+      }
     })
 
 
@@ -252,11 +263,11 @@ YARNTALE.setSlideIndex = function(i) {
     this.log("set slide index",i)
     this.cur_slide_index = i;
 
-    this.el.find(".timeline img.slide").removeClass("current")
+    this.el.find(".timeline img.slide.current").removeClass("current")
     this.el.find(".timeline img.slide[data-index="+i+"]").addClass("current")
 
     this.el.find(".slides_wrapper .slide.active").removeClass("active")
-    $(this.el.find(".slides_wrapper .slide")[i]).addClass("active")
+    this.el.find(".slides_wrapper .slide[data-index="+i+"]").addClass("active")
 
     if(this.playing) {
         this.play()
@@ -325,6 +336,15 @@ YARNTALE.pause = function() {
   this.el.find(".control .play").show()
   this.el.find(".control .pause").hide()
   return this;
+}
+
+YARNTALE.showCover = function() {
+  if(this.cover) {
+    this.el.find(".timeline img.slide.current").removeClass("current")
+    this.el.find(".slides_wrapper .slide.active").removeClass("active")
+
+    this.el.find(".slides_wrapper img.slide.cover").addClass("active")
+  }
 }
 
 
