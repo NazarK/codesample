@@ -13,12 +13,16 @@
       <% end %>
     ]
 
-    YARNTALE.audio = "<%= @tale.audio.url %>"
-    YARNTALE.audio_volume = <%= @tale.audio_volume.to_i %>
+    <% if @tale.audio.present? %>
+      YARNTALE.audio = "<%= @tale.audio.url %>"
+      YARNTALE.audio_volume = <%= @tale.audio_volume.to_i %>
+    <% end %>
 
-    YARNTALE.cover = {original: "<%= @tale.cover.url(:crop) %>",
-            thumb: "<%= @tale.cover.url(:thumb) %>",
-            medium: "<%= @tale.cover.url(:medium) %>"}
+    <% if @tale.cover.present? %>
+      YARNTALE.cover = {original: "<%= @tale.cover.url(:crop) %>",
+              thumb: "<%= @tale.cover.url(:thumb) %>",
+              medium: "<%= @tale.cover.url(:medium) %>"}
+    <% end %>
 
     YARNTALE.attach_to(".yarntale")
 
