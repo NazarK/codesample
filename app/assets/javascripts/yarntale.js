@@ -133,8 +133,8 @@ YARNTALE.attach_to = function(selector) {
 
     $.each(this.slides,function(i,slide) {
       //console.log(slide)
-      self.el.find(".slides_wrapper").append("<img class='slide' data-index="+i+" src="+slide.image.original+">")
-      timeline.find(".slides .platform").append("<img class='slide' data-index="+i+" src="+slide.image.thumb+">")
+      self.el.find(".slides_wrapper").append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
+      timeline.find(".slides .platform").append("<img class='slide' data-index="+i+" data-src="+slide.image.thumb+">")
     })
     this.TIMELINE_HEIGHT = this.el.find("img.slide").outerHeight()
     this.TIMELINE_SLIDE_WIDTH = Math.floor(this.TIMELINE_HEIGHT * 960/640);
@@ -147,7 +147,15 @@ YARNTALE.attach_to = function(selector) {
         "font-size":this.TIMELINE_HEIGHT+"px"})
 
     var images_loaded = 0;
-    YARNTALE.showCover()
+    if(this.cover) {
+      YARNTALE.showCover()
+      self.el.find(".slide.cover").load(function() {
+        YARNTALE.start_loading_images()
+      })
+    } else {
+      YARNTALE.start_loading_images()
+    }
+
     self.el.find(".slides_wrapper .slide").load(function() {
       images_loaded ++
       console.log("image loaded",$(this),images_loaded)
@@ -347,6 +355,11 @@ YARNTALE.showCover = function() {
   }
 }
 
+YARNTALE.start_loading_images = function() {
+  this.el.find(".slide[data-src]").each(function() {
+    $(this).attr('src',$(this).attr("data-src"))
+  })
+}
 
 $(function() {
 
