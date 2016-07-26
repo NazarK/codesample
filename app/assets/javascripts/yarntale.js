@@ -113,6 +113,10 @@ YARNTALE.log = function() {
 }
 
 YARNTALE.attach_to = function(selector) {
+    if(this.slides.length==0) {
+      alert("No slides in this tale.")
+      return
+    }
     this.el = $(selector)
 
 
@@ -129,6 +133,8 @@ YARNTALE.attach_to = function(selector) {
     console.log("building timeline")
     if(this.cover) {
       self.el.find(".slides_wrapper").append("<img class='slide cover' src="+this.cover.original+">")
+    } else {
+      self.el.find(".slides_wrapper").append("<img class='slide cover' src="+this.slides[0].image.original+">")
     }
 
     $.each(this.slides,function(i,slide) {
@@ -147,14 +153,10 @@ YARNTALE.attach_to = function(selector) {
         "font-size":this.TIMELINE_HEIGHT+"px"})
 
     var images_loaded = 0;
-    if(this.cover) {
-      YARNTALE.showCover()
-      self.el.find(".slide.cover").load(function() {
-        YARNTALE.start_loading_images()
-      })
-    } else {
+    YARNTALE.showCover()
+    self.el.find(".slide.cover").load(function() {
       YARNTALE.start_loading_images()
-    }
+    })
 
     self.el.find(".slides_wrapper .slide").load(function() {
       images_loaded ++
@@ -347,12 +349,10 @@ YARNTALE.pause = function() {
 }
 
 YARNTALE.showCover = function() {
-  if(this.cover) {
-    this.el.find(".timeline img.slide.current").removeClass("current")
-    this.el.find(".slides_wrapper .slide.active").removeClass("active")
+  this.el.find(".timeline img.slide.current").removeClass("current")
+  this.el.find(".slides_wrapper .slide.active").removeClass("active")
 
-    this.el.find(".slides_wrapper img.slide.cover").addClass("active")
-  }
+  this.el.find(".slides_wrapper img.slide.cover").addClass("active")
 }
 
 YARNTALE.start_loading_images = function() {
