@@ -1,6 +1,8 @@
 <script>
   $(function() {
 
+    $.extend(YARNTALE, JSON.parse( '<%= @tale.to_json(only: :slide_duration).html_safe %>'))
+
     YARNTALE.slides = [
       <% @tale.slides.each do |slide| %>
       {

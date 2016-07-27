@@ -37,8 +37,7 @@ class TalesController < ApplicationController
 
   def update
     if @tale.update(tale_params)
-      flash[:notice] = 'Tale was successfully updated.'
-      redirect_to tales_path
+      redirect_to edit_tale_path(@tale), notice: 'Tale was successfully updated.'
     else
       respond_with(@tale)
     end

@@ -206,8 +206,12 @@ YARNTALE.attach_to = function(selector) {
     });
 
     $(".yarntale .slide_audio")[0].onended = function() {
-        YARNTALE.log('audio ended')
-        YARNTALE.next()
+        YARNTALE.log('audio ended, this audio duration: ', this.duration)
+        //only trigger if audio duration is longer
+        //otherwise it will be triggered by timer
+        if(this.duration>YARNTALE.slide_duration) {
+          YARNTALE.next()
+        }
     }
 
     $('.yarntale .volume_slider .button').draggable({
@@ -282,6 +286,7 @@ YARNTALE.setSlideIndex = function(i) {
     if(this.playing) {
         this.play()
     }
+
     this.el.find(".caption .text").html(this.slides[i].caption)
     $(".nav").attr("style","")
     if(i==0) {
@@ -311,15 +316,26 @@ YARNTALE.play = function() {
       this.el.find(".slide_audio").attr("src",this.slides[this.cur_slide_index].audio)
       media = this.el.find(".slide_audio")[0]
       media.volume = localStorage['YARN_VOL'] || 1;
-      media.play()
-    //if no audio
+      media.play() //this will trigger next
     } else {
-      this.trigger_next_timer = setTimeout(function() {
-        if(YARNTALE.playing) {
+      this.el.find(".slide_audio").attr("src","")
+    }
+
+    //setup trigger
+    //should work automatically if no audio, or audio is shorter
+    //no action if audio is longer
+    this.trigger_next_timer = setTimeout(function() {
+      if(YARNTALE.playing) {
+        //if current slide audio is shorter (it should be stopped at this moment)
+        //or if slide audio is empty
+        var cur_slide_audio_duration = YARNTALE.el.find(".slide_audio")[0].duration || 0
+        YARNTALE.log('trigger next timer, cur slide audio duration: ', cur_slide_audio_duration)
+        if(cur_slide_audio_duration<YARNTALE.slide_duration) {
           YARNTALE.next()
         }
-      },2000)
-    }
+      }
+    },YARNTALE.slide_duration*1000)
+
 
     if(this.audio) {
       tale_background = this.el.find(".audio")[0]

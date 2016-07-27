@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160726145430) do
+ActiveRecord::Schema.define(version: 20160727060350) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 20160726145430) do
     t.integer  "audio_file_size"
     t.datetime "audio_updated_at"
     t.integer  "position"
+    t.float    "duration"
   end
 
   add_index "slides", ["tale_id"], name: "index_slides_on_tale_id"
@@ -82,6 +83,7 @@ ActiveRecord::Schema.define(version: 20160726145430) do
     t.string   "cover_content_type"
     t.integer  "cover_file_size"
     t.datetime "cover_updated_at"
+    t.integer  "slide_duration",     default: 4
   end
 
   add_index "tales", ["user_id"], name: "index_tales_on_user_id"

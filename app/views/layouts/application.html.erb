@@ -9,6 +9,7 @@
 </head>
 <body class="<%= [params[:controller].gsub("/","_"),params[:action]].compact.join(" ") %>">
 
+<%= flash_messages %>
 <%= yield %>
 
 </body>

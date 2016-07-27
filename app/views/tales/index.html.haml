@@ -1,6 +1,6 @@
 .pull-right
   = current_user.email
-  = link_to "log out", destroy_user_session_path, method: :delete, class: "btn btn-default"
+  = link_to "<i class='fa fa-sign-out'></i> log out".html_safe, destroy_user_session_path, method: :delete, class: "btn btn-default"
 %h1 Your Tales
 
 %table.table
@@ -18,7 +18,7 @@
           = tale.slides.count
         %td
           = link_to "<i class='fa fa-eye'></i> Show".html_safe, "/t#{tale.id}", class: "btn btn-default", target: "_blank"
-          = link_to "<i class='fa fa-pencil-square-o'></i> Edit".html_safe, edit_tale_path(tale), class: "btn btn-default"
+          = link_to "<i class='fa fa-pencil-square-o'></i> Edit".html_safe, edit_tale_path(tale), class: "btn btn-default", target: "_blank"
           = link_to "<i class='fa fa-code'></i> Embed".html_safe, embed_tale_path(tale), class: "btn btn-default"
           = link_to "<i class='fa fa-trash-o'></i> Destroy".html_safe, tale_path(tale), method: :delete, class: "btn btn-danger"
 %br
