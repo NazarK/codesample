@@ -31,7 +31,13 @@ User.create(email: "demo@demo.com", password: '12345678')
   (1..slides_num).each do |slide_num|
     j = 1 + (slide_num-1) % 3
     puts "image: #{j}.png"
-    tale.slides.create! image: File.open("#{Rails.root}/public/sample_data/#{j}.png"), audio: File.open("#{Rails.root}/public/sample_data/#{j}.mp3"),
+    audio = "#{j}.mp3"
+
+    if i==1 && slide_num==1
+      audio = "long.mp3"
+    end
+
+    tale.slides.create! image: File.open("#{Rails.root}/public/sample_data/#{j}.png"), audio: File.open("#{Rails.root}/public/sample_data/#{audio}"),
                        caption: "slide number #{slide_num} - "+Faker::Hipster.paragraphs(1+rand(3)).first
   end
 
