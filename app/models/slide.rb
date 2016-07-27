@@ -5,7 +5,11 @@ class Slide < ActiveRecord::Base
   has_attached_file :image,
                     :styles => { original: "2048x2048>", crop: "960x640#", :medium => "450x300>", :thumb => "150x100#" },
                     :storage => Rails.env=='production' ? :s3 : :filesystem
-
+  after_save do
+    if self.position.blank?
+      self.update_attributes position: self.id
+    end
+  end
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
   has_attached_file :audio,
@@ -14,5 +18,6 @@ class Slide < ActiveRecord::Base
   validates_attachment_content_type :audio, :content_type => /\Aaudio\/.*\Z/
 
   validates_presence_of :image
+
 
 end
