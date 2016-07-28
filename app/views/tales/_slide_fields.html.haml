@@ -1,4 +1,4 @@
-.nested-fields.margin-bottom-sm
+.nested-fields.margin-bottom.slide{data: {id: f.object.id}}
   .row
     = f.hidden_field :id
     = f.hidden_field :position
@@ -9,22 +9,30 @@
       = f.input :caption, input_html: { style: "vertical-align:top;width:90%;", rows: 14}
     .col-sm-6
       .row
-        .col-sm-6
+        .col-sm-5
           = f.input :image, input_html: { style: "margin:0"}
           - if f.object.image.present?
             .row
               %a{href: f.object.image.url(:crop), target: "_blank",style:"cursor:pointer;"}
                 = image_tag f.object.image.url(:thumb), style: "height:60px;"
-        .col-sm-6
+        .col-sm-7
           = f.input :audio, label: "Image Audio"
           - if f.object.audio.present?
-            .player-wrap.row
-              %audio{src: f.object.audio.url, controls:true}
+            .row
+              = audio_tag f.object.audio.url,
+                { controls: true,
+                  onvolumechange: "slide_vol_change.apply(this)",
+                  onloadedmetadata: "this.volume = #{f.object.audio_vol}"  }
       .row
         .col-sm-12
           = f.input :video, label: "or Video"
           - if f.object.video.present?
             .row
-              = video_tag f.object.video.url, { controls: true, style: "width:70%"}
-      .col-sm-3
-        = f.hidden_field :duration
+              = video_tag f.object.video.url,
+                  { controls: true, style: "width:70%",
+                    ontimeupdate: "slide_video_pos_change.apply(this)",
+                    onvolumechange: "slide_vol_change.apply(this)",
+                    onloadedmetadata: "this.currentTime = #{f.object.video_thumb_pos}; this.volume = #{f.object.audio_vol}"}
+      = f.hidden_field :duration
+      = f.hidden_field :video_thumb_pos, class: "video_thumb_pos"
+      = f.hidden_field :audio_vol, class: "audio_vol"

@@ -8,7 +8,7 @@ window.YARNTALE = {
     cur_slide_index: 0,
     cur_slide_line_offset: 0,
     audio: null,
-    audio_volume: 100,
+    audio_vol: 1,
     TIMELINE_HEIGHT: null,
     TIMELINE_SLIDE_WIDTH: null,
     TIMELINE_SLIDES_WIDTH: null,
@@ -47,11 +47,19 @@ YARNTALE.volume = function(value,update_control, update_indicator) {
     value = 1;
 
   localStorage['YARN_VOL'] = value;
-  media = this.el.find(".slide_audio")[0]
-  media.volume = localStorage['YARN_VOL'];
+  var media;
+
+  if(YARNTALE.cur_slide().video) {
+    media = YARNTALE.cur_slide_el()
+  } else {
+    media = this.el.find(".slide_audio")[0]
+  }
+  if(media) {
+    media.volume = YARNTALE.cur_slide().audio_vol * localStorage['YARN_VOL'];
+  }  
 
   tale_background = this.el.find(".audio")[0]
-  tale_background.volume = localStorage['YARN_VOL']*this.audio_volume/100;
+  tale_background.volume = localStorage['YARN_VOL']*this.audio_vol;
 
   vol = value
 
@@ -72,7 +80,7 @@ YARNTALE.volume = function(value,update_control, update_indicator) {
   if(update_indicator) {
     var i = this.el.find(".volume i")
     i.removeClass("fa-volume-up fa-volume-down fa-volume-off")
-    if(vol==1) {
+    if(vol>=0.9) {
       i.addClass("fa-volume-up")
     } else if(vol==0) {
       i.addClass("fa-volume-off")
@@ -143,7 +151,7 @@ YARNTALE.attach_to = function(selector) {
       //console.log(slide)
       if(slide.video) {
         slides_wrapper.append("<video class='slide' data-index="+i+" data-src="+slide.video +">")
-        timeline.append("<div class='slide' data-index="+i+"><video data-src="+slide.video+"></div>")
+        timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
       } else {
         slides_wrapper.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
         timeline.append("<img class='slide' data-index="+i+" data-src="+slide.image.thumb+">")
@@ -345,6 +353,7 @@ YARNTALE.play = function() {
       this.el.find(".slide_audio").attr("src",this.slides[this.cur_slide_index].audio)
       var media = this.el.find(".slide_audio")[0]
       media.volume = localStorage['YARN_VOL'] || 1;
+      media.volume *= this.cur_slide().audio_vol
       media.play() //this will trigger next on media end
     } else {
       this.el.find(".slide_audio").attr("src","")
@@ -353,8 +362,10 @@ YARNTALE.play = function() {
     //if there is video
     if(this.cur_slide().video) {
       console.log("playing video")
-      var video = this.cur_slide_el()
-      video.play()
+      var media = this.cur_slide_el()
+      media.volume = localStorage['YARN_VOL'] || 1;
+      media.volume *= this.cur_slide().audio_vol
+      media.play()
     }
 
     //setup trigger

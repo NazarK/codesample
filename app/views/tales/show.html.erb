@@ -6,6 +6,7 @@
     YARNTALE.slides = [
       <% @tale.slides.each do |slide| %>
       {
+        <%= slide.to_json(except: [:id,:tale_id,:caption,:image,:video,:audio]).gsub(/^{/,"").gsub(/}$/,"").html_safe %>,
         video: "<%= slide.video.url %>",
         image: {original: "<%= slide.image.url(:crop) %>",
                 thumb: "<%= slide.image.url(:thumb) %>",
@@ -18,7 +19,7 @@
 
     <% if @tale.audio.present? %>
       YARNTALE.audio = "<%= @tale.audio.url %>"
-      YARNTALE.audio_volume = <%= @tale.audio_volume.to_i %>
+      YARNTALE.audio_vol = <%= @tale.audio_vol %>
     <% end %>
 
     <% if @tale.cover.present? %>

@@ -71,11 +71,6 @@ var ready = function() {
     embed_generate()
   }
 
-  if($("body").is(".tales.edit")) {
-    console.log('setting tale audio volume')
-    $("#tale_audio_player")[0].volume = $("#tale_audio_volume").val()/100
-  }
-
 };
 
 
@@ -99,6 +94,15 @@ $(function() {
 });
 
 
-tale_audio_volume_change = function() {
-  $("#tale_audio_volume").val(Math.floor(this.volume*100))
+tale_audio_vol_change = function() {
+  $("#tale_audio_vol").val(this.volume)
+}
+
+slide_video_pos_change = function() {
+  $(this).parents(".slide").find(".video_thumb_pos").val(this.currentTime)
+
+}
+
+slide_vol_change = function() {
+  $(this).parents(".slide").find(".audio_vol").val(this.volume)
 }

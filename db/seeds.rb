@@ -45,14 +45,14 @@ User.create(email: "demo@demo.com", password: '12345678')
   if i==3
     tale.slides.create video: File.open("#{Rails.root}/test/data/video_8_sec.mp4"), caption: "video 8 seconds"
     tale.slides.create video: File.open("#{Rails.root}/test/data/video_2_sec.mp4"), caption: "video 2 seconds"
-    tale.slides.create image: File.open("#{Rails.root}/test/data/2.png"), caption: "image"
+    tale.slides.create image: File.open("#{Rails.root}/test/data/2.png"), caption: "image", audio: File.open("#{Rails.root}/test/data/2.mp3")
 
     tale.save
   end
 
   if i==1
     tale.audio = File.open("#{Rails.root}/test/data/background_audio.mp3")
-    tale.audio_volume = 50
+    tale.audio_vol = 0.5
     tale.name = tale.name + " - with background audio"
 
     tale.cover = File.open("#{Rails.root}/test/data/cover.jpg")

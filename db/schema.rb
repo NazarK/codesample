@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160728070140) do
+ActiveRecord::Schema.define(version: 20160728123415) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -49,12 +49,8 @@ ActiveRecord::Schema.define(version: 20160728070140) do
   create_table "slides", force: :cascade do |t|
     t.integer  "tale_id"
     t.text     "caption"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.string   "imager_file_name"
-    t.string   "imager_content_type"
-    t.integer  "imager_file_size"
-    t.datetime "imager_updated_at"
+    t.datetime "created_at",                        null: false
+    t.datetime "updated_at",                        null: false
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
@@ -69,6 +65,8 @@ ActiveRecord::Schema.define(version: 20160728070140) do
     t.string   "video_content_type"
     t.integer  "video_file_size"
     t.datetime "video_updated_at"
+    t.float    "video_thumb_pos",     default: 0.0
+    t.float    "audio_vol",           default: 1.0
   end
 
   add_index "slides", ["tale_id"], name: "index_slides_on_tale_id"
@@ -82,12 +80,12 @@ ActiveRecord::Schema.define(version: 20160728070140) do
     t.string   "audio_content_type"
     t.integer  "audio_file_size"
     t.datetime "audio_updated_at"
-    t.integer  "audio_volume",       default: 100
     t.string   "cover_file_name"
     t.string   "cover_content_type"
     t.integer  "cover_file_size"
     t.datetime "cover_updated_at"
     t.integer  "slide_duration",     default: 4
+    t.float    "audio_vol",          default: 1.0
   end
 
   add_index "tales", ["user_id"], name: "index_tales_on_user_id"
