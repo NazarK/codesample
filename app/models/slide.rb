@@ -13,11 +13,24 @@ class Slide < ActiveRecord::Base
     end
   end
 
+  #strip caption
   before_save do
     if self.caption_changed? && !self.caption.nil?
       self.caption_will_change!
       self.caption.strip!
     end
+    true
+  end
+
+  #keep only slide or video
+  before_save do
+    if self.image_updated_at_changed?
+      self.video.clear
+    elsif self.video_updated_at_changed?
+      self.image.clear
+      self.audio.clear
+    end
+    true
   end
 
   has_attached_file :audio,

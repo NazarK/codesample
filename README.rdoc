@@ -4,7 +4,4 @@
 based on:
 http://www.vitalmtb.com/photos/features/Downhill-Finals-Race-Action-from-the-Cairns-World-Cup,10052/Slideshow,0/sspomer,2
 
-
-#TODO: problem: slides not showing on navigation - preload slide images
-#TODO: active slide to be always visible
 #TODO: timeline slides bug when having 3-4 slides on last slide
