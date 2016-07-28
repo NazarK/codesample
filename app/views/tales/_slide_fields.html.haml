@@ -18,7 +18,7 @@
         .col-sm-6
           = f.input :audio, label: "Image Audio"
           - if f.object.audio.present?
-            .player-wrap
+            .player-wrap.row
               %audio{src: f.object.audio.url, controls:true}
       .row
         .col-sm-12
