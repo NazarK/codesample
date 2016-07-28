@@ -8,9 +8,10 @@
   <script>APP_HOST="<%= request.protocol + request.host_with_port %>"</script>
 </head>
 <body class="<%= [params[:controller].gsub("/","_"),params[:action]].compact.join(" ") %>">
-
 <%= flash_messages %>
-<%= yield %>
+<div class='yield'>
+  <%= yield %>
+</div>
 
 </body>
 </html>

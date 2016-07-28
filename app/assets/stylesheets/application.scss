@@ -34,7 +34,9 @@ body.devise_registrations, body.devise_sessions {
 
 
 body.tales.index, body.tales.edit, body.tales.new  {
-  padding: 20px;
+  .yield {
+    padding: 20px;
+  }
 }
 
 .player-wrap {
