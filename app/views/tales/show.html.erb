@@ -6,6 +6,7 @@
     YARNTALE.slides = [
       <% @tale.slides.each do |slide| %>
       {
+        video: "<%= slide.video.url %>",
         image: {original: "<%= slide.image.url(:crop) %>",
                 thumb: "<%= slide.image.url(:thumb) %>",
                 medium: "<%= slide.image.url(:medium) %>"},
@@ -58,8 +59,7 @@
       </div>
 
       <div class="caption">
-        <div class="text">
-        </div>
+        <div class="text"></div>
       </div>
 
       <div class="timeline">

@@ -19,9 +19,10 @@ User.create(email: "demo@demo.com", password: '12345678')
 
   if i==3
     slides_num = 1
-    tale.name = "slide and video"
+    tale.name = "slides and video"
     tale.save
   end
+
   if i==4
     slides_num = 3
     tale.name = "with 3 slides"
@@ -42,7 +43,10 @@ User.create(email: "demo@demo.com", password: '12345678')
   end
 
   if i==3
-    tale.slides.create video: File.open("#{Rails.root}/test/data/video.webm"), caption: "video"
+    tale.slides.create video: File.open("#{Rails.root}/test/data/video_8_sec.mp4"), caption: "video 8 seconds"
+    tale.slides.create video: File.open("#{Rails.root}/test/data/video_2_sec.mp4"), caption: "video 2 seconds"
+    tale.slides.create image: File.open("#{Rails.root}/test/data/2.png"), caption: "image"
+
     tale.save
   end
 

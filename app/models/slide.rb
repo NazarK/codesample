@@ -13,6 +13,13 @@ class Slide < ActiveRecord::Base
     end
   end
 
+  before_save do
+    if self.caption_changed? && !self.caption.nil?
+      self.caption_will_change!
+      self.caption.strip!
+    end
+  end
+
   has_attached_file :audio,
                     :storage => Rails.env=='production' ? :s3 : :filesystem
   validates_attachment_content_type :audio, :content_type => /\Aaudio\/.*\Z/

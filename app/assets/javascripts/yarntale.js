@@ -137,11 +137,19 @@ YARNTALE.attach_to = function(selector) {
       self.el.find(".slides_wrapper").append("<img class='slide cover' src="+this.slides[0].image.original+">")
     }
 
+    var slides_wrapper = self.el.find(".slides_wrapper")
+    var timeline = self.el.find(".timeline .slides .platform")
     $.each(this.slides,function(i,slide) {
       //console.log(slide)
-      self.el.find(".slides_wrapper").append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
-      timeline.find(".slides .platform").append("<img class='slide' data-index="+i+" data-src="+slide.image.thumb+">")
+      if(slide.video) {
+        slides_wrapper.append("<video class='slide' data-index="+i+" data-src="+slide.video +">")
+        timeline.append("<div class='slide' data-index="+i+"><video data-src="+slide.video+"></div>")
+      } else {
+        slides_wrapper.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
+        timeline.append("<img class='slide' data-index="+i+" data-src="+slide.image.thumb+">")
+      }
     })
+
     this.TIMELINE_HEIGHT = this.el.find("img.slide").outerHeight()
     this.TIMELINE_SLIDE_WIDTH = Math.floor(this.TIMELINE_HEIGHT * 960/640);
     this.TIMELINE_SLIDES_WIDTH = this.el.find(".slides .platform").width();
@@ -155,18 +163,24 @@ YARNTALE.attach_to = function(selector) {
     var images_loaded = 0;
     YARNTALE.showCover()
     self.el.find(".slide.cover").load(function() {
-      YARNTALE.start_loading_images()
+      YARNTALE.start_loading_media()
     })
 
     self.el.find(".slides_wrapper .slide").load(function() {
       images_loaded ++
-      console.log("image loaded",$(this),images_loaded)
+      YARNTALE.log("slide loaded",$(this),images_loaded)
       if(images_loaded == YARNTALE.slides.length) {
         console.log("all loadeded")
         YARNTALE.setSlideIndex(0)
       }
     })
 
+    $('video').on('ended',function(e) {
+      YARNTALE.log("video ended, video duration: ",this.duration)
+      if(this.duration>YARNTALE.slide_duration) {
+        YARNTALE.next()
+      }
+    })
 
     $(document).on("click",".yarntale .timeline .slide",function() {
         YARNTALE.pause()
@@ -277,8 +291,14 @@ YARNTALE.setSlideIndex = function(i) {
     this.log("set slide index",i)
     this.cur_slide_index = i;
 
-    this.el.find(".timeline img.slide.current").removeClass("current")
-    this.el.find(".timeline img.slide[data-index="+i+"]").addClass("current")
+    this.el.find(".timeline .slide.current").removeClass("current")
+    this.el.find(".timeline .slide[data-index="+i+"]").addClass("current")
+
+    if(this.cur_slide().video) {
+      var video = this.el.find(".slides_wrapper .slide[data-index="+this.cur_slide_index+"]")[0]
+      video.currentTime = 0;
+    }
+
 
     this.el.find(".slides_wrapper .slide.active").removeClass("active")
     this.el.find(".slides_wrapper .slide[data-index="+i+"]").addClass("active")
@@ -309,16 +329,32 @@ YARNTALE.start = function() {
 }
 
 
+YARNTALE.cur_slide = function() {
+  return this.slides[this.cur_slide_index]
+}
+
+YARNTALE.cur_slide_el = function() {
+  return this.el.find(".slides_wrapper .slide[data-index="+this.cur_slide_index+"]")[0]
+}
+
 YARNTALE.play = function() {
     this.playing = true
+
     //if there is audio
-    if(this.slides[this.cur_slide_index].audio) {
+    if(this.cur_slide().audio) {
       this.el.find(".slide_audio").attr("src",this.slides[this.cur_slide_index].audio)
-      media = this.el.find(".slide_audio")[0]
+      var media = this.el.find(".slide_audio")[0]
       media.volume = localStorage['YARN_VOL'] || 1;
-      media.play() //this will trigger next
+      media.play() //this will trigger next on media end
     } else {
       this.el.find(".slide_audio").attr("src","")
+    }
+
+    //if there is video
+    if(this.cur_slide().video) {
+      console.log("playing video")
+      var video = this.cur_slide_el()
+      video.play()
     }
 
     //setup trigger
@@ -328,9 +364,15 @@ YARNTALE.play = function() {
       if(YARNTALE.playing) {
         //if current slide audio is shorter (it should be stopped at this moment)
         //or if slide audio is empty
-        var cur_slide_audio_duration = YARNTALE.el.find(".slide_audio")[0].duration || 0
-        YARNTALE.log('trigger next timer, cur slide audio duration: ', cur_slide_audio_duration)
-        if(cur_slide_audio_duration<YARNTALE.slide_duration) {
+        var cur_slide_duration = 0
+        if(YARNTALE.cur_slide().video) {
+          cur_slide_duration = YARNTALE.cur_slide_el().duration || 0
+        } else {
+          cur_slide_duration = YARNTALE.el.find(".slide_audio")[0].duration || 0
+        }
+
+        YARNTALE.log('trigger next timer, cur slide media duration: ', cur_slide_duration)
+        if(cur_slide_duration<YARNTALE.slide_duration) {
           YARNTALE.next()
         }
       }
@@ -348,9 +390,6 @@ YARNTALE.play = function() {
     this.el.find(".control .play").hide()
     this.el.find(".control .pause").show()
 
-
-
-
     return this;
 }
 
@@ -361,6 +400,10 @@ YARNTALE.pause = function() {
   this.el.find(".audio")[0].pause()
   this.el.find(".control .play").show()
   this.el.find(".control .pause").hide()
+  if(this.cur_slide().video) {
+    video = this.el.find(".slides_wrapper .slide[data-index=" + this.cur_slide_index+"]")[0]
+    video.pause()
+  }
   return this;
 }
 
@@ -371,8 +414,8 @@ YARNTALE.showCover = function() {
   this.el.find(".slides_wrapper img.slide.cover").addClass("active")
 }
 
-YARNTALE.start_loading_images = function() {
-  this.el.find(".slide[data-src]").each(function() {
+YARNTALE.start_loading_media = function() {
+  this.el.find(".slide[data-src], .slide video[data-src]").each(function() {
     $(this).attr('src',$(this).attr("data-src"))
   })
 }

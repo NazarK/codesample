@@ -98,10 +98,10 @@ $timeline-height: 50px;
           display: none;
         }
         .text {
+          padding: 10px;
           width:100%;
           bottom: 0;
           position: absolute;
-          padding: 10px;
           color: white;
           font-size: 14px;
           font-weight: bold;
@@ -111,6 +111,9 @@ $timeline-height: 50px;
            -1px 1px 0 #000,
            1px 1px 0 #000;
           background: rgba(0,0,0,0.3);
+          &:empty {
+            display: none;
+          }
         }
         //background: rgba(0,0,0,0.5);
         position: absolute;
@@ -195,15 +198,22 @@ $timeline-height: 50px;
             position: relative;
             white-space: nowrap;
             height: 100%;
-            img.slide {
+            .slide {
               border: 4px solid #2E2F30;
               cursor: pointer;
               display: inline-block;
               vertical-align: top;
               margin: 0px 2px;
+              width:  $timeline-height*3/2;
               height: $timeline-height;
+              overflow: hidden;
+              video {
+                object-fit: cover;
+                width:  $timeline-height*3/2 - 8px;
+                height: $timeline-height - 8px;
+              }
               &.current {
-                border: 4px solid #EFEFEF;
+                border: 4px solid #EFEFEF !important;
               }
             }
           }
@@ -283,13 +293,23 @@ $timeline-height: 50px;
 
   .slides_wrapper {
     width: 100%;
-    img.slide {
+    height: 100%;
+    overflow: hidden;
+    position: absolute;
+    video.slide {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      overflow: hidden;
+    }
+
+    .slide {
       display: block;
       opacity: 0;
       transition: opacity 0.2s;
       position: absolute;
-      width: 100%;
       z-index: 1;
+      width: 100%;
       &.active {
         display: block;
         opacity: 1;
