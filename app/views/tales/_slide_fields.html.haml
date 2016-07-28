@@ -6,15 +6,20 @@
       %i.sort-handle.cursor-move.color-gray.fa.fa-sort.fa-2x{"aria-hidden" => "true", title: "drag to reorder"}
       = link_to_remove_association "<i class='fa fa-2x fa-remove color-red margin-top-sm'></i>".html_safe, f, data: { confirmation: "Delete slide?"}
     .col-sm-7
-      = f.input :caption, input_html: { style: "vertical-align:top;width:90%;", rows: 4}
+      = f.input :caption, input_html: { style: "vertical-align:top;width:90%;", rows: 7}
     .col-sm-2
       = f.input :image, input_html: { style: "margin:0"}
       - if f.object.image.present?
         .row
           %a{href: f.object.image.url(:crop), target: "_blank",style:"cursor:pointer;"}
             = image_tag f.object.image.url(:thumb), style: "height:60px;"
+      = f.input :video, label: "or Video"
+      - if f.object.video.present?
+        .row
+          = video_tag f.object.video.url, { controls: true, style: "width:100%"}
     .col-sm-2
-      = f.input :audio
+      .col-sm-12
+        = f.input :audio, label: "Image Audio"
       - if f.object.audio.present?
         .player-wrap
           %audio{src: f.object.audio.url, controls:true}

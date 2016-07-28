@@ -19,7 +19,7 @@ User.create(email: "demo@demo.com", password: '12345678')
 
   if i==3
     slides_num = 1
-    tale.name = "with one slide"
+    tale.name = "slide and video"
     tale.save
   end
   if i==4
@@ -37,16 +37,21 @@ User.create(email: "demo@demo.com", password: '12345678')
       audio = "long.mp3"
     end
 
-    tale.slides.create! image: File.open("#{Rails.root}/public/sample_data/#{j}.png"), audio: File.open("#{Rails.root}/public/sample_data/#{audio}"),
+    tale.slides.create! image: File.open("#{Rails.root}/test/data/#{j}.png"), audio: File.open("#{Rails.root}/test/data/#{audio}"),
                        caption: "slide number #{slide_num} - "+Faker::Hipster.paragraphs(1+rand(3)).first
   end
 
+  if i==3
+    tale.slides.create video: File.open("#{Rails.root}/test/data/video.webm"), caption: "video"
+    tale.save
+  end
+
   if i==1
-    tale.audio = File.open("#{Rails.root}/public/sample_data/background_audio.mp3")
+    tale.audio = File.open("#{Rails.root}/test/data/background_audio.mp3")
     tale.audio_volume = 50
     tale.name = tale.name + " - with background audio"
 
-    tale.cover = File.open("#{Rails.root}/public/sample_data/cover.jpg")
+    tale.cover = File.open("#{Rails.root}/test/data/cover.jpg")
     tale.save
   end
 end

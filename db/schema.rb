@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160727060350) do
+ActiveRecord::Schema.define(version: 20160728070140) do
 
   create_table "active_admin_comments", force: :cascade do |t|
     t.string   "namespace"
@@ -65,6 +65,10 @@ ActiveRecord::Schema.define(version: 20160727060350) do
     t.datetime "audio_updated_at"
     t.integer  "position"
     t.float    "duration"
+    t.string   "video_file_name"
+    t.string   "video_content_type"
+    t.integer  "video_file_size"
+    t.datetime "video_updated_at"
   end
 
   add_index "slides", ["tale_id"], name: "index_slides_on_tale_id"
