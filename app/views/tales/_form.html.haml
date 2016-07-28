@@ -1,6 +1,8 @@
 .col-sm-12
   = simple_form_for(@tale, html: { class: 'form-horizontal' }) do |f|
-    .pull-right{style: "margin-top:-50px"}
+    %div{style: "top: 15px;position:fixed;right:15px;z-index:1;background: #fff;padding: 10px;border-radius: 10px;"}
+      - if !@tale.new_record?
+        = link_to "<i class='fa fa-eye'></i> Show".html_safe, "/t#{@tale.id}", class: "btn btn-default", target: "_blank"
       %button.btn.btn-default{type: :submit}
         %i.fa.fa-check
         Save
