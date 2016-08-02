@@ -33,6 +33,5 @@
                     ontimeupdate: "slide_video_pos_change.apply(this)",
                     onvolumechange: "slide_vol_change.apply(this)",
                     onloadedmetadata: "this.currentTime = #{f.object.video_thumb_pos}; this.volume = #{f.object.audio_vol}"}
-      = f.hidden_field :duration
       = f.hidden_field :video_thumb_pos, class: "video_thumb_pos"
       = f.hidden_field :audio_vol, class: "audio_vol"

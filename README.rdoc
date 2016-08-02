@@ -6,3 +6,4 @@ http://www.vitalmtb.com/photos/features/Downhill-Finals-Race-Action-from-the-Cai
 
 #TODO: timeline slides bug when having 3-4 slides on last slide
 #TODO: closed captions enabled by default
+#TODO: delete audio from slide

@@ -392,7 +392,11 @@ YARNTALE.play = function() {
 
     if(this.audio) {
       tale_background = this.el.find(".audio")[0]
-      tale_background.volume = (localStorage['YARN_VOL'] || 1)*this.audio_volume/100;
+      tale_background.loop = true
+      vol = (localStorage['YARN_VOL'] || 1)*this.audio_vol
+      YARNTALE.log("playing background, volume: ", vol)
+      tale_background.volume = vol
+      tale_background.currentTime = (this.slides[this.cur_slide_index].position % tale_background.duration)
       tale_background.play()
     }
 
