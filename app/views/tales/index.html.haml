@@ -8,6 +8,7 @@
     %tr
       %th title
       %th slides
+      %th duration
       %th
 
   %tbody
@@ -16,6 +17,8 @@
         %td= tale.name
         %td
           = tale.slides.count
+        %td
+          = Time.at(tale.duration).utc.strftime("%H:%M:%S")
         %td
           = link_to "<i class='fa fa-eye'></i> Show".html_safe, "/t#{tale.id}", class: "btn btn-default", target: "_blank"
           = link_to "<i class='fa fa-pencil-square-o'></i> Edit".html_safe, edit_tale_path(tale), class: "btn btn-default", target: "_blank"
