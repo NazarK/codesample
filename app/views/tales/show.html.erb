@@ -8,7 +8,7 @@
       {
         <%= slide.to_json(except: [:id,:tale_id,:caption,:image,:video,:audio]).gsub(/^{/,"").gsub(/}$/,"").html_safe %>,
         video: "<%= slide.video.url %>",
-        image: {original: "<%= slide.image.url(:crop) %>",
+        image: {original: "<%= slide.image.url(:original) %>",
                 thumb: "<%= slide.image.url(:thumb) %>"},
         audio: "<%= slide.audio.url if slide.audio.present? %>",
         caption: decodeURI("<%= URI.encode(slide.caption.gsub("\n","<br>")) %>")
@@ -22,7 +22,7 @@
     <% end %>
 
     <% if @tale.cover.present? %>
-      YARNTALE.cover = {original: "<%= @tale.cover.url(:crop) %>",
+      YARNTALE.cover = {original: "<%= @tale.cover.url(:original) %>",
               thumb: "<%= @tale.cover.url(:thumb) %>"}
     <% end %>
 

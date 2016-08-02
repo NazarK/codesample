@@ -212,6 +212,12 @@ $timeline-height: 50px;
                 width:  $timeline-height*3/2 - 8px;
                 height: $timeline-height - 8px;
               }
+              img {
+                object-fit: cover;
+                vertical-align: top;
+                width:  $timeline-height*3/2 - 8px;
+                height: $timeline-height - 8px;
+              }
               &.current {
                 border: 4px solid #EFEFEF !important;
               }
@@ -297,6 +303,12 @@ $timeline-height: 50px;
     overflow: hidden;
     position: absolute;
     video.slide {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      overflow: hidden;
+    }
+    img.slide {
       width: 100%;
       height: 100%;
       object-fit: cover;

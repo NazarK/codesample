@@ -1,5 +1,7 @@
 //= require jquery
 //= require jquery-ui
+//= require fitie
+//= require fitie.init
 
 
 window.YARNTALE = {
@@ -56,7 +58,7 @@ YARNTALE.volume = function(value,update_control, update_indicator) {
   }
   if(media) {
     media.volume = YARNTALE.cur_slide().audio_vol * localStorage['YARN_VOL'];
-  }  
+  }
 
   tale_background = this.el.find(".audio")[0]
   tale_background.volume = localStorage['YARN_VOL']*this.audio_vol;
@@ -154,11 +156,11 @@ YARNTALE.attach_to = function(selector) {
         timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
       } else {
         slides_wrapper.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
-        timeline.append("<img class='slide' data-index="+i+" data-src="+slide.image.thumb+">")
+        timeline.append("<div class='slide' data-index="+i+"><img data-src="+slide.image.thumb+"></div>")
       }
     })
 
-    this.TIMELINE_HEIGHT = this.el.find("img.slide").outerHeight()
+    this.TIMELINE_HEIGHT = this.el.find(".timeline .slide").outerHeight()
     this.TIMELINE_SLIDE_WIDTH = Math.floor(this.TIMELINE_HEIGHT * 960/640);
     this.TIMELINE_SLIDES_WIDTH = this.el.find(".slides .platform").width();
 
@@ -426,7 +428,7 @@ YARNTALE.showCover = function() {
 }
 
 YARNTALE.start_loading_media = function() {
-  this.el.find(".slide[data-src], .slide video[data-src]").each(function() {
+  this.el.find("*[data-src]").each(function() {
     $(this).attr('src',$(this).attr("data-src"))
   })
 }
