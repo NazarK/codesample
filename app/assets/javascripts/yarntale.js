@@ -197,11 +197,16 @@ YARNTALE.attach_to = function(selector) {
 
 
     $(document).on("click",".yarntale .sensor.right",function() {
-        YARNTALE.next()
+        YARNTALE.keep_playing_state(function() {
+            YARNTALE.next()
+        })
     })
 
     $(document).on("click",".yarntale .sensor.left",function() {
-        YARNTALE.prev()
+        YARNTALE.keep_playing_state(function() {
+          YARNTALE.prev()  
+        })
+        
     })
 
 
@@ -435,9 +440,22 @@ YARNTALE.start_loading_media = function() {
   })
 }
 
+YARNTALE.keep_playing_state = function(yield) {
+  var was_playing = YARNTALE.playing;
+  
+  YARNTALE.pause()
+  yield()
+  if(was_playing) {
+    YARNTALE.play()
+  }
+  
+}
+
 $(function() {
 
     if (localStorage['TIMELINE_FORCE']=='true') {
       $(".timeline").css("height", "96px");
     }
 })
+
+
