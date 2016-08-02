@@ -3,7 +3,7 @@ class Slide < ActiveRecord::Base
   belongs_to :tale
   default_scope -> { order(:position)}
   has_attached_file :image,
-                    :styles => { original: "2048x2048>", crop: "960x640#", :medium => "450x300>", :thumb => "150x100#" },
+                    :styles => { original: "2048x2048>", crop: "960x640#", thumb: "150x100#" },
                     :storage => Rails.env=='production' ? :s3 : :filesystem
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
