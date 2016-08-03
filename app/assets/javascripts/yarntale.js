@@ -16,9 +16,11 @@ window.YARNTALE = {
 }
 
 YARNTALE.cc_enabled = function(value, update_controls) {
-    if(typeof(value) == 'undefined')
-      return localStorage['YARN_CC_ENABLED'] || true;
-
+    if(typeof(value) == 'undefined') {
+      return (localStorage['YARN_CC_ENABLED']!='false')
+    }
+      
+    this.log("setting cc enabled",value)  
 
     localStorage['YARN_CC_ENABLED'] = value;
 
@@ -270,7 +272,7 @@ YARNTALE.attach_to = function(selector) {
     })
 
     $('.cc').click(function() {
-        YARNTALE.cc_enabled(!(YARNTALE.cc_enabled()=='true'))
+        YARNTALE.cc_enabled(!YARNTALE.cc_enabled())
     })
 
     if(this.audio) {
@@ -279,7 +281,8 @@ YARNTALE.attach_to = function(selector) {
 
     this.volume(localStorage['YARN_VOL'])
 
-    this.cc_enabled(this.cc_enabled()=='true')
+    
+    this.cc_enabled(this.cc_enabled())
 
     return this;
 }
