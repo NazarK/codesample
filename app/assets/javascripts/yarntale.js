@@ -92,26 +92,27 @@ YARNTALE.volume = function(value,update_control, update_indicator) {
 
 }
 
-YARNTALE.set_cur_slide_line_offset = function(v) {
-  console.log("set cur slide line offset",v)
-  if(v<0) {
-      console.log("<0")
-      v = 0;
-      //return false;
-  } else if(v>(this.slides.length-this.slides_in_slide_line()+1)) {
-      console.log(">total slides")
-      v = this.slides.length-this.slides_in_slide_line()+1
-      //return false;
+YARNTALE.set_cur_slide_line_offset = function(slides_platform_ofs) {
+  this.log("set cur slide line offset",slides_platform_ofs)
+
+  var max_ofs = this.slides.length-this.slides_in_slide_line()+2
+
+  if(slides_platform_ofs<0) {
+      this.log("<0")
+      slides_platform_ofs = 0;
+  } else if(slides_platform_ofs>max_ofs) {
+      this.log("too big, setting to max value", max_ofs)
+      slides_platform_ofs = max_ofs
   }
-  this.cur_slide_line_offset = v;
-  var new_margin_left = -this.TIMELINE_SLIDE_WIDTH*v;
+  this.cur_slide_line_offset = slides_platform_ofs;
+  var new_margin_left = -this.TIMELINE_SLIDE_WIDTH*slides_platform_ofs;
   console.log("new margin left", new_margin_left)
   $(".slides .platform").css({ "margin-left": new_margin_left })
   return true;
 }
 
 YARNTALE.slides_in_slide_line = function() {
-  ret = Math.ceil(this.TIMELINE_SLIDES_WIDTH / this.TIMELINE_SLIDE_WIDTH)
+  ret = Math.floor(this.TIMELINE_SLIDES_WIDTH / this.TIMELINE_SLIDE_WIDTH)
   this.log("slides_in_slide_line",ret)
   return ret;
 }
@@ -197,13 +198,13 @@ YARNTALE.attach_to = function(selector) {
 
 
     $(document).on("click",".yarntale .sensor.right",function() {
-        YARNTALE.keep_playing_state(function() {
+        YARNTALE.do_while_keeping_play_state(function() {
             YARNTALE.next()
         })
     })
 
     $(document).on("click",".yarntale .sensor.left",function() {
-        YARNTALE.keep_playing_state(function() {
+        YARNTALE.do_while_keeping_play_state(function() {
           YARNTALE.prev()  
         })
         
@@ -440,7 +441,7 @@ YARNTALE.start_loading_media = function() {
   })
 }
 
-YARNTALE.keep_playing_state = function(yield) {
+YARNTALE.do_while_keeping_play_state = function(yield) {
   var was_playing = YARNTALE.playing;
   
   YARNTALE.pause()
