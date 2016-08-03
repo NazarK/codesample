@@ -43,6 +43,9 @@ class Slide < ActiveRecord::Base
   validates_attachment_content_type :video, :content_type => /\Avideo\/.*\Z/
 
 
+  attr_accessor :delete_audio 
+  before_validation { audio.clear if delete_audio == '1' }
+
   before_audio_post_process do
     media = FFMPEG::Movie.new(audio.queued_for_write[:original].path)
     puts "media duration: #{media.duration}"

@@ -71,4 +71,16 @@ class SlideTest < ActiveSupport::TestCase
     assert tale.duration == (tale.slides.first.duration + tale.slides.last.duration)
     
   end
+  
+  test 'delete audio' do
+    slide = Slide.create! image: File.open("#{Rails.root}/test/data/2.png"), 
+       audio: File.open("#{Rails.root}/test/data/1.mp3")
+    assert slide.audio.present?   
+    slide.delete_audio = "1"
+    slide.save
+    
+    slide.reload
+    assert slide.audio.blank?   
+    
+  end
 end

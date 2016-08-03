@@ -23,6 +23,8 @@
                 { controls: true,
                   onvolumechange: "slide_vol_change.apply(this)",
                   onloadedmetadata: "this.volume = #{f.object.audio_vol}"  }
+            .row.col-sm-12
+              = f.input :delete_audio, as: :boolean, label: "delete audio"
       .row
         .col-sm-12
           = f.input :video, label: "or Video"
