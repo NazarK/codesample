@@ -1,5 +1,7 @@
 //= require jquery
 //= require jquery-ui
+//= require fitie
+//= require fitie.apply
 
 
 window.YARNTALE = {
@@ -143,25 +145,27 @@ YARNTALE.attach_to = function(selector) {
 
     console.log("building timeline")
     if(this.cover) {
-      self.el.find(".slides_wrapper").append("<img class='slide cover' src="+this.cover.original+">")
+      self.el.find(".slide_view").append("<img class='slide cover' src="+this.cover.original+">")
     } else {
-      self.el.find(".slides_wrapper").append("<img class='slide cover' src="+this.slides[0].image.original+">")
+      self.el.find(".slide_view").append("<img class='slide cover' src="+this.slides[0].image.original+">")
     }
 
-    var slides_wrapper = self.el.find(".slides_wrapper")
+    var slide_view = self.el.find(".slide_view")
     var timeline = self.el.find(".timeline .slides .platform")
     $.each(this.slides,function(i,slide) {
       //console.log(slide)
-      if(slide.video) {
-        slides_wrapper.append("<video class='slide' data-index="+i+" data-src="+slide.video +">")
+    if(slide.video) {
+        slide_view.append("<div class='slide' data-index="+i+" ><video data-src="+slide.video +"></video></div>")
         timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
       } else {
-        slides_wrapper.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
-        timeline.append("<img class='slide' data-index="+i+" data-src="+slide.image.thumb+">")
+        slide_view.append("<div class='slide' data-index="+i+" ><img data-src="+slide.image.original+"></div>")
+        timeline.append("<div class='slide' data-index="+i+"><img data-src="+slide.image.thumb+"></div>")
       }
     })
 
-    this.TIMELINE_HEIGHT = this.el.find("img.slide").outerHeight()
+    //slide_view.append('<video class="slide" style="width:100%;height:100%;object-fit:cover;display:block;" data-src="/system/slides/videos/42/original.mp4?1470150265"></video>')
+
+    this.TIMELINE_HEIGHT = this.el.find(".timeline .slide").outerHeight()
     this.TIMELINE_SLIDE_WIDTH = Math.floor(this.TIMELINE_HEIGHT * 960/640);
     this.TIMELINE_SLIDES_WIDTH = this.el.find(".slides .platform").width();
 
@@ -177,7 +181,7 @@ YARNTALE.attach_to = function(selector) {
       YARNTALE.start_loading_media()
     })
 
-    self.el.find(".slides_wrapper .slide").load(function() {
+    self.el.find(".slide_view .slide").load(function() {
       images_loaded ++
       YARNTALE.log("slide loaded",$(this),images_loaded)
       if(images_loaded == YARNTALE.slides.length) {
@@ -186,7 +190,7 @@ YARNTALE.attach_to = function(selector) {
       }
     })
 
-    $('video').on('ended',function(e) {
+    $('.slide_view video').on('ended',function(e) {
       YARNTALE.log("video ended, video duration: ",this.duration)
       if(this.duration>YARNTALE.slide_duration) {
         YARNTALE.next()
@@ -312,13 +316,12 @@ YARNTALE.setSlideIndex = function(i) {
     this.el.find(".timeline .slide[data-index="+i+"]").addClass("current")
 
     if(this.cur_slide().video) {
-      var video = this.el.find(".slides_wrapper .slide[data-index="+this.cur_slide_index+"]")[0]
-      video.currentTime = 0;
+      this.cur_slide_el().currentTime = 0
     }
 
 
-    this.el.find(".slides_wrapper .slide.active").removeClass("active")
-    this.el.find(".slides_wrapper .slide[data-index="+i+"]").addClass("active")
+    this.el.find(".slide_view .slide.active").removeClass("active")
+    this.el.find(".slide_view .slide[data-index="+i+"]").addClass("active")
 
     if(this.playing) {
         this.play()
@@ -351,7 +354,7 @@ YARNTALE.cur_slide = function() {
 }
 
 YARNTALE.cur_slide_el = function() {
-  return this.el.find(".slides_wrapper .slide[data-index="+this.cur_slide_index+"]")[0]
+  return this.el.find(".slide_view .slide[data-index="+this.cur_slide_index+"]").find("img,video")[0]
 }
 
 YARNTALE.play = function() {
@@ -425,7 +428,7 @@ YARNTALE.pause = function() {
   this.el.find(".control .play").show()
   this.el.find(".control .pause").hide()
   if(this.cur_slide().video) {
-    video = this.el.find(".slides_wrapper .slide[data-index=" + this.cur_slide_index+"]")[0]
+    video = this.el.find(".slide_view .slide[data-index=" + this.cur_slide_index+"] video")[0]
     video.pause()
   }
   return this;
@@ -433,15 +436,17 @@ YARNTALE.pause = function() {
 
 YARNTALE.showCover = function() {
   this.el.find(".timeline img.slide.current").removeClass("current")
-  this.el.find(".slides_wrapper .slide.active").removeClass("active")
+  this.el.find(".slide_view .slide.active").removeClass("active")
 
-  this.el.find(".slides_wrapper img.slide.cover").addClass("active")
+  this.el.find(".slide_view img.slide.cover").addClass("active")
 }
 
 YARNTALE.start_loading_media = function() {
-  this.el.find(".slide[data-src], .slide video[data-src]").each(function() {
+  this.el.find("*[data-src]").each(function() {
     $(this).attr('src',$(this).attr("data-src"))
   })
+  window.fitie.apply()  
+  
 }
 
 YARNTALE.do_while_keeping_play_state = function(yield) {

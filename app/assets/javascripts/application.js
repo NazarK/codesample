@@ -15,7 +15,6 @@
 //= require turbolinks
 //= require cocoon
 //= require bootstrap
-//= require_tree .
 
 
 /* JQUERY SORTABLE CLASS SUPPORT */

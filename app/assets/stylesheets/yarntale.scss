@@ -202,15 +202,15 @@ $timeline-height: 50px;
               border: 4px solid #2E2F30;
               cursor: pointer;
               display: inline-block;
-              vertical-align: top;
               margin: 0px 2px;
               width:  $timeline-height*3/2;
               height: $timeline-height;
               overflow: hidden;
-              video {
+              img, video {
                 object-fit: cover;
-                width:  $timeline-height*3/2 - 8px;
-                height: $timeline-height - 8px;
+                width:  100%;
+                height: 100%;
+                vertical-align: top
               }
               &.current {
                 border: 4px solid #EFEFEF !important;
@@ -291,27 +291,27 @@ $timeline-height: 50px;
     }
   }
 
-  .slides_wrapper {
+  .slide_view {
     width: 100%;
     height: 100%;
     overflow: hidden;
     position: absolute;
-    video.slide {
+    .slide {
       width: 100%;
       height: 100%;
-      object-fit: cover;
-      overflow: hidden;
-    }
-
-    .slide {
       display: block;
-      opacity: 0;
-      transition: opacity 0.2s;
       position: absolute;
       z-index: 1;
-      width: 100%;
+
+      img, video {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;  
+      }
+
+      opacity: 0;
+      transition: opacity 0.2s;
       &.active {
-        display: block;
         opacity: 1;
         transition: opacity 0.2s;
       }
