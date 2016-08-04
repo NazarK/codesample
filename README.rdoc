@@ -4,4 +4,4 @@
 based on:
 http://www.vitalmtb.com/photos/features/Downhill-Finals-Race-Action-from-the-Cairns-World-Cup,10052/Slideshow,0/sspomer,2
 
-#TODO: video in IE emulate object-fit: cover
+#TODO: detect cover by ruby? select first image, what to do if no IMAGES? what to do if first is video?
