@@ -4,5 +4,4 @@
 based on:
 http://www.vitalmtb.com/photos/features/Downhill-Finals-Race-Action-from-the-Cairns-World-Cup,10052/Slideshow,0/sspomer,2
 
-#TODO: on cover do not show "left"
 #TODO: on cover click start slide show?
