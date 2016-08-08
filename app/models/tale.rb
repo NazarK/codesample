@@ -42,4 +42,17 @@ class Tale < ActiveRecord::Base
   def duration
     self.slides.to_a.sum &:duration
   end    
+  
+  def pick_cover
+    if cover.present?
+      self.cover.url
+    else
+      first_image_slide = self.slides.where("image_file_name is not null").first
+      if first_image_slide.present?
+        first_image_slide.image.url
+      else
+        "/loading.jpg"
+      end    
+    end  
+  end    
 end

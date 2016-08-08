@@ -5,3 +5,6 @@ based on:
 http://www.vitalmtb.com/photos/features/Downhill-Finals-Race-Action-from-the-Cairns-World-Cup,10052/Slideshow,0/sspomer,2
 
 #TODO: detect cover by ruby? select first image, what to do if no IMAGES? what to do if first is video?
+#TODO: on cover do not show "left" and "right"
+#TODO: on cover click start slide show?
+#TODO: reordering doesn't work

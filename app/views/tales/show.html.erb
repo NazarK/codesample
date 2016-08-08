@@ -25,10 +25,7 @@
       YARNTALE.audio_vol = <%= @tale.audio_vol %>
     <% end %>
 
-    <% if @tale.cover.present? %>
-      YARNTALE.cover = {original: "<%= @tale.cover.url(:crop) %>",
-              thumb: "<%= @tale.cover.url(:thumb) %>"}
-    <% end %>
+    YARNTALE.cover = "<%= @tale.pick_cover %>"
 
     YARNTALE.attach_to(".yarntale")
 

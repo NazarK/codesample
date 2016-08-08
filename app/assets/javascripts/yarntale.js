@@ -145,7 +145,7 @@ YARNTALE.attach_to = function(selector) {
 
     console.log("building timeline")
     if(this.cover) {
-      self.el.find(".slide_view").append("<img class='slide cover' src="+this.cover.original+">")
+      self.el.find(".slide_view").append("<img class='slide cover' src="+this.cover+">")
     } else {
       self.el.find(".slide_view").append("<img class='slide cover' src="+this.slides[0].image.original+">")
     }
