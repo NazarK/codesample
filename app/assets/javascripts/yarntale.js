@@ -21,8 +21,8 @@ YARNTALE.cc_enabled = function(value, update_controls) {
     if(typeof(value) == 'undefined') {
       return (localStorage['YARN_CC_ENABLED']!='false')
     }
-      
-    this.log("setting cc enabled",value)  
+
+    this.log("setting cc enabled",value)
 
     localStorage['YARN_CC_ENABLED'] = value;
 
@@ -60,7 +60,7 @@ YARNTALE.volume = function(value,update_control, update_indicator) {
   }
   if(media) {
     media.volume = YARNTALE.cur_slide().audio_vol * localStorage['YARN_VOL'];
-  }  
+  }
 
   tale_background = this.el.find(".audio")[0]
   tale_background.volume = localStorage['YARN_VOL']*this.audio_vol;
@@ -211,9 +211,9 @@ YARNTALE.attach_to = function(selector) {
 
     $(document).on("click",".yarntale .sensor.left",function() {
         YARNTALE.do_while_keeping_play_state(function() {
-          YARNTALE.prev()  
+          YARNTALE.prev()
         })
-        
+
     })
 
 
@@ -285,7 +285,7 @@ YARNTALE.attach_to = function(selector) {
 
     this.volume(localStorage['YARN_VOL'])
 
-    
+
     this.cc_enabled(this.cc_enabled())
 
     return this;
@@ -355,6 +355,10 @@ YARNTALE.cur_slide_el = function() {
 }
 
 YARNTALE.play = function() {
+    if(this.cur_slide_index==-1) {
+      this.setSlideIndex(0)
+    }
+
     this.playing = true
 
     //if there is audio
@@ -437,7 +441,7 @@ YARNTALE.showCover = function() {
 
   this.el.find(".slide_view img.slide.cover").addClass("active")
   this.adjust_nav_buttons(-1)
-  this.cur_slide_index = -1;  
+  this.cur_slide_index = -1;
 }
 
 YARNTALE.adjust_nav_buttons = function(i) {
@@ -448,26 +452,26 @@ YARNTALE.adjust_nav_buttons = function(i) {
   }
   if(i==this.slides.length-1) {
       $(".top .nav.next").attr("style","display:none");
-  }  
+  }
 }
 
 YARNTALE.start_loading_media = function() {
   this.el.find("*[data-src]").each(function() {
     $(this).attr('src',$(this).attr("data-src"))
   })
-  window.fitie.apply()  
-  
+  window.fitie.apply()
+
 }
 
 YARNTALE.do_while_keeping_play_state = function(yield) {
   var was_playing = YARNTALE.playing;
-  
+
   YARNTALE.pause()
   yield()
   if(was_playing) {
     YARNTALE.play()
   }
-  
+
 }
 
 $(function() {
@@ -476,5 +480,3 @@ $(function() {
       $(".timeline").css("height", "96px");
     }
 })
-
-
