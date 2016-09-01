@@ -45,6 +45,12 @@ end
 # For Rails apps, we'll make some of the shared paths that are shared between
 # all releases.
 task :setup => :environment do
+  queue! %[mkdir -p "#{deploy_to}/#{shared_path}/public/assets"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/public/assets"]
+
+  queue! %[mkdir -p "#{deploy_to}/#{shared_path}/public/system"]
+  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/public/system"]
+
   queue! %[mkdir -p "#{deploy_to}/#{shared_path}/log"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/log"]
 
