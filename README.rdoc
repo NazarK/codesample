@@ -6,6 +6,7 @@ http://www.vitalmtb.com/photos/features/Downhill-Finals-Race-Action-from-the-Cai
 
 #TODO: on cover click start slide show?
 
+#TODO: make layout max width 980px?
 
 
 == INSTALLATION
