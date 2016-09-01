@@ -23,7 +23,6 @@ module Yarntale
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
-    byebug
     config.paperclip_defaults = {
       :path => ":rails_root/public/system/:class/:attachment/:id/:style/:basename.:extension",
       url: "/system/:class/:attachment/:id/:style/:basename.:extension",
