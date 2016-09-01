@@ -31,15 +31,15 @@ class Slide < ActiveRecord::Base
   default_scope -> { order(:position)}
   has_attached_file :image,
                     :styles => { original: "2048x2048>", crop: "960x640#", thumb: "150x100#" },
-                    :storage => Rails.env=='production' ? :s3 : :filesystem
+                    :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
   has_attached_file :audio,
-                    :storage => Rails.env=='production' ? :s3 : :filesystem
+                    :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
   validates_attachment_content_type :audio, :content_type => /\Aaudio\/.*\Z/
 
   has_attached_file :video,
-                    :storage => Rails.env=='production' ? :s3 : :filesystem
+                    :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
   validates_attachment_content_type :video, :content_type => /\Avideo\/.*\Z/
 
 

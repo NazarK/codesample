@@ -28,13 +28,13 @@ class Tale < ActiveRecord::Base
 
   has_attached_file :cover,
                     :styles => { original: "2048x2048>", crop: "960x640#", :medium => "450x300>", :thumb => "150x100#" },
-                    :storage => Rails.env=='production' ? :s3 : :filesystem
+                    :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
 
   validates_attachment_content_type :cover, :content_type => /\Aimage\/.*\Z/
 
 
   has_attached_file :audio,
-                    :storage => Rails.env=='production' ? :s3 : :filesystem
+                    :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
 
   validates_attachment_content_type :audio, :content_type => /\Aaudio\/.*\Z/
 

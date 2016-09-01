@@ -11,7 +11,13 @@ http://www.vitalmtb.com/photos/features/Downhill-Finals-Race-Action-from-the-Cai
 == INSTALLATION
 
 
-install ffmpeg via this instruction (from https://askubuntu.com/questions/373322/how-to-replace-avconv-with-the-real-ffmpeg-and-have-it-work-right/373509)
+PROBLEM WITH FFMPEG
+
+
+to make it work on ubuntu
+
+install original static ffmpeg  via this instruction (from https://askubuntu.com/questions/373322/how-to-replace-avconv-with-the-real-ffmpeg-and-have-it-work-right/373509)
+
 
 % wget http://johnvansickle.com/ffmpeg/builds/ffmpeg-git-32bit-static.tar.xz
 % tar xJvf ffmpeg-git-32bit-static.tar.xz
