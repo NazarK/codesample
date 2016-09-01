@@ -28,6 +28,12 @@
 require 'test_helper'
 
 class SlideTest < ActiveSupport::TestCase
+  test 'saves slide file' do
+    slide = Slide.create! video: File.open("#{Rails.root}/test/data/video_2_sec.mp4")
+    assert File.exists?("#{Rails.root}/public#{slide.video.url.split('?')[0]}")
+    assert File.exists?("#{Rails.root}/public#{slide.video.path}")
+  end
+  
   test "get media duration" do
     movie = FFMPEG::Movie.new("#{Rails.root}/test/data/long.mp3")
     puts "movie duration: #{movie.duration}"
