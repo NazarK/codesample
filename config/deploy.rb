@@ -100,12 +100,12 @@ task :deploy => :environment do
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
-    queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job stop"
+    #queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job stop"
 
     to :launch do
       queue shutdown_cmd
       queue launch_cmd
-      queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job start"
+      #queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job start"
     end
   end
 end
