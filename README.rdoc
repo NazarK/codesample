@@ -5,3 +5,15 @@ based on:
 http://www.vitalmtb.com/photos/features/Downhill-Finals-Race-Action-from-the-Cairns-World-Cup,10052/Slideshow,0/sspomer,2
 
 #TODO: on cover click start slide show?
+
+
+
+== INSTALLATION
+
+
+install ffmpeg via this instruction (from https://askubuntu.com/questions/373322/how-to-replace-avconv-with-the-real-ffmpeg-and-have-it-work-right/373509)
+
+% wget http://johnvansickle.com/ffmpeg/builds/ffmpeg-git-32bit-static.tar.xz
+% tar xJvf ffmpeg-git-32bit-static.tar.xz
+% cd ffmpeg-git-20150427-32bit-static
+% ./ffmpeg
