@@ -23,12 +23,11 @@ module Yarntale
     # Do not swallow errors in after_commit/after_rollback callbacks.
     config.active_record.raise_in_transactional_callbacks = true
 
-    if ENV['S3_STORAGE']=='true'
-      config.paperclip_defaults = {
-        :storage => :s3,
-        :bucket => "yarn-#{Rails.env[0]}"
-      }
-    end
+    config.paperclip_defaults = {
+      :path => ":rails_root/public/system/:class/:attachment/:id/:style/:basename.:extension",
+      :storage => :s3,
+      :bucket => "yarn-#{Rails.env[0]}"
+    }
 
   end
 end
