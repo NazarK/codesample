@@ -26,8 +26,7 @@
     <% end %>
 
     <% if @tale.cover.present? %>
-      YARNTALE.cover = {original: "<%= @tale.cover.url(:original) %>",
-              thumb: "<%= @tale.cover.url(:thumb) %>"}
+      YARNTALE.cover = "<%= @tale.cover.url(:original) %>"
     <% end %>
 
     YARNTALE.attach_to(".yarntale")
