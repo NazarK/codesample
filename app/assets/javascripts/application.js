@@ -53,7 +53,7 @@ function embed_generate() {
   var w = $("#width").val()
   var h = $("#height").val()
   var id = $("#id").val()
-  code = "<iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no'></iframe>"
+  code = "<iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no' allowfullscreen></iframe>"  
   $("textarea#code").html(code)
   clearTimeout(iframe_reload_timer)
   iframe_reload_timer = setTimeout(function() {
