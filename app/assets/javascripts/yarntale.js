@@ -2,7 +2,7 @@
 //= require jquery-ui
 //= require fitie
 //= require fitie.apply
-
+//= require jquery.fullscreen
 
 window.YARNTALE = {
     el: null, //hosting DOM element
@@ -224,7 +224,7 @@ YARNTALE.attach_to = function(selector) {
     $(document).on("click",".yarntale .control .pause",function() {
         YARNTALE.pause()
     })
-
+    
     $(document).on("click",".yarntale .slides_line_nav.prev",function() {
         YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset - YARNTALE.slides_in_slide_line())
     })
@@ -275,9 +275,14 @@ YARNTALE.attach_to = function(selector) {
 
     })
 
-    $('.cc').click(function() {
-        YARNTALE.cc_enabled(!YARNTALE.cc_enabled())
+    $('.fullscreen').click(function() {
+      $(YARNTALE.el).toggleFullScreen()
     })
+    
+    $('.cc').click(function() {
+      YARNTALE.cc_enabled(!YARNTALE.cc_enabled())
+    })
+    
 
     if(this.audio) {
       this.el.find(".audio").attr("src",this.audio);

@@ -38,7 +38,7 @@ $timeline-height: 50px;
       .volume_sensor {
         width: $timeline-height;
         position: absolute;
-        right: $timeline-height;
+        right: $timeline-height*2;
         bottom: 0px;
         height: 0px;
         overflow: hidden;
@@ -191,7 +191,7 @@ $timeline-height: 50px;
           position: relative;
           overflow: hidden;
           height: 100%;
-          width: calc(100% - #{$timeline-height*1.2} - #{$timeline-height/2} - #{$timeline-height/2} - #{$timeline-height} - #{$timeline-height});
+          width: calc(100% - #{$timeline-height*1.2} - #{$timeline-height/2} - #{$timeline-height/2} - #{3*$timeline-height});
           float: left;
           .platform {
             transition: margin-left 0.10s ease-out;
@@ -219,6 +219,19 @@ $timeline-height: 50px;
           }
         }
 
+        .fullscreen {
+
+          width: $timeline-height;
+          position: absolute;
+          font-size: 45%;
+          height: 100%;
+          text-align: center;
+          padding: 0 10px;
+          color: white;
+          cursor: pointer;
+          bottom: 0px;
+          right: $timeline-height;
+        }
         .cc {
           &.disabled {
             color: #888;
