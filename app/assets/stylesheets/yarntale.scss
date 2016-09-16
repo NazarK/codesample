@@ -5,6 +5,10 @@
 $timeline-height: 50px;
 
 
+html, body {
+    height: 100%;
+}
+
 .yarntale {
 
   -moz-user-select: none;
@@ -16,7 +20,8 @@ $timeline-height: 50px;
   position: relative;
   background: #000;
   width: 100%;
-
+  height: 100%;
+  
   .sensor {
     position: absolute;
     z-index: 2;
@@ -305,13 +310,13 @@ $timeline-height: 50px;
     video.slide {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       overflow: hidden;
     }
     img.slide {
       width: 100%;
       height: 100%;
-      object-fit: cover;
+      object-fit: contain;
       overflow: hidden;
     }
 
