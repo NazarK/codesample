@@ -135,7 +135,7 @@ YARNTALE.attach_to = function(selector) {
 
     var yarntale_width = $(selector).width()
     console.log("yarntale width: ", yarntale_width);
-    $(selector).css("height",$(selector).width()*640/960)
+    //$(selector).css("height",$(selector).width()*640/960)
 
     console.log("YARNTALE.attach_to")
     this.el.append( "" )
@@ -158,12 +158,10 @@ YARNTALE.attach_to = function(selector) {
         slide_view.append("<div class='slide' data-index="+i+" ><video data-src="+slide.video +"></video></div>")
         timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
       } else {
-        slide_view.append("<div class='slide' data-index="+i+" ><img data-src="+slide.image.original+"></div>")
+        slide_view.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
         timeline.append("<div class='slide' data-index="+i+"><img data-src="+slide.image.thumb+"></div>")
       }
     })
-
-    //slide_view.append('<video class="slide" style="width:100%;height:100%;object-fit:cover;display:block;" data-src="/system/slides/videos/42/original.mp4?1470150265"></video>')
 
     this.TIMELINE_HEIGHT = this.el.find(".timeline .slide").outerHeight()
     this.TIMELINE_SLIDE_WIDTH = Math.floor(this.TIMELINE_HEIGHT * 960/640);

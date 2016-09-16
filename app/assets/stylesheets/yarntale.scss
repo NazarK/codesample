@@ -5,6 +5,10 @@
 $timeline-height: 50px;
 
 
+html, body {
+    height: 100%;
+}
+
 .yarntale {
 
   -moz-user-select: none;
@@ -16,7 +20,8 @@ $timeline-height: 50px;
   position: relative;
   background: #000;
   width: 100%;
-
+  height: 100%;
+  
   .sensor {
     position: absolute;
     z-index: 2;
@@ -212,6 +217,12 @@ $timeline-height: 50px;
                 height: 100%;
                 vertical-align: top
               }
+              img {
+                object-fit: cover;
+                vertical-align: top;
+                width:  $timeline-height*3/2 - 8px;
+                height: $timeline-height - 8px;
+              }
               &.current {
                 border: 4px solid #EFEFEF !important;
               }
@@ -309,9 +320,12 @@ $timeline-height: 50px;
     height: 100%;
     overflow: hidden;
     position: absolute;
+
     .slide {
       width: 100%;
       height: 100%;
+      object-fit: contain;
+      overflow: hidden;
       display: block;
       position: absolute;
       z-index: 1;
@@ -319,7 +333,7 @@ $timeline-height: 50px;
       img, video {
         width: 100%;
         height: 100%;
-        object-fit: cover;  
+        object-fit: contain;  
       }
 
       opacity: 0;

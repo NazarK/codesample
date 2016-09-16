@@ -25,17 +25,16 @@
       YARNTALE.audio_vol = <%= @tale.audio_vol %>
     <% end %>
 
-    YARNTALE.cover = "<%= @tale.pick_cover %>"
+    <% if @tale.cover.present? %>
+      YARNTALE.cover = {original: "<%= @tale.cover.url(:original) %>",
+              thumb: "<%= @tale.cover.url(:thumb) %>"}
+    <% end %>
 
     YARNTALE.attach_to(".yarntale")
 
   })
 </script>
-<div
-  <% if params[:mode]!="embed" %>
-    style="width:980px;margin:0 auto;"
-  <% end %>
->
+<div  style="width:100%;margin:0 auto;height:100%;" >
 
 
   <div class="yarntale">
