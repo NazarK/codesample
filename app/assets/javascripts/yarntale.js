@@ -191,7 +191,7 @@ YARNTALE.attach_to = function(selector) {
     $('.slide_view video').on('ended',function(e) {
       YARNTALE.log("video ended, video duration: ",this.duration)
       if(this.duration>YARNTALE.slide_duration) {
-        YARNTALE.next()
+        YARNTALE.next({on_auto_next:true})
       }
     })
 
@@ -242,7 +242,7 @@ YARNTALE.attach_to = function(selector) {
         //only trigger if audio duration is longer
         //otherwise it will be triggered by timer
         if(this.duration>YARNTALE.slide_duration) {
-          YARNTALE.next()
+          YARNTALE.next({on_auto_next:true})
         }
     }
 
@@ -301,17 +301,19 @@ YARNTALE.prev = function() {
     }
 }
 
-YARNTALE.next = function() {
+YARNTALE.next = function(opt) {
+    opt = opt || {}
     this.log("next")
     if(this.cur_slide_index+1>=this.slides.length) {
         this.log("tale ended")
         YARNTALE.pause()
     } else {
-        this.setSlideIndex(this.cur_slide_index+1)
+        this.setSlideIndex(this.cur_slide_index+1,opt)
     }
 }
 
-YARNTALE.setSlideIndex = function(i) {
+YARNTALE.setSlideIndex = function(i,opt) {
+    opt = opt || {}
     this.log("set slide index",i)
     this.cur_slide_index = i;
 
@@ -327,7 +329,7 @@ YARNTALE.setSlideIndex = function(i) {
     this.el.find(".slide_view .slide[data-index="+i+"]").addClass("active")
 
     if(this.playing) {
-        this.play()
+        this.play(opt)
     }
 
     this.el.find(".caption .text").html(this.slides[i].caption)
@@ -357,7 +359,9 @@ YARNTALE.cur_slide_el = function() {
   return this.el.find(".slide_view .slide[data-index="+this.cur_slide_index+"]").find("img,video")[0]
 }
 
-YARNTALE.play = function() {
+YARNTALE.play = function(opt) {
+    opt = opt || {}
+  
     if(this.cur_slide_index==-1) {
       this.setSlideIndex(0)
     }
@@ -400,19 +404,22 @@ YARNTALE.play = function() {
 
         YARNTALE.log('trigger next timer, cur slide media duration: ', cur_slide_duration)
         if(cur_slide_duration<YARNTALE.slide_duration) {
-          YARNTALE.next()
+          YARNTALE.next({on_auto_next:true})
         }
       }
     },YARNTALE.slide_duration*1000)
 
 
-    if(this.audio) {
+    //background audio
+    if(this.audio && !opt.on_auto_next) {
       tale_background = this.el.find(".audio")[0]
       tale_background.loop = true
       vol = (localStorage['YARN_VOL'] || 1)*this.audio_vol
       YARNTALE.log("playing background, volume: ", vol)
       tale_background.volume = vol
-      tale_background.currentTime = (this.slides[this.cur_slide_index].position % tale_background.duration)
+      var new_pos = (this.slides[this.cur_slide_index].position % tale_background.duration)
+      YARNTALE.log("setting background audio position from to", tale_background.currentTime, new_pos )
+      tale_background.currentTime = new_pos
       tale_background.play()
     }
 
