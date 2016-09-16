@@ -24,6 +24,8 @@ module Yarntale
     config.active_record.raise_in_transactional_callbacks = true
 
     config.paperclip_defaults = {
+      :path => ":rails_root/public/system/:class/:attachment/:id/:style/:basename.:extension",
+      url: "/system/:class/:attachment/:id/:style/:basename.:extension",
       :storage => :s3,
       :bucket => "yarn-#{Rails.env[0]}"
     }

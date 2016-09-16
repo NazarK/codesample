@@ -1,8 +1,8 @@
 //= require jquery
 //= require jquery-ui
 //= require fitie
-//= require fitie.init
-
+//= require fitie.apply
+//= require jquery.fullscreen
 
 window.YARNTALE = {
     el: null, //hosting DOM element
@@ -18,9 +18,11 @@ window.YARNTALE = {
 }
 
 YARNTALE.cc_enabled = function(value, update_controls) {
-    if(typeof(value) == 'undefined')
-      return localStorage['YARN_CC_ENABLED'] || true;
+    if(typeof(value) == 'undefined') {
+      return (localStorage['YARN_CC_ENABLED']!='false')
+    }
 
+    this.log("setting cc enabled",value)
 
     localStorage['YARN_CC_ENABLED'] = value;
 
@@ -94,26 +96,27 @@ YARNTALE.volume = function(value,update_control, update_indicator) {
 
 }
 
-YARNTALE.set_cur_slide_line_offset = function(v) {
-  console.log("set cur slide line offset",v)
-  if(v<0) {
-      console.log("<0")
-      v = 0;
-      //return false;
-  } else if(v>(this.slides.length-this.slides_in_slide_line()+1)) {
-      console.log(">total slides")
-      v = this.slides.length-this.slides_in_slide_line()+1
-      //return false;
+YARNTALE.set_cur_slide_line_offset = function(slides_platform_ofs) {
+  this.log("set cur slide line offset",slides_platform_ofs)
+
+  var max_ofs = this.slides.length-this.slides_in_slide_line()+2
+
+  if(slides_platform_ofs<0) {
+      this.log("<0")
+      slides_platform_ofs = 0;
+  } else if(slides_platform_ofs>max_ofs) {
+      this.log("too big, setting to max value", max_ofs)
+      slides_platform_ofs = max_ofs
   }
-  this.cur_slide_line_offset = v;
-  var new_margin_left = -this.TIMELINE_SLIDE_WIDTH*v;
+  this.cur_slide_line_offset = slides_platform_ofs;
+  var new_margin_left = -this.TIMELINE_SLIDE_WIDTH*slides_platform_ofs;
   console.log("new margin left", new_margin_left)
   $(".slides .platform").css({ "margin-left": new_margin_left })
   return true;
 }
 
 YARNTALE.slides_in_slide_line = function() {
-  ret = Math.ceil(this.TIMELINE_SLIDES_WIDTH / this.TIMELINE_SLIDE_WIDTH)
+  ret = Math.floor(this.TIMELINE_SLIDES_WIDTH / this.TIMELINE_SLIDE_WIDTH)
   this.log("slides_in_slide_line",ret)
   return ret;
 }
@@ -142,20 +145,20 @@ YARNTALE.attach_to = function(selector) {
 
     console.log("building timeline")
     if(this.cover) {
-      self.el.find(".slides_wrapper").append("<img class='slide cover' src="+this.cover.original+">")
+      self.el.find(".slide_view").append("<img class='slide cover' src="+this.cover+">")
     } else {
-      self.el.find(".slides_wrapper").append("<img class='slide cover' src="+this.slides[0].image.original+">")
+      self.el.find(".slide_view").append("<img class='slide cover' src="+this.slides[0].image.original+">")
     }
 
-    var slides_wrapper = self.el.find(".slides_wrapper")
+    var slide_view = self.el.find(".slide_view")
     var timeline = self.el.find(".timeline .slides .platform")
     $.each(this.slides,function(i,slide) {
       //console.log(slide)
-      if(slide.video) {
-        slides_wrapper.append("<video class='slide' data-index="+i+" data-src="+slide.video +">")
+    if(slide.video) {
+        slide_view.append("<div class='slide' data-index="+i+" ><video data-src="+slide.video +"></video></div>")
         timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
       } else {
-        slides_wrapper.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
+        slide_view.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
         timeline.append("<div class='slide' data-index="+i+"><img data-src="+slide.image.thumb+"></div>")
       }
     })
@@ -176,7 +179,7 @@ YARNTALE.attach_to = function(selector) {
       YARNTALE.start_loading_media()
     })
 
-    self.el.find(".slides_wrapper .slide").load(function() {
+    self.el.find(".slide_view .slide").load(function() {
       images_loaded ++
       YARNTALE.log("slide loaded",$(this),images_loaded)
       if(images_loaded == YARNTALE.slides.length) {
@@ -185,7 +188,7 @@ YARNTALE.attach_to = function(selector) {
       }
     })
 
-    $('video').on('ended',function(e) {
+    $('.slide_view video').on('ended',function(e) {
       YARNTALE.log("video ended, video duration: ",this.duration)
       if(this.duration>YARNTALE.slide_duration) {
         YARNTALE.next()
@@ -199,11 +202,16 @@ YARNTALE.attach_to = function(selector) {
 
 
     $(document).on("click",".yarntale .sensor.right",function() {
-        YARNTALE.next()
+        YARNTALE.do_while_keeping_play_state(function() {
+            YARNTALE.next()
+        })
     })
 
     $(document).on("click",".yarntale .sensor.left",function() {
-        YARNTALE.prev()
+        YARNTALE.do_while_keeping_play_state(function() {
+          YARNTALE.prev()
+        })
+
     })
 
 
@@ -214,7 +222,7 @@ YARNTALE.attach_to = function(selector) {
     $(document).on("click",".yarntale .control .pause",function() {
         YARNTALE.pause()
     })
-
+    
     $(document).on("click",".yarntale .slides_line_nav.prev",function() {
         YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset - YARNTALE.slides_in_slide_line())
     })
@@ -265,9 +273,14 @@ YARNTALE.attach_to = function(selector) {
 
     })
 
-    $('.cc').click(function() {
-        YARNTALE.cc_enabled(!(YARNTALE.cc_enabled()=='true'))
+    $('.fullscreen').click(function() {
+      $(YARNTALE.el).toggleFullScreen()
     })
+    
+    $('.cc').click(function() {
+      YARNTALE.cc_enabled(!YARNTALE.cc_enabled())
+    })
+    
 
     if(this.audio) {
       this.el.find(".audio").attr("src",this.audio);
@@ -275,7 +288,8 @@ YARNTALE.attach_to = function(selector) {
 
     this.volume(localStorage['YARN_VOL'])
 
-    this.cc_enabled(this.cc_enabled()=='true')
+
+    this.cc_enabled(this.cc_enabled())
 
     return this;
 }
@@ -305,26 +319,19 @@ YARNTALE.setSlideIndex = function(i) {
     this.el.find(".timeline .slide[data-index="+i+"]").addClass("current")
 
     if(this.cur_slide().video) {
-      var video = this.el.find(".slides_wrapper .slide[data-index="+this.cur_slide_index+"]")[0]
-      video.currentTime = 0;
+      this.cur_slide_el().currentTime = 0
     }
 
 
-    this.el.find(".slides_wrapper .slide.active").removeClass("active")
-    this.el.find(".slides_wrapper .slide[data-index="+i+"]").addClass("active")
+    this.el.find(".slide_view .slide.active").removeClass("active")
+    this.el.find(".slide_view .slide[data-index="+i+"]").addClass("active")
 
     if(this.playing) {
         this.play()
     }
 
     this.el.find(".caption .text").html(this.slides[i].caption)
-    $(".nav").attr("style","")
-    if(i==0) {
-        $(".top .nav.prev").attr("style","display:none");
-    }
-    if(i==this.slides.length-1) {
-        $(".top .nav.next").attr("style","display:none");
-    }
+    this.adjust_nav_buttons(i)
 
     this.set_cur_slide_line_offset(this.cur_slide_index-Math.floor(this.slides_in_slide_line()/2-1))
 
@@ -340,14 +347,21 @@ YARNTALE.start = function() {
 
 
 YARNTALE.cur_slide = function() {
+  //showing cover case - index == -1
+  if(this.cur_slide_index==-1)
+    return { video: false, audio: false, image: false }
   return this.slides[this.cur_slide_index]
 }
 
 YARNTALE.cur_slide_el = function() {
-  return this.el.find(".slides_wrapper .slide[data-index="+this.cur_slide_index+"]")[0]
+  return this.el.find(".slide_view .slide[data-index="+this.cur_slide_index+"]").find("img,video")[0]
 }
 
 YARNTALE.play = function() {
+    if(this.cur_slide_index==-1) {
+      this.setSlideIndex(0)
+    }
+
     this.playing = true
 
     //if there is audio
@@ -394,7 +408,11 @@ YARNTALE.play = function() {
 
     if(this.audio) {
       tale_background = this.el.find(".audio")[0]
-      tale_background.volume = (localStorage['YARN_VOL'] || 1)*this.audio_volume/100;
+      tale_background.loop = true
+      vol = (localStorage['YARN_VOL'] || 1)*this.audio_vol
+      YARNTALE.log("playing background, volume: ", vol)
+      tale_background.volume = vol
+      tale_background.currentTime = (this.slides[this.cur_slide_index].position % tale_background.duration)
       tale_background.play()
     }
 
@@ -414,7 +432,7 @@ YARNTALE.pause = function() {
   this.el.find(".control .play").show()
   this.el.find(".control .pause").hide()
   if(this.cur_slide().video) {
-    video = this.el.find(".slides_wrapper .slide[data-index=" + this.cur_slide_index+"]")[0]
+    video = this.el.find(".slide_view .slide[data-index=" + this.cur_slide_index+"] video")[0]
     video.pause()
   }
   return this;
@@ -422,15 +440,41 @@ YARNTALE.pause = function() {
 
 YARNTALE.showCover = function() {
   this.el.find(".timeline img.slide.current").removeClass("current")
-  this.el.find(".slides_wrapper .slide.active").removeClass("active")
+  this.el.find(".slide_view .slide.active").removeClass("active")
 
-  this.el.find(".slides_wrapper img.slide.cover").addClass("active")
+  this.el.find(".slide_view img.slide.cover").addClass("active")
+  this.adjust_nav_buttons(-1)
+  this.cur_slide_index = -1;
+}
+
+YARNTALE.adjust_nav_buttons = function(i) {
+  $(".nav").attr("style","")
+  //-1 - is for cover, 0 - first slide
+  if(i<=0) {
+      $(".top .nav.prev").attr("style","display:none");
+  }
+  if(i==this.slides.length-1) {
+      $(".top .nav.next").attr("style","display:none");
+  }
 }
 
 YARNTALE.start_loading_media = function() {
   this.el.find("*[data-src]").each(function() {
     $(this).attr('src',$(this).attr("data-src"))
   })
+  window.fitie.apply()
+
+}
+
+YARNTALE.do_while_keeping_play_state = function(yield) {
+  var was_playing = YARNTALE.playing;
+
+  YARNTALE.pause()
+  yield()
+  if(was_playing) {
+    YARNTALE.play()
+  }
+
 }
 
 $(function() {

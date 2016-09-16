@@ -25,12 +25,23 @@
 #  media_duration     :float
 #
 
-# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+require 'test_helper'
 
-one:
-  tale_id: 
-  caption: MyText
+class TaleTest < ActiveSupport::TestCase
+  test "use cover" do
+    tale = Tale.new
+    tale.save
+    assert tale.pick_cover.include? "/loading"
 
-two:
-  tale_id: 
-  caption: MyText
+    tale.slides.create! video: File.open("#{Rails.root}/test/data/video_2_sec.mp4")
+    assert tale.pick_cover.include? "/loading"
+
+
+    slide = tale.slides.create! image: File.open("#{Rails.root}/test/data/2.png"), 
+       audio: File.open("#{Rails.root}/test/data/1.mp3")
+       
+    assert_equal slide.image.url, tale.pick_cover
+    
+  end
+  
+end

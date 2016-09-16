@@ -4,15 +4,19 @@
     $.extend(YARNTALE, JSON.parse( '<%= @tale.to_json(only: :slide_duration).html_safe %>'))
 
     YARNTALE.slides = [
+      <% position = 0 %>
       <% @tale.slides.each do |slide| %>
       {
         <%= slide.to_json(except: [:id,:tale_id,:caption,:image,:video,:audio]).gsub(/^{/,"").gsub(/}$/,"").html_safe %>,
         video: "<%= slide.video.url %>",
-        image: {original: "<%= slide.image.url(:original) %>",
+        position: <%= position %>,
+        duration: <%= slide.duration %>,
+        image: {original: "<%= slide.image.url(:crop) %>",
                 thumb: "<%= slide.image.url(:thumb) %>"},
         audio: "<%= slide.audio.url if slide.audio.present? %>",
         caption: decodeURI("<%= URI.encode(slide.caption.gsub("\n","<br>")) %>")
       },
+      <% position += slide.duration %>
       <% end %>
     ]
 
@@ -62,23 +66,33 @@
       </div>
 
       <div class="timeline">
+
         <div class="control">
           <div class="pause"><i class="fa fa-pause" aria-hidden="true"></i></div>
           <div class="play"><i class="fa fa-play" aria-hidden="true"></i></div>
         </div>
+
         <div class="slides_line_nav prev"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
+
         <div class="slides">
           <div class="platform">
           </div>
         </div>
+
         <div class="slides_line_nav next"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
+
+        <div class="fullscreen">
+          <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+        </div>
+
         <div class="cc">
           <i class="fa fa-cc" aria-hidden="true"></i>
         </div>
+
       </div>
     </div>
 
-    <div class="slides_wrapper"></div>
+    <div class="slide_view"></div>
     <audio class="audio" loop></audio>
     <audio class="slide_audio"></audio>
   </div>
