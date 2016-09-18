@@ -17,7 +17,7 @@
 //= require cocoon
 //= require bootstrap
 //= require embeded
-
+//= require jquery.fontselect
 
 /* JQUERY SORTABLE CLASS SUPPORT */
 /* just add class ".jquery-sortable" to elements that you plan to reorder */
@@ -71,6 +71,8 @@ var ready = function() {
   if($("body").is(".tales.embed")) {
     embed_generate()
   }
+  
+  $("#tale_captions_font").fontselect()
 
 };
 

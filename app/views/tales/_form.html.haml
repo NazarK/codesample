@@ -7,7 +7,20 @@
         %i.fa.fa-check
         Save
 
-    = f.input :name, label: "Title"
+    .row
+      .col-sm-7
+        = f.input :name, label: "Title"
+      .col-sm-5
+        .col-sm-12
+          .row
+            %label.string.option.control-label
+              Captions font
+          .row
+            .col-sm-8
+              = f.input :captions_font, label: false, input_html: { class: "col-sm-12"}
+              
+        .col-sm-4
+          = f.input :captions_font_size
     .row
       .col-sm-4
         = f.input :cover, label: "Cover Image"

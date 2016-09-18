@@ -33,6 +33,25 @@
 
   })
 </script>
+
+
+<% if @tale.captions_font.present? %>
+  <link href="//fonts.googleapis.com/css?family=<%= @tale.captions_font.gsub(' ','+') %>" rel="stylesheet" type="text/css">
+<% end %>  
+<style>
+.yarntale .sensor.bottom .caption .text {
+  <% if @tale.captions_font.present? %>
+    font-family: "<%= @tale.captions_font.gsub('+', ' ') %>";
+  <% end %>
+  <% if @tale.captions_font_size.present? %>
+    font-size: <%= @tale.captions_font_size %>px;
+  <% end %>  
+  <% if @tale.captions_letter_spacing.present? %>
+    letter-spacing: <%= @tale.captions_letter_spacing %>px;
+  <% end %>
+}
+</style>
+
 <div  style="width:100%;margin:0 auto;height:100%;" >
 
 
