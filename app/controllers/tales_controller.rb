@@ -14,6 +14,7 @@ class TalesController < ApplicationController
   end
 
   def show
+    response.headers.delete('X-Frame-Options')    
     render layout: "show"
   end
 
