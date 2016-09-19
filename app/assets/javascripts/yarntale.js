@@ -232,6 +232,36 @@ YARNTALE.attach_to = function(selector) {
     })
 
 
+    $(document).on('keyup',function(e) {
+      if(e.key=="ArrowLeft" || e.key=="PageUp") {
+        YARNTALE.do_while_keeping_play_state(function() {
+            YARNTALE.prev()
+        })
+      }
+
+      if(e.key=="ArrowRight" || e.key=="PageDown") {
+        YARNTALE.do_while_keeping_play_state(function() {
+            YARNTALE.next()
+        })
+      }
+      if(e.key=="Home") {
+        YARNTALE.pause()
+        YARNTALE.setSlideIndex(0)
+      }
+      if(e.key=="End") {
+        YARNTALE.pause()
+        YARNTALE.setSlideIndex(YARNTALE.slides.length-1)
+      }
+
+      if(e.key==" ") {
+        if(YARNTALE.playing) {
+          YARNTALE.pause()
+        } else {
+          YARNTALE.play()
+        }  
+      }
+    })
+
    $(document).on('dragstart', '.yarntale *', function(event) {
       if(!$(this).hasClass("drag-enabled"))
         event.preventDefault();
