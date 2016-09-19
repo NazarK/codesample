@@ -231,7 +231,6 @@ html, body {
         }
 
         .fullscreen {
-
           width: $timeline-height;
           position: absolute;
           font-size: 45%;
@@ -242,7 +241,11 @@ html, body {
           cursor: pointer;
           bottom: 0px;
           right: $timeline-height;
+          &.disabled {
+            color: #888;
+          }
         }
+        
         .cc {
           &.disabled {
             color: #888;

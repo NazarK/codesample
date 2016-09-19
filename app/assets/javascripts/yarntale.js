@@ -230,6 +230,10 @@ YARNTALE.attach_to = function(selector) {
     $(document).on("click",".yarntale .slides_line_nav.next",function() {
         YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset + YARNTALE.slides_in_slide_line())
     })
+    
+    $(document).on('fullscreenchange',function(e) {
+      $(".fullscreen").toggleClass("disabled", !$(document).fullScreen())
+    })
 
 
     $(document).on('keyup',function(e) {
