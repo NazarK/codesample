@@ -213,9 +213,11 @@ YARNTALE.attach_to = function(selector) {
     })
 
     $(document).on("click",".yarntale .sensor.left",function() {
-        YARNTALE.do_while_keeping_play_state(function() {
-          YARNTALE.prev()
-        })
+      if(YARNTALE.cur_slide_index<=0) return;
+      
+      YARNTALE.do_while_keeping_play_state(function() {
+        YARNTALE.prev()
+      })
 
     })
 
@@ -243,6 +245,7 @@ YARNTALE.attach_to = function(selector) {
     $(document).on('click','.sensor.top, .slide_view', function() {
       //click on cover
       if(YARNTALE.cur_slide_index == -1 ) {
+        console.log("autoplay on cover click")
         YARNTALE.play()
       }
     })
