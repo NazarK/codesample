@@ -7,7 +7,7 @@
 
 window.YARNTALE = {
     el: null, //hosting DOM element
-    playng: false, //triggered by play/pause button
+    playing: false, //triggered by play/pause button
     cur_slide_index: 0,
     cur_slide_line_offset: 0,
     audio: null,
@@ -59,7 +59,7 @@ YARNTALE.volume = function(value,update_control, update_indicator) {
   } else {
     media = this.el.find(".slide_audio")[0]
   }
-  if(media) {
+  if(media && YARNTALE.cur_slide_index>0) {
     media.volume = YARNTALE.cur_slide().audio_vol * localStorage['YARN_VOL'];
   }
 
@@ -185,7 +185,7 @@ YARNTALE.attach_to = function(selector) {
       YARNTALE.log("slide loaded",$(this),images_loaded)
       if(images_loaded == YARNTALE.slides.length) {
         console.log("all loadeded")
-        YARNTALE.setSlideIndex(0)
+        //YARNTALE.setSlideIndex(0)
       }
     })
 
@@ -234,6 +234,13 @@ YARNTALE.attach_to = function(selector) {
     
     $(document).on('fullscreenchange',function(e) {
       $(".fullscreen").toggleClass("disabled", !$(document).fullScreen())
+    })
+    
+    $(document).on('click','.yarntale', function() {
+      //click on cover
+      if(YARNTALE.cur_slide_index == -1 ) {
+        YARNTALE.play()
+      }
     })
 
 
