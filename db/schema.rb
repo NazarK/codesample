@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160918150922) do
+ActiveRecord::Schema.define(version: 20160919112240) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,7 @@ ActiveRecord::Schema.define(version: 20160918150922) do
     t.string   "captions_font"
     t.integer  "captions_font_size"
     t.integer  "captions_letter_spacing"
+    t.integer  "media_fit_mode",          default: 0
   end
 
   add_index "tales", ["user_id"], name: "index_tales_on_user_id", using: :btree
