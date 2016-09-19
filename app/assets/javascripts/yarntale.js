@@ -3,6 +3,7 @@
 //= require fitie
 //= require fitie.apply
 //= require jquery.fullscreen
+//= require cursor-auto-hide
 
 window.YARNTALE = {
     el: null, //hosting DOM element
