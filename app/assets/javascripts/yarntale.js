@@ -236,7 +236,7 @@ YARNTALE.attach_to = function(selector) {
       $(".fullscreen").toggleClass("disabled", !$(document).fullScreen())
     })
     
-    $(document).on('click','.yarntale', function() {
+    $(document).on('click','.sensor.top, .slide_view', function() {
       //click on cover
       if(YARNTALE.cur_slide_index == -1 ) {
         YARNTALE.play()
