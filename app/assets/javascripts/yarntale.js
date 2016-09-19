@@ -101,6 +101,10 @@ YARNTALE.set_cur_slide_line_offset = function(slides_platform_ofs) {
   this.log("set cur slide line offset",slides_platform_ofs)
 
   var max_ofs = this.slides.length-this.slides_in_slide_line()+2
+  if(max_ofs<0) {
+    max_ofs = 0
+  }
+  console.log("max_ofs", max_ofs)
 
   if(slides_platform_ofs<0) {
       this.log("<0")
