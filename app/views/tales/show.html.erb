@@ -14,7 +14,7 @@
         image: {original: "<%= slide.image.url(:crop) %>",
                 thumb: "<%= slide.image.url(:thumb) %>"},
         audio: "<%= slide.audio.url if slide.audio.present? %>",
-        caption: decodeURI("<%= URI.encode(slide.caption.gsub("\n","<br>")) %>")
+        caption: decodeURIComponent("<%= URI.encode(slide.caption.gsub("\n","<br>")) %>")
       },
       <% position += slide.duration %>
       <% end %>
