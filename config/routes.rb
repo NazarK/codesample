@@ -8,6 +8,8 @@ Rails.application.routes.draw do
     member do
       get :embed
     end
+    #this is for internal testing only
+    resources :slides, only: [:show]
   end
 
   get '/t:id(/:mode)' => "tales#show"

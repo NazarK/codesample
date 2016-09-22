@@ -159,13 +159,17 @@ YARNTALE.attach_to = function(selector) {
     var timeline = self.el.find(".timeline .slides .platform")
     $.each(this.slides,function(i,slide) {
       //console.log(slide)
-    if(slide.video) {
-        slide_view.append("<div class='slide' data-index="+i+" ><video data-src="+slide.video +"></video></div>")
-        timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
-      } else {
-        slide_view.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
-        timeline.append("<div class='slide' data-index="+i+"><img data-src="+slide.image.thumb+"></div>")
+      if(slide.video) {
+          slide_view.append("<div class='slide' data-index="+i+" ><video data-src="+slide.video +"></video></div>")
+          timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
+      } else if(slide.embed) {
+          slide_view.append("<div class='slide embeded' data-index="+i+" >"+slide.embed.video_html+"</div>")
+          timeline.append("<div class='slide' data-index="+i+">"+slide.embed.thumb_html+"</div>")
+      } else if(slide.image) {
+          slide_view.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
+          timeline.append("<div class='slide' data-index="+i+"><img data-src="+slide.image.thumb+"></div>")
       }
+      
     })
 
     this.TIMELINE_HEIGHT = this.el.find(".timeline .slide").outerHeight()

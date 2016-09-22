@@ -1,4 +1,4 @@
-<script>
+  <script>
   $(function() {
 
     $.extend(YARNTALE, JSON.parse( '<%= @tale.to_json(only: :slide_duration).html_safe %>'))
@@ -9,6 +9,9 @@
       {
         <%= slide.to_json(except: [:id,:tale_id,:caption,:image,:video,:audio]).gsub(/^{/,"").gsub(/}$/,"").html_safe %>,
         video: "<%= slide.video.url %>",
+        <% if slide.youtube_video_link.present? %>
+          embed: { video_html: "<%== j slide.embed_html %>", thumb_html: "<%== j slide.embed_thumb_html %>" }, 
+        <% end %>
         position: <%= position %>,
         duration: <%= slide.duration %>,
         image: {original: "<%= slide.image.url(:crop) %>",

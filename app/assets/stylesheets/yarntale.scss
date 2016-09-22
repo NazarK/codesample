@@ -222,7 +222,7 @@ body.no-cursor {
               width:  $timeline-height*3/2;
               height: $timeline-height;
               overflow: hidden;
-              img, video {
+              img, video, iframe {
                 object-fit: cover;
                 width:  100%;
                 height: 100%;
@@ -344,7 +344,7 @@ body.no-cursor {
       position: absolute;
       z-index: 1;
 
-      img, video {
+      img, video, iframe {
         width: 100%;
         height: 100%;
         object-fit: contain;  

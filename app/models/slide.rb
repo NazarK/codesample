@@ -80,9 +80,19 @@ class Slide < ActiveRecord::Base
   before_save do
     if self.image_updated_at_changed?
       self.video.clear
+      self.youtube_video_link = nil
+      self.youtube_video_start = nil
+      self.youtube_video_end = nil
     elsif self.video_updated_at_changed?
       self.image.clear
       self.audio.clear
+      self.youtube_video_link = nil
+      self.youtube_video_start = nil
+      self.youtube_video_end = nil
+    elsif self.youtube_video_link_changed? && self.youtube_video_link.present?
+      self.image.clear
+      self.audio.clear
+      self.video.clear  
     end
 
     #reset media_duration if no audio or video
@@ -101,11 +111,31 @@ class Slide < ActiveRecord::Base
       self.media_duration
     end      
   end  
+  
+  def youtube_video_id
+    regex = /(?:.be\/|\/watch\?v=|\/(?=p\/))([\w\/\-]+)/
+    youtube_id = youtube_video_link.match(regex)[1]
+  end  
+
+  #for youtube video
+  def embed_html
+    return "" if youtube_video_link.blank?
+    
+    "<iframe class='youtube' data-slide-id='#{self.id}' id='player' type='text/html' 
+        src='http://www.youtube.com/embed/#{self.youtube_video_id}?enablejsapi=1&origin=http://localhost&autoplay=0&showinfo=0&controls=0'
+        frameborder='0'></iframe>"
+  end  
+  
+  def embed_thumb_html
+    return "" if youtube_video_link.blank?
+    "<img src='http://img.youtube.com/vi/#{self.youtube_video_id}/0.jpg'></img>"
+  end  
 
   validate do
-    if !(self.image.present? || self.video.present?)
-      self.errors[:image] << " should be image or video"
-      self.errors[:video] << " should be image or video"
+    if !(self.image.present? || self.video.present? || self.youtube_video_link.present?)
+      self.errors[:image] << " some media for the slide should be specified"
+      self.errors[:video] << " some media for the slide should be specified"
+      self.errors[:youtube_video_link] << "  some media for the slide should be specified"
     end
   end
 end

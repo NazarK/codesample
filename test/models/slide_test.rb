@@ -89,4 +89,6 @@ class SlideTest < ActiveSupport::TestCase
     assert slide.audio.blank?   
     
   end
+  
+  
 end

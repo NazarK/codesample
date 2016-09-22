@@ -1,4 +1,4 @@
-.nested-fields.margin-bottom.slide{data: {id: f.object.id}}
+.nested-fields.well.padding.slide{data: {id: f.object.id}}
   .row
     = f.hidden_field :id
     = f.hidden_field :position
@@ -25,6 +25,12 @@
                   onloadedmetadata: "this.volume = #{f.object.audio_vol}"  }
             .row.col-sm-12
               = f.input :delete_audio, as: :boolean, label: "delete audio"
+      .row
+        .col-sm-7
+          = f.input :youtube_video_link, label: "or Youtube Video Link"
+          - if f.object.youtube_video_link.present?
+            .row.youtube_thumb
+              = f.object.embed_thumb_html.html_safe
       .row
         .col-sm-12
           = f.input :video, label: "or Video"
