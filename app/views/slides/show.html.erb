@@ -4,4 +4,45 @@ iframe {
   height: 200px;
 }
 </style>
-<%= @slide.embed_html.html_safe %>
+<%= render "slides/youtube_embed", slide: @slide %>
+
+<script src="https://www.youtube.com/iframe_api"></script>
+
+
+<script>
+// 2. This code loads the IFrame Player API code asynchronously.
+  var tag = document.createElement('script');
+
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+  
+  function onReady(event) {
+    console.log('onReady',event)
+    event.target.playVideo()
+  }
+  function onStateChange(event) {
+/*
+-1 (unstarted)
+0 (ended)
+1 (playing)
+2 (paused)
+3 (buffering)
+5 (video cued).
+*/    
+    if(event.data==YT.PlayerState.ENDED) {
+      console.log("stopped, next slide should be here")
+    }
+    console.log(event)
+  }
+
+  function onYouTubeIframeAPIReady() {
+    window.player = new YT.Player('youtube-slide-<%= @slide.id%>', {
+      events: { onReady: onReady, onStateChange: onStateChange }
+    })
+  }
+
+</script>      
+
+<button onclick='player.playVideo()'>play</button>
+<button onclick='player.pauseVideo()'>pause</button>

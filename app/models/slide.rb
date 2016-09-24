@@ -117,20 +117,6 @@ class Slide < ActiveRecord::Base
     youtube_id = youtube_video_link.match(regex)[1]
   end  
 
-  #for youtube video
-  def embed_html
-    return "" if youtube_video_link.blank?
-    
-    "<iframe class='youtube' data-slide-id='#{self.id}' id='player' type='text/html' 
-        src='http://www.youtube.com/embed/#{self.youtube_video_id}?enablejsapi=1&origin=http://localhost&autoplay=0&showinfo=0&controls=0'
-        frameborder='0'></iframe>"
-  end  
-  
-  def embed_thumb_html
-    return "" if youtube_video_link.blank?
-    "<img src='http://img.youtube.com/vi/#{self.youtube_video_id}/0.jpg'></img>"
-  end  
-
   validate do
     if !(self.image.present? || self.video.present? || self.youtube_video_link.present?)
       self.errors[:image] << " some media for the slide should be specified"

@@ -10,7 +10,8 @@
         <%= slide.to_json(except: [:id,:tale_id,:caption,:image,:video,:audio]).gsub(/^{/,"").gsub(/}$/,"").html_safe %>,
         video: "<%= slide.video.url %>",
         <% if slide.youtube_video_link.present? %>
-          embed: { video_html: "<%== j slide.embed_html %>", thumb_html: "<%== j slide.embed_thumb_html %>" }, 
+          embed: { video_html: "<%== j render('slides/youtube_embed', slide: slide) %>", 
+          thumb_html: "<%== j render('slides/youtube_thumb', slide: slide) %>" }, 
         <% end %>
         position: <%= position %>,
         duration: <%= slide.duration %>,
