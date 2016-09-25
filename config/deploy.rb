@@ -20,7 +20,7 @@ set :rvm_path, '/usr/local/rvm/scripts/rvm'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/secrets.yml', 'log', 'config/application.yml', 'public/system', 'public/assets']
+set :shared_paths, ['config/secrets.yml', 'log', 'config/application.yml', 'public/system']
 
 set :launch_cmd, "cd #{deploy_to}/current && thin start -e production -p 8080 -d  --servers 1"
 set :shutdown_cmd, "ps ax | grep 808 | grep -v grep | awk '{print $1}' | xargs kill || true"
