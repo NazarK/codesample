@@ -4,7 +4,7 @@ iframe {
   height: 200px;
 }
 </style>
-<%= render "slides/youtube_embed", slide: @slide %>
+<%= render "slides/youtube_video", slide: @slide, slide_index: 1 %>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 
@@ -37,7 +37,7 @@ iframe {
   }
 
   function onYouTubeIframeAPIReady() {
-    window.player = new YT.Player('youtube-slide-<%= @slide.id%>', {
+    window.player = new YT.Player('youtube-slide-1', {
       events: { onReady: onReady, onStateChange: onStateChange }
     })
   }

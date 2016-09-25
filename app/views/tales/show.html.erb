@@ -5,12 +5,12 @@
 
     YARNTALE.slides = [
       <% position = 0 %>
-      <% @tale.slides.each do |slide| %>
+      <% @tale.slides.each_with_index do |slide,slide_i| %>
       {
         <%= slide.to_json(except: [:id,:tale_id,:caption,:image,:video,:audio]).gsub(/^{/,"").gsub(/}$/,"").html_safe %>,
         video: "<%= slide.video.url %>",
         <% if slide.youtube_video_link.present? %>
-          embed: { video_html: "<%== j render('slides/youtube_embed', slide: slide) %>", 
+          youtube: { video_html: "<%== j render('slides/youtube_video', slide: slide, slide_index: slide_i) %>", 
           thumb_html: "<%== j render('slides/youtube_thumb', slide: slide) %>" }, 
         <% end %>
         position: <%= position %>,

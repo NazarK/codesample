@@ -130,11 +130,25 @@ YARNTALE.log = function() {
     console.log("YARNTALE: ", arguments)
 }
 
+
+YARNTALE.youtube_library_load = function(callback) {
+  window.onYouTubeIframeAPIReady = callback
+  var tag = document.createElement('script');
+
+  tag.src = "https://www.youtube.com/iframe_api";
+  var firstScriptTag = document.getElementsByTagName('script')[0];
+  firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+}
+
+
+
 YARNTALE.attach_to = function(selector) {
     if(this.slides.length==0) {
       alert("No slides in this tale.")
       return
     }
+        
+    
     this.el = $(selector)
 
 
@@ -162,15 +176,24 @@ YARNTALE.attach_to = function(selector) {
       if(slide.video) {
           slide_view.append("<div class='slide' data-index="+i+" ><video data-src="+slide.video +"></video></div>")
           timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
-      } else if(slide.embed) {
-          slide_view.append("<div class='slide embeded' data-index="+i+" >"+slide.embed.video_html+"</div>")
-          timeline.append("<div class='slide' data-index="+i+">"+slide.embed.thumb_html+"</div>")
+      } else if(slide.youtube) {
+          slide_view.append("<div class='slide youtube' data-index="+i+" >"+slide.youtube.thumb_html+slide.youtube.video_html+"</div>")
+          timeline.append("<div class='slide' data-index="+i+">"+slide.youtube.thumb_html+"</div>")
       } else if(slide.image) {
           slide_view.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
           timeline.append("<div class='slide' data-index="+i+"><img data-src="+slide.image.thumb+"></div>")
       }
       
     })
+
+    YARNTALE.youtube_library_load(function() {
+      console.log("youtube library loaded")
+      $(".slide.youtube").each(function() {
+        var slide_i = $(this).data("index")
+        YARNTALE.youtube_player_create(slide_i)        
+      })
+    })
+
 
     this.TIMELINE_HEIGHT = this.el.find(".timeline .slide").outerHeight()
     this.TIMELINE_SLIDE_WIDTH = Math.floor(this.TIMELINE_HEIGHT * 960/640);
@@ -187,153 +210,18 @@ YARNTALE.attach_to = function(selector) {
     self.el.find(".slide.cover").load(function() {
       YARNTALE.start_loading_media()
     })
-
+    
     self.el.find(".slide_view .slide").load(function() {
       images_loaded ++
       YARNTALE.log("slide loaded",$(this),images_loaded)
       if(images_loaded == YARNTALE.slides.length) {
         console.log("all loadeded")
-        //YARNTALE.setSlideIndex(0)
       }
-    })
-
-    $('.slide_view video').on('ended',function(e) {
-      YARNTALE.log("video ended, video duration: ",this.duration)
-      if(this.duration>YARNTALE.slide_duration) {
-        YARNTALE.next({on_auto_next:true})
-      }
-    })
-
-    $(document).on("click",".yarntale .timeline .slide",function() {
-        YARNTALE.pause()
-        YARNTALE.setSlideIndex($(this).data("index"))
-    })
-
-
-    $(document).on("click",".yarntale .sensor.right",function() {
-        YARNTALE.do_while_keeping_play_state(function() {
-            YARNTALE.next()
-        })
-    })
-
-    $(document).on("click",".yarntale .sensor.left",function() {
-      if(YARNTALE.cur_slide_index<=0) return;
-      
-      YARNTALE.do_while_keeping_play_state(function() {
-        YARNTALE.prev()
-      })
-
-    })
-
-
-    $(document).on("click",".yarntale .control .play",function() {
-        YARNTALE.play()
-    })
-
-    $(document).on("click",".yarntale .control .pause",function() {
-        YARNTALE.pause()
     })
     
-    $(document).on("click",".yarntale .slides_line_nav.prev",function() {
-        YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset - YARNTALE.slides_in_slide_line())
-    })
-
-    $(document).on("click",".yarntale .slides_line_nav.next",function() {
-        YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset + YARNTALE.slides_in_slide_line())
-    })
     
-    $(document).on('fullscreenchange',function(e) {
-      $(".fullscreen").toggleClass("disabled", !$(document).fullScreen())
-    })
-    
-    $(document).on('click','.sensor.top, .slide_view', function() {
-      //click on cover
-      if(YARNTALE.cur_slide_index == -1 ) {
-        console.log("autoplay on cover click")
-        YARNTALE.play()
-      }
-    })
+    YARNTALE.ui_event_handlers_attach()
 
-
-    $(document).on('keyup',function(e) {
-      if(e.key=="ArrowLeft" || e.key=="PageUp") {
-        YARNTALE.do_while_keeping_play_state(function() {
-            YARNTALE.prev()
-        })
-      }
-
-      if(e.key=="ArrowRight" || e.key=="PageDown") {
-        YARNTALE.do_while_keeping_play_state(function() {
-            YARNTALE.next()
-        })
-      }
-      if(e.key=="Home") {
-        YARNTALE.pause()
-        YARNTALE.setSlideIndex(0)
-      }
-      if(e.key=="End") {
-        YARNTALE.pause()
-        YARNTALE.setSlideIndex(YARNTALE.slides.length-1)
-      }
-
-      if(e.key==" ") {
-        if(YARNTALE.playing) {
-          YARNTALE.pause()
-        } else {
-          YARNTALE.play()
-        }  
-      }
-    })
-
-   $(document).on('dragstart', '.yarntale *', function(event) {
-      if(!$(this).hasClass("drag-enabled"))
-        event.preventDefault();
-    });
-
-    $(".yarntale .slide_audio")[0].onended = function() {
-        YARNTALE.log('audio ended, this audio duration: ', this.duration)
-        //only trigger if audio duration is longer
-        //otherwise it will be triggered by timer
-        if(this.duration>YARNTALE.slide_duration) {
-          YARNTALE.next({on_auto_next:true})
-        }
-    }
-
-    $('.yarntale .volume_slider .button').draggable({
-      containment: '.volume_slider',
-      axis: "y",
-      drag: function(e,ui) {
-        if(ui.position.top < 0)
-            ui.position.top = 0;
-
-        var top = $(this).position().top
-        var total = $(this).parent(".volume_slider").height() - $(this).height()
-
-        var volume = (total-top)/total;
-
-        YARNTALE.volume(volume,false)
-      }
-    })
-
-    $(".volume").click(function() {
-      if(YARNTALE.volume()>0) {
-        localStorage['YARN_VOL_SAVE'] = YARNTALE.volume()
-        YARNTALE.volume(0)
-      } else
-      if(YARNTALE.volume()==0) {
-        YARNTALE.volume(localStorage['YARN_VOL_SAVE'])
-      }
-
-    })
-
-    $('.fullscreen').click(function() {
-      $(YARNTALE.el).toggleFullScreen()
-    })
-    
-    $('.cc').click(function() {
-      YARNTALE.cc_enabled(!YARNTALE.cc_enabled())
-    })
-    
 
     if(this.audio) {
       this.el.find(".audio").attr("src",this.audio);
@@ -345,6 +233,147 @@ YARNTALE.attach_to = function(selector) {
     this.cc_enabled(this.cc_enabled())
 
     return this;
+}
+
+YARNTALE.ui_event_handlers_attach = function() {
+
+  $('.slide_view video').on('ended',function(e) {
+    YARNTALE.log("video ended, video duration: ",this.duration)
+    if(this.duration>YARNTALE.slide_duration) {
+      YARNTALE.next({on_auto_next:true})
+    }
+  })
+
+  $(document).on("click",".yarntale .timeline .slide",function() {
+      YARNTALE.pause()
+      YARNTALE.setSlideIndex($(this).data("index"))
+  })
+
+
+  $(document).on("click",".yarntale .sensor.right",function() {
+      YARNTALE.do_while_keeping_play_state(function() {
+          YARNTALE.next()
+      })
+  })
+
+  $(document).on("click",".yarntale .sensor.left",function() {
+    if(YARNTALE.cur_slide_index<=0) return;
+    
+    YARNTALE.do_while_keeping_play_state(function() {
+      YARNTALE.prev()
+    })
+
+  })
+
+
+  $(document).on("click",".yarntale .control .play",function() {
+      YARNTALE.play()
+  })
+
+  $(document).on("click",".yarntale .control .pause",function() {
+      YARNTALE.pause()
+  })
+  
+  $(document).on("click",".yarntale .slides_line_nav.prev",function() {
+      YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset - YARNTALE.slides_in_slide_line())
+  })
+
+  $(document).on("click",".yarntale .slides_line_nav.next",function() {
+      YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset + YARNTALE.slides_in_slide_line())
+  })
+  
+  $(document).on('fullscreenchange',function(e) {
+    $(".fullscreen").toggleClass("disabled", !$(document).fullScreen())
+  })
+  
+  $(document).on('click','.sensor.top, .slide_view', function() {
+    //click on cover
+    if(YARNTALE.cur_slide_index == -1 ) {
+      console.log("autoplay on cover click")
+      YARNTALE.play()
+    }
+  })
+
+
+  $(document).on('keyup',function(e) {
+    if(e.key=="ArrowLeft" || e.key=="PageUp") {
+      YARNTALE.do_while_keeping_play_state(function() {
+          YARNTALE.prev()
+      })
+    }
+
+    if(e.key=="ArrowRight" || e.key=="PageDown") {
+      YARNTALE.do_while_keeping_play_state(function() {
+          YARNTALE.next()
+      })
+    }
+    if(e.key=="Home") {
+      YARNTALE.pause()
+      YARNTALE.setSlideIndex(0)
+    }
+    if(e.key=="End") {
+      YARNTALE.pause()
+      YARNTALE.setSlideIndex(YARNTALE.slides.length-1)
+    }
+
+    if(e.key==" ") {
+      if(YARNTALE.playing) {
+        YARNTALE.pause()
+      } else {
+        YARNTALE.play()
+      }  
+    }
+  })
+
+ $(document).on('dragstart', '.yarntale *', function(event) {
+    if(!$(this).hasClass("drag-enabled"))
+      event.preventDefault();
+  });
+
+  $(".yarntale .slide_audio")[0].onended = function() {
+      YARNTALE.log('audio ended, this audio duration: ', this.duration)
+      //only trigger if audio duration is longer
+      //otherwise it will be triggered by timer
+      if(this.duration>YARNTALE.slide_duration) {
+        YARNTALE.next({on_auto_next:true})
+      }
+  }
+
+  $('.yarntale .volume_slider .button').draggable({
+    containment: '.volume_slider',
+    axis: "y",
+    drag: function(e,ui) {
+      if(ui.position.top < 0)
+          ui.position.top = 0;
+
+      var top = $(this).position().top
+      var total = $(this).parent(".volume_slider").height() - $(this).height()
+
+      var volume = (total-top)/total;
+
+      YARNTALE.volume(volume,false)
+    }
+  })
+
+  $(".volume").click(function() {
+    if(YARNTALE.volume()>0) {
+      localStorage['YARN_VOL_SAVE'] = YARNTALE.volume()
+      YARNTALE.volume(0)
+    } else
+    if(YARNTALE.volume()==0) {
+      YARNTALE.volume(localStorage['YARN_VOL_SAVE'])
+    }
+
+  })
+
+  $('.fullscreen').click(function() {
+    $(YARNTALE.el).toggleFullScreen()
+  })
+  
+  $('.cc').click(function() {
+    YARNTALE.cc_enabled(!YARNTALE.cc_enabled())
+  })
+    
 }
 
 
@@ -364,6 +393,7 @@ YARNTALE.next = function(opt) {
         this.setSlideIndex(this.cur_slide_index+1,opt)
     }
 }
+
 
 YARNTALE.setSlideIndex = function(i,opt) {
     opt = opt || {}
@@ -420,9 +450,12 @@ YARNTALE.play = function(opt) {
     }
 
     this.playing = true
+    
+    $(this.el).addClass("playing")
 
     //if there is audio
     if(this.cur_slide().audio) {
+      console.log("playing audio")
       this.el.find(".slide_audio").attr("src",this.slides[this.cur_slide_index].audio)
       var media = this.el.find(".slide_audio")[0]
       media.volume = localStorage['YARN_VOL'] || 1;
@@ -439,6 +472,11 @@ YARNTALE.play = function(opt) {
       media.volume = localStorage['YARN_VOL'] || 1;
       media.volume *= this.cur_slide().audio_vol
       media.play()
+    }
+    
+    if(this.cur_slide().youtube) {
+      console.log("playing youtube")      
+      YARNTALE.cur_slide().youtube_player.seekTo(0).playVideo()
     }
 
     //setup trigger
@@ -486,6 +524,7 @@ YARNTALE.play = function(opt) {
 
 YARNTALE.pause = function() {
   this.playing = false
+  $(this.el).removeClass("playing")  
   clearTimeout(this.trigger_next_timer)
   this.el.find(".slide_audio")[0].pause()
   this.el.find(".audio")[0].pause()
@@ -494,6 +533,9 @@ YARNTALE.pause = function() {
   if(this.cur_slide().video) {
     video = this.el.find(".slide_view .slide[data-index=" + this.cur_slide_index+"] video")[0]
     video.pause()
+  }
+  if(this.cur_slide().youtube) {
+    this.cur_slide().youtube_player.pauseVideo()
   }
   return this;
 }
@@ -535,6 +577,26 @@ YARNTALE.do_while_keeping_play_state = function(yield) {
     YARNTALE.play()
   }
 
+}
+
+YARNTALE.youtube_player_create = function(slide_index) {
+  function on_youtube_ready(event) {
+    console.log('youtube player ready',event)
+    event.target.seekTo(0).pauseVideo() //trying to buffer
+  }
+
+  function on_youtube_state_change(event) {
+    console.log(event)
+    if(event.data==YT.PlayerState.ENDED) {
+        YARNTALE.log("youtube video ended")
+        YARNTALE.next({on_auto_next:true})        
+    }
+  }
+  
+  YARNTALE.slides[slide_index].youtube_player = new YT.Player('youtube-slide-'+slide_index, {
+    events: { onReady: on_youtube_ready, onStateChange: on_youtube_state_change }
+  })
+  
 }
 
 $(function() {
