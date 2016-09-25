@@ -93,10 +93,14 @@ class Slide < ActiveRecord::Base
       self.image.clear
       self.audio.clear
       self.video.clear  
+      
+      video = VideoInfo.new(self.youtube_video_link)
+      self.media_duration_will_change!
+      self.media_duration = video.duration
     end
 
     #reset media_duration if no audio or video
-    if !self.video.present? && !self.audio.present?
+    if !self.video.present? && !self.audio.present? && self.youtube_video_link.blank?
       self.media_duration_will_change!
       self.media_duration = nil
     end

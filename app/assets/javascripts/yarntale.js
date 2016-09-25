@@ -489,6 +489,8 @@ YARNTALE.play = function(opt) {
         var cur_slide_duration = 0
         if(YARNTALE.cur_slide().video) {
           cur_slide_duration = YARNTALE.cur_slide_el().duration || 0
+        } else if(YARNTALE.cur_slide().youtube) {
+          cur_slide_duration = YARNTALE.slides[YARNTALE.cur_slide_index].duration
         } else {
           cur_slide_duration = YARNTALE.el.find(".slide_audio")[0].duration || 0
         }
