@@ -29,13 +29,15 @@
         .col-sm-7
           = f.input :youtube_video_link, label: "or Youtube Video Link"
         .col-sm-2.col-sm-offset-1
-          = f.input :youtube_video_start, label: "Start (sec)"
+          = f.input :youtube_video_start, label: "Start", input_html: { value: (Time.at(f.object.youtube_video_start.to_i).utc.strftime("%M:%S") if f.object.youtube_video_start.present?), placeholder: "min:sec"  }
         .col-sm-2
-          = f.input :youtube_video_end, label: "End (sec)"
+          = f.input :youtube_video_end, label: "End", input_html: { value: (Time.at(f.object.youtube_video_end.to_i).utc.strftime("%M:%S") if f.object.youtube_video_end.present?), placeholder: "min:sec" }
           
         - if f.object.youtube_video_link.present?
           .col-sm-12.row.youtube_thumb
             = render "slides/youtube_thumb", slide: f.object
+            %span{style: "vertical-align:top"}
+              = Time.at(f.object.media_duration).utc.strftime("%M:%S")
       .row
         .col-sm-12
           = f.input :video, label: "or Video"

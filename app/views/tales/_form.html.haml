@@ -6,7 +6,9 @@
       %button.btn.btn-default{type: :submit}
         %i.fa.fa-check
         Save
-
+    - if f.object.errors.any?
+      .row.alert.alert-danger
+        Please fix errors below
     .row
       .col-sm-7
         = f.input :name, label: "Title"

@@ -79,12 +79,24 @@ class Slide < ActiveRecord::Base
   #keep only slide or video
   
   before_validation do
+    if self.youtube_video_start.to_s.include? ":"
+      self.youtube_video_start = (Time.parse("0:"+self.youtube_video_start) - Time.parse("0:0:0")).to_i.to_s
+    end  
+    
+    if self.youtube_video_end.to_s.include? ":"
+      self.youtube_video_end = (Time.parse("0:"+self.youtube_video_end) - Time.parse("0:0:0")).to_i.to_s
+    end  
+
     if self.youtube_video_link.present?       
       if self.youtube_video_link_changed?
         video = VideoInfo.new(self.youtube_video_link)
         self.media_duration = video.duration
       end
-    end    
+    end
+    
+    
+    
+        
   end
   
   validate do
@@ -93,6 +105,12 @@ class Slide < ActiveRecord::Base
         self.errors[:youtube_video_end] << "should be lower than this video length: #{self.media_duration.to_i} sec"
       end    
     end
+    
+    if self.youtube_video_end.present? && self.youtube_video_start.present?
+      if self.youtube_video_end.to_i < self.youtube_video_start.to_i
+        self.errors[:youtube_video_end] << "should be greater than start"
+      end  
+    end  
   end
   
   before_save do
@@ -147,12 +165,7 @@ class Slide < ActiveRecord::Base
     regex = /(?:.be\/|\/watch\?v=|\/(?=p\/))([\w\/\-]+)/
     youtube_id = youtube_video_link.match(regex)[1]
   end  
-  
-  #returns adjusted integer value
-  def youtube_start
-    youtube_video_start.to_i 
-  end  
-  
+    
   validate do
     if !(self.image.present? || self.video.present? || self.youtube_video_link.present?)
       self.errors[:image] << " some media for the slide should be specified"
