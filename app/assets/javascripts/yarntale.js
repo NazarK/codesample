@@ -421,6 +421,8 @@ YARNTALE.setSlideIndex = function(i,opt) {
 
     this.set_cur_slide_line_offset(this.cur_slide_index-Math.floor(this.slides_in_slide_line()/2-1))
 
+    $(this.el).removeClass("pending_next")
+
     return this;
 }
 
@@ -477,7 +479,9 @@ YARNTALE.play = function(opt) {
     
     if(this.cur_slide().youtube) {
       console.log("playing youtube")      
-      YARNTALE.cur_slide().youtube_player.seekTo(0).playVideo()
+      var slide = YARNTALE.cur_slide()
+      var start = slide.youtube_video_start_i
+      slide.youtube_player.seekTo(start).playVideo()
     }
 
     //setup trigger
@@ -491,13 +495,13 @@ YARNTALE.play = function(opt) {
         if(YARNTALE.cur_slide().video) {
           cur_slide_duration = YARNTALE.cur_slide_el().duration || 0
         } else if(YARNTALE.cur_slide().youtube) {
-          cur_slide_duration = YARNTALE.slides[YARNTALE.cur_slide_index].duration
+          cur_slide_duration = YARNTALE.cur_slide().duration
         } else {
           cur_slide_duration = YARNTALE.el.find(".slide_audio")[0].duration || 0
         }
 
         YARNTALE.log('trigger next timer, cur slide media duration: ', cur_slide_duration)
-        if(cur_slide_duration<YARNTALE.slide_duration) {
+        if(cur_slide_duration<=YARNTALE.slide_duration) {
           YARNTALE.next({on_auto_next:true})
         }
       }
@@ -536,7 +540,7 @@ YARNTALE.play = function(opt) {
 
 YARNTALE.pause = function() {
   this.playing = false
-  $(this.el).removeClass("playing")  
+  $(this.el).removeClass("playing").removeClass("pending_next")  
   clearTimeout(this.trigger_next_timer)
   this.el.find(".slide_audio")[0].pause()
   this.el.find(".audio")[0].pause()
@@ -594,14 +598,23 @@ YARNTALE.do_while_keeping_play_state = function(yield) {
 YARNTALE.youtube_player_create = function(slide_index) {
   function on_youtube_ready(event) {
     console.log('youtube player ready',event)
-    event.target.seekTo(0).pauseVideo() //trying to buffer
+    var slide_index = $(event.target.a).parent(".slide").data("index")
+    console.log($(event.target.a).parent(".slide"))
+    console.log('slide index', slide_index)
+    var start = YARNTALE.slides[slide_index].youtube_video_start_i
+    event.target.seekTo(start).pauseVideo() //trying to buffer
   }
 
   function on_youtube_state_change(event) {
     console.log(event)
     if(event.data==YT.PlayerState.ENDED) {
         YARNTALE.log("youtube video ended")
-        YARNTALE.next({on_auto_next:true})        
+        //don't skip to next if this video is shorter than default slide duration
+        if(YARNTALE.cur_slide().duration>YARNTALE.slide_duration) {
+          YARNTALE.next({on_auto_next:true})
+        } else {
+          $(YARNTALE.el).addClass("pending_next")
+        }
     }
   }
   

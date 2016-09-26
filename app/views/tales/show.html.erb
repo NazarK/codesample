@@ -12,6 +12,7 @@
         <% if slide.youtube_video_link.present? %>
           youtube: { video_html: "<%== j render('slides/youtube_video', slide: slide, slide_index: slide_i) %>", 
           thumb_html: "<%== j render('slides/youtube_thumb', slide: slide) %>" }, 
+          youtube_video_start_i: <%= slide.youtube_video_start.to_i %>,
         <% end %>
         position: <%= position %>,
         duration: <%= slide.duration %>,
@@ -59,7 +60,7 @@
 .yarntale .slide_view .slide { 
   object-fit: cover;
 }
-.yarntale .slide_view .slide img, .yarntale .slide_view .slide video {
+.yarntale .slide_view .slide img, .yarntale .slide_view .slide video, .yarntale .slide_view .slide iframe {
   object-fit: cover;
 }
 <% end %>

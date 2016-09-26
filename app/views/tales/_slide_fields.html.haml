@@ -28,9 +28,14 @@
       .row
         .col-sm-7
           = f.input :youtube_video_link, label: "or Youtube Video Link"
-          - if f.object.youtube_video_link.present?
-            .row.youtube_thumb
-              = render "slides/youtube_thumb", slide: f.object
+        .col-sm-2.col-sm-offset-1
+          = f.input :youtube_video_start, label: "Start (sec)"
+        .col-sm-2
+          = f.input :youtube_video_end, label: "End (sec)"
+          
+        - if f.object.youtube_video_link.present?
+          .col-sm-12.row.youtube_thumb
+            = render "slides/youtube_thumb", slide: f.object
       .row
         .col-sm-12
           = f.input :video, label: "or Video"

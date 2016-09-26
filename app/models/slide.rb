@@ -77,6 +77,24 @@ class Slide < ActiveRecord::Base
   end
 
   #keep only slide or video
+  
+  before_validation do
+    if self.youtube_video_link.present?       
+      if self.youtube_video_link_changed?
+        video = VideoInfo.new(self.youtube_video_link)
+        self.media_duration = video.duration
+      end
+    end    
+  end
+  
+  validate do
+    if self.youtube_video_link.present?       
+      if self.youtube_video_end.to_i > self.media_duration
+        self.errors[:youtube_video_end] << "should be lower than this video length: #{self.media_duration.to_i} sec"
+      end    
+    end
+  end
+  
   before_save do
     if self.image_updated_at_changed?
       self.video.clear
@@ -93,10 +111,6 @@ class Slide < ActiveRecord::Base
       self.image.clear
       self.audio.clear
       self.video.clear  
-      
-      video = VideoInfo.new(self.youtube_video_link)
-      self.media_duration_will_change!
-      self.media_duration = video.duration
     end
 
     #reset media_duration if no audio or video
@@ -112,7 +126,20 @@ class Slide < ActiveRecord::Base
     if self.media_duration.to_f<self.tale&.slide_duration
         self.tale&.slide_duration
     else
-      self.media_duration
+      if self.youtube_video_link.present?
+        if self.youtube_video_end.present?
+          ret = self.youtube_video_end.to_i
+        else  
+          ret = self.media_duration
+        end
+          
+        if self.youtube_video_start.present?
+          ret -= self.youtube_video_start.to_i
+        end
+        ret        
+      else
+        self.media_duration
+      end  
     end      
   end  
   
@@ -120,7 +147,12 @@ class Slide < ActiveRecord::Base
     regex = /(?:.be\/|\/watch\?v=|\/(?=p\/))([\w\/\-]+)/
     youtube_id = youtube_video_link.match(regex)[1]
   end  
-
+  
+  #returns adjusted integer value
+  def youtube_start
+    youtube_video_start.to_i 
+  end  
+  
   validate do
     if !(self.image.present? || self.video.present? || self.youtube_video_link.present?)
       self.errors[:image] << " some media for the slide should be specified"
