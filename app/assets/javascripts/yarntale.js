@@ -142,7 +142,8 @@ YARNTALE.youtube_library_load = function(callback) {
 
 
 
-YARNTALE.attach_to = function(selector) {
+YARNTALE.prepare = function(selector) {
+    console.log("YARNTALE.prepare")
     if(this.slides.length==0) {
       alert("No slides in this tale.")
       return
@@ -156,7 +157,6 @@ YARNTALE.attach_to = function(selector) {
     console.log("yarntale width: ", yarntale_width);
     //$(selector).css("height",$(selector).width()*640/960)
 
-    console.log("YARNTALE.attach_to")
     this.el.append( "" )
 
     var self = this;
@@ -225,6 +225,7 @@ YARNTALE.attach_to = function(selector) {
 
     if(this.audio) {
       this.el.find(".audio").attr("src",this.audio);
+      this.el.find(".audio")[0].loop = true
     }
 
     this.volume(localStorage['YARN_VOL'])
@@ -504,17 +505,26 @@ YARNTALE.play = function(opt) {
 
 
     //background audio
-    if(this.audio && !opt.on_auto_next) {
+    if(this.audio) {
       tale_background = this.el.find(".audio")[0]
-      tale_background.loop = true
-      vol = (localStorage['YARN_VOL'] || 1)*this.audio_vol
-      YARNTALE.log("playing background, volume: ", vol)
-      tale_background.volume = vol
-      var new_pos = (this.slides[this.cur_slide_index].position % tale_background.duration)
-      YARNTALE.log("setting background audio position from to", tale_background.currentTime, new_pos )
-      tale_background.currentTime = new_pos
-      tale_background.play()
+      if(YARNTALE.cur_slide().mute_background_audio) {
+        vol = 0;
+      } else {
+        vol = (localStorage['YARN_VOL'] || 1)*this.audio_vol
+        YARNTALE.log("playing background, volume: ", vol)
+      }
+      tale_background.volume = vol      
+      //don't adjust position and click play if it is auto next slide
+      if(!opt.on_auto_next) {
+        var new_pos = (this.slides[this.cur_slide_index].position % tale_background.duration)
+        YARNTALE.log("setting background audio position from to", tale_background.currentTime, new_pos )
+        tale_background.currentTime = new_pos
+        tale_background.play()
+      }
+      
     }
+    
+    
 
 
 
