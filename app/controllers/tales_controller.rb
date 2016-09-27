@@ -9,7 +9,7 @@ class TalesController < ApplicationController
   end
 
   def index
-    @tales = current_user.tales
+    @tales = current_user.tales.order("id desc")
     respond_with(@tales)
   end
 
