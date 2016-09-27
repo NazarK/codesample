@@ -253,8 +253,10 @@ YARNTALE.ui_event_handlers_attach = function() {
   $(document).on("click",".yarntale .play_toggle", function() {
     console.log(".play_toggle clicked")
     if(YARNTALE.playing) {
+      $(".state_icon.pause").show().fadeOut(1000)
       YARNTALE.pause()
     } else {
+      $(".state_icon.play").show().fadeOut(1000)
       YARNTALE.play()
     }
   })
@@ -627,6 +629,7 @@ YARNTALE.youtube_player_create = function(slide_index) {
   function on_youtube_state_change(event) {
     console.log(event)
     if(event.data==YT.PlayerState.PAUSED) {
+      $(".state_icon.pause").show().fadeOut(1000)      
       YARNTALE.pause()
     }
     if(event.data==YT.PlayerState.ENDED) {

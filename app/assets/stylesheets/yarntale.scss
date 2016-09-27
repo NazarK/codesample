@@ -17,6 +17,27 @@ body.no-cursor {
 }
 
 .yarntale {
+  .state_icon {
+    top: calc(45% - 50px);
+    left: calc(50% - 60px);
+    text-align: center;
+    width: 120px;
+    font-size: 100px;
+    position: absolute;
+    z-index: 10;
+    color: white;
+    display: none;
+
+    text-shadow:
+    -2px -2px 0 #000,
+    2px -2px 0 #000,
+    -2px 2px 0 #000,
+    2px 2px 0 #000;    
+  }  
+}
+
+
+.yarntale {
 
   &.playing {
     .slide_view .slide.youtube img {
