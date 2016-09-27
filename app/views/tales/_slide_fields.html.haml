@@ -37,7 +37,7 @@
           .col-sm-12.row.youtube_thumb
             = render "slides/youtube_thumb", slide: f.object
             %span{style: "vertical-align:top"}
-              = Time.at(f.object.media_duration).utc.strftime("%M:%S")
+              = Time.at(f.object.media_duration).utc.strftime("%M:%S") rescue ''
       .row
         .col-sm-12
           = f.input :video, label: "or Video"

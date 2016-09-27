@@ -88,7 +88,7 @@ class Slide < ActiveRecord::Base
     end  
 
     if self.youtube_video_link.present?       
-      if self.youtube_video_link_changed?
+      if self.youtube_video_link_changed? || self.media_duration.blank?
         video = VideoInfo.new(self.youtube_video_link)
         self.media_duration = video.duration
       end
