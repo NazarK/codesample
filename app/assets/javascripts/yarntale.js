@@ -162,29 +162,7 @@ YARNTALE.prepare = function(selector) {
     var self = this;
     var timeline = this.el.find(".timeline")
 
-    console.log("building timeline")
-    if(this.cover) {
-      self.el.find(".slide_view").append("<img class='slide cover' src="+this.cover+">")
-    } else {
-      self.el.find(".slide_view").append("<img class='slide cover' src="+this.slides[0].image.original+">")
-    }
-
-    var slide_view = self.el.find(".slide_view")
-    var timeline = self.el.find(".timeline .slides .platform")
-    $.each(this.slides,function(i,slide) {
-      //console.log(slide)
-      if(slide.video) {
-          slide_view.append("<div class='slide' data-index="+i+" ><video data-src="+slide.video +"></video></div>")
-          timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
-      } else if(slide.youtube) {
-          slide_view.append("<div class='slide youtube' data-index="+i+" >"+slide.youtube.thumb_html+slide.youtube.video_html+"</div>")
-          timeline.append("<div class='slide' data-index="+i+">"+slide.youtube.thumb_html+"</div>")
-      } else if(slide.image) {
-          slide_view.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
-          timeline.append("<div class='slide' data-index="+i+"><img data-src="+slide.image.thumb+"></div>")
-      }
-      
-    })
+    YARNTALE.slides_build()
 
     YARNTALE.youtube_library_load(function() {
       console.log("youtube library loaded")
@@ -236,12 +214,48 @@ YARNTALE.prepare = function(selector) {
     return this;
 }
 
+YARNTALE.slides_build = function() {
+  var self = this
+  console.log("building timeline")
+  if(this.cover) {
+    self.el.find(".slide_view").append("<img class='slide cover' src="+this.cover+">")
+  } else {
+    self.el.find(".slide_view").append("<img class='slide cover' src="+this.slides[0].image.original+">")
+  }
+
+  var slide_view = self.el.find(".slide_view")
+  var timeline = self.el.find(".timeline .slides .platform")
+  $.each(this.slides,function(i,slide) {
+    //console.log(slide)
+    if(slide.video) {
+        slide_view.append("<div class='slide' data-index="+i+" ><video data-src="+slide.video +"></video></div>")
+        timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
+    } else if(slide.youtube) {
+        slide_view.append("<div class='slide youtube' data-index="+i+" >"+slide.youtube.thumb_html+slide.youtube.video_html+"</div>")
+        timeline.append("<div class='slide' data-index="+i+">"+slide.youtube.thumb_html+"</div>")
+    } else if(slide.image) {
+        slide_view.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
+        timeline.append("<div class='slide' data-index="+i+"><img data-src="+slide.image.thumb+"></div>")
+    }
+    
+  })
+}
+
 YARNTALE.ui_event_handlers_attach = function() {
 
   $('.slide_view video').on('ended',function(e) {
     YARNTALE.log("video ended, video duration: ",this.duration)
     if(this.duration>YARNTALE.slide_duration) {
       YARNTALE.next({on_auto_next:true})
+    }
+  })
+  
+  $(document).on("click",".yarntale .play_toggle", function() {
+    console.log(".play_toggle clicked")
+    if(YARNTALE.playing) {
+      YARNTALE.pause()
+    } else {
+      YARNTALE.play()
     }
   })
 
@@ -251,13 +265,13 @@ YARNTALE.ui_event_handlers_attach = function() {
   })
 
 
-  $(document).on("click",".yarntale .sensor.right",function() {
+  $(document).on("click",".yarntale .nav.next",function() {
       YARNTALE.do_while_keeping_play_state(function() {
           YARNTALE.next()
       })
   })
 
-  $(document).on("click",".yarntale .sensor.left",function() {
+  $(document).on("click",".yarntale .nav.prev",function() {
     if(YARNTALE.cur_slide_index<=0) return;
     
     YARNTALE.do_while_keeping_play_state(function() {
@@ -397,8 +411,12 @@ YARNTALE.next = function(opt) {
 
 
 YARNTALE.setSlideIndex = function(i,opt) {
-    opt = opt || {}
     this.log("set slide index",i)
+    if(i<0 || i>this.slides.length) {
+      YARNTALE.log("slide index out of range",i)
+      return;
+    }
+    opt = opt || {}
     this.cur_slide_index = i;
 
     this.el.find(".timeline .slide.current").removeClass("current")
@@ -553,6 +571,7 @@ YARNTALE.pause = function() {
   if(this.cur_slide().youtube) {
     this.cur_slide().youtube_player.pauseVideo()
   }
+  this.setSlideIndex(this.cur_slide_index)
   return this;
 }
 
@@ -607,6 +626,9 @@ YARNTALE.youtube_player_create = function(slide_index) {
 
   function on_youtube_state_change(event) {
     console.log(event)
+    if(event.data==YT.PlayerState.PAUSED) {
+      YARNTALE.pause()
+    }
     if(event.data==YT.PlayerState.ENDED) {
         YARNTALE.log("youtube video ended")
         //don't skip to next if this video is shorter than default slide duration
