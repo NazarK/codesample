@@ -1,7 +1,7 @@
   <script>
   $(function() {
 
-    $.extend(YARNTALE, JSON.parse( '<%= @tale.to_json(only: :slide_duration).html_safe %>'))
+    $.extend(YARNTALE, JSON.parse( '<%= @tale.to_json(only: [:audio_snap_to_slides, :slide_duration]).html_safe %>'))
 
     YARNTALE.slides = [
       <% position = 0 %>

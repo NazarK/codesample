@@ -560,13 +560,21 @@ YARNTALE.play = function(opt) {
         vol = (localStorage['YARN_VOL'] || 1)*this.audio_vol
         YARNTALE.log("playing background, volume: ", vol)
       }
-      tale_background.volume = vol      
+      if(tale_background.volume!=vol)
+        tale_background.volume = vol      
       //don't adjust position and click play if it is auto next slide
       if(!opt.on_auto_next) {
-        var new_pos = (this.slides[this.cur_slide_index].position % tale_background.duration)
-        YARNTALE.log("setting background audio position from to", tale_background.currentTime, new_pos )
-        tale_background.currentTime = new_pos
-        tale_background.play()
+        if(YARNTALE.audio_snap_to_slides) {
+          var new_pos = (this.slides[this.cur_slide_index].position % tale_background.duration)
+          YARNTALE.log("setting background audio position from to", tale_background.currentTime, new_pos )
+          tale_background.currentTime = new_pos
+          tale_background.play()
+        } else {
+          if(tale_background.paused) {
+            tale_background.play()
+          }
+        }
+        
       }
       
     }
