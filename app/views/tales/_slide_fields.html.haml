@@ -16,7 +16,7 @@
               %a{href: f.object.image.url(:crop), target: "_blank",style:"cursor:pointer;"}
                 = image_tag f.object.image.url(:thumb), style: "height:60px;"
         .col-sm-7
-          = f.input :audio, label: "Image Audio"
+          = f.input :audio, label: "Image Audio", input_html: { accept: "audio/*" }
           - if f.object.audio.present?
             .row
               = audio_tag f.object.audio.url,
@@ -40,7 +40,7 @@
               = Time.at(f.object.media_duration).utc.strftime("%M:%S") rescue ''
       .row
         .col-sm-12
-          = f.input :video, label: "or Video"
+          = f.input :video, label: "or Video", input_html: { accept: "video/*" }
           - if f.object.video.present?
             .row
               = video_tag f.object.video.url,
