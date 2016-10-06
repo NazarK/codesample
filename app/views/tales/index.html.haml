@@ -20,7 +20,7 @@
         %td
           = Time.at(tale.duration).utc.strftime("%H:%M:%S")
         %td
-          = link_to "<i class='fa fa-eye'></i> Show".html_safe, "/t#{tale.id}", class: "btn btn-default", target: "_blank"
+          = link_to "<i class='fa fa-eye'></i> Show".html_safe, tale.path, class: "btn btn-default", target: "_blank"
           = link_to "<i class='fa fa-pencil-square-o'></i> Edit".html_safe, edit_tale_path(tale), class: "btn btn-default", target: "_blank"
           = link_to "<i class='fa fa-code'></i> Embed".html_safe, embed_tale_path(tale), class: "btn btn-default"
           = link_to "<i class='fa fa-trash-o'></i> Destroy".html_safe, tale_path(tale), method: :delete, class: "btn btn-danger", data: { confirm: "Delete tale?"}

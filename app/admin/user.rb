@@ -14,8 +14,10 @@ ActiveAdmin.register User do
 #   permitted
 # end
   index do
-    selectable_column
     column :email
+    column :tales do |user|
+      user.tales.count
+    end
     column :last_sign_in_at
     column :sign_in_count
     actions
@@ -29,6 +31,26 @@ ActiveAdmin.register User do
     end
     f.actions
   end
+  
+  
+  show do |user|
+    attributes_table do
+      row :email
+    end
+    
+    panel "Tales" do
+      table_for user.tales do 
+        column :name
+        column :slides do |tale|
+          tale.slides.count
+        end
+        column "" do |tale|
+          span link_to "View", tale.path, target: "_blank"
+        end
+      end
+    end    
+  end  
 
+  filter :email
 
 end

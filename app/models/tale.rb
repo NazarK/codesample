@@ -61,4 +61,8 @@ class Tale < ActiveRecord::Base
       end    
     end  
   end    
+  
+  def path
+    "/t#{self.id}"
+  end
 end
