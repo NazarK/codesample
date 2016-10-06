@@ -2,27 +2,31 @@
 #
 # Table name: slides
 #
-#  id                 :integer          not null, primary key
-#  tale_id            :integer
-#  caption            :text
-#  created_at         :datetime         not null
-#  updated_at         :datetime         not null
-#  image_file_name    :string
-#  image_content_type :string
-#  image_file_size    :integer
-#  image_updated_at   :datetime
-#  audio_file_name    :string
-#  audio_content_type :string
-#  audio_file_size    :integer
-#  audio_updated_at   :datetime
-#  position           :integer
-#  video_file_name    :string
-#  video_content_type :string
-#  video_file_size    :integer
-#  video_updated_at   :datetime
-#  video_thumb_pos    :float            default(0.0)
-#  audio_vol          :float            default(1.0)
-#  media_duration     :float
+#  id                    :integer          not null, primary key
+#  tale_id               :integer
+#  caption               :text
+#  created_at            :datetime         not null
+#  updated_at            :datetime         not null
+#  image_file_name       :string
+#  image_content_type    :string
+#  image_file_size       :integer
+#  image_updated_at      :datetime
+#  audio_file_name       :string
+#  audio_content_type    :string
+#  audio_file_size       :integer
+#  audio_updated_at      :datetime
+#  position              :integer
+#  video_file_name       :string
+#  video_content_type    :string
+#  video_file_size       :integer
+#  video_updated_at      :datetime
+#  video_thumb_pos       :float            default(0.0)
+#  audio_vol             :float            default(1.0)
+#  media_duration        :float
+#  youtube_video_link    :string
+#  youtube_video_start   :string
+#  youtube_video_end     :string
+#  mute_background_audio :boolean          default(FALSE)
 #
 
 require 'test_helper'
