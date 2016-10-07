@@ -16,5 +16,6 @@ ActiveAdmin.register Slide do
         span audio_tag slide.audio.url, controls: true
       end  
     end  
+    actions
   end
 end
