@@ -1,6 +1,6 @@
 ActiveAdmin.register User do
   permit_params :email, :password, :password_confirmation
-  menu priority: 1
+  menu priority: 2
 # See permitted parameters documentation:
 # https://github.com/activeadmin/activeadmin/blob/master/docs/2-resource-customization.md#setting-up-strong-parameters
 #
@@ -39,13 +39,17 @@ ActiveAdmin.register User do
     end
     
     panel "Tales" do
-      table_for user.tales do 
-        column :name
+      table_for user.tales.order("id desc") do 
+        column :id
+        column :name do |tale|
+          link_to tale.name, admin_tale_path(tale)
+        end
         column :slides do |tale|
           tale.slides.count
         end
+        column :created_at
         column "" do |tale|
-          span link_to "View", tale.path, target: "_blank"
+          span link_to "Play", tale.path, target: "_blank"
         end
       end
     end    
