@@ -10,7 +10,7 @@ ActiveAdmin.register Tale do
     column :slides do |tale|
       tale.slides.count      
     end
-    column :view_count
+    column :page_views
     actions defaults: true do |tale|
       span link_to "Play", tale.path, target: "_blank"
     end
@@ -24,7 +24,7 @@ ActiveAdmin.register Tale do
       row :slides do |tale|
         tale.slides.count
       end
-      row :view_count
+      row :page_views
     end
     
     panel "Slides" do

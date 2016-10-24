@@ -14,7 +14,7 @@ class TalesController < ApplicationController
   end
 
   def show
-    @tale.update_attributes view_count: (@tale.view_count+1)
+    @tale.update_attributes page_views: (@tale.page_views+1)
     response.headers.delete('X-Frame-Options')    
     render layout: "show"
   end
