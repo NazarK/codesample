@@ -72,6 +72,8 @@ h1 {
 
 .flash_messages {
   z-index: 10;
+  top: 10px;
+  left: 10px;
   position: fixed;
   .close {
     margin-left: 20px;
@@ -79,7 +81,9 @@ h1 {
 }
 
 
-body.mobile .flash_messages {
-  bottom: 20px;
-  right: 20px;
+body.desktop.devise_sessions {
+  .flash_messages {
+    right: 10px;
+    left: auto;
+  }
 }
