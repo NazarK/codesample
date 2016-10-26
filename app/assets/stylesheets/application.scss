@@ -16,6 +16,7 @@
  *= require style-classes
  *= require yarntale
  *= require fontselect
+ *= require mobile
  */
 
 .sort-handle {
@@ -34,9 +35,11 @@ body.devise_registrations, body.devise_sessions {
 }
 
 
-body.tales.index, body.tales.edit, body.tales.new  {
-  .yield {
-    padding: 20px;
+body.desktop {
+  &.tales.index, &.tales.edit, &.tales.new  {
+    .yield {
+      padding: 20px;
+    }
   }
 }
 
@@ -65,4 +68,18 @@ h1 {
 
 .youtube_thumb img {
   height: 60px;
+}
+
+.flash_messages {
+  z-index: 10;
+  position: fixed;
+  .close {
+    margin-left: 20px;
+  }
+}
+
+
+body.mobile .flash_messages {
+  bottom: 20px;
+  right: 20px;
 }

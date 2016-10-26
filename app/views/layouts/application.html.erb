@@ -6,9 +6,19 @@
   <%= javascript_include_tag 'application', 'data-turbolinks-track' => true %>
   <%= csrf_meta_tags %>
   <script>APP_HOST="<%= request.protocol + request.host_with_port %>"</script>
+  <% if is_mobile_browser? %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">  
+  <% end %>
 </head>
-<body class="<%= [params[:controller].gsub("/","_"),params[:action]].compact.join(" ") %>">
-<%= flash_messages %>
+<body class="
+    <%= [params[:controller].gsub("/","_"),params[:action]].compact.join(" ") %>
+    <%= is_mobile_browser? ? "mobile" : "desktop" %>
+  ">
+
+<div class="flash_messages">
+  <%= render "layouts/flash_messages" %>
+</div>
+
 <div class='yield'>
   <%= yield %>
 </div>

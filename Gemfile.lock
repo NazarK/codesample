@@ -40,6 +40,7 @@ GEM
       erubis (~> 2.7.0)
       rails-dom-testing (~> 1.0, >= 1.0.5)
       rails-html-sanitizer (~> 1.0, >= 1.0.2)
+    active_device (1.2.0)
     activejob (4.2.5.1)
       activesupport (= 4.2.5.1)
       globalid (>= 0.3.0)
@@ -291,6 +292,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  active_device
   activeadmin!
   annotate
   aws-sdk (< 2.0)
