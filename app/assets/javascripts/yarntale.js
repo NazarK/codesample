@@ -186,12 +186,6 @@ YARNTALE.render_to = function(selector) {
     this.TIMELINE_SLIDE_WIDTH = Math.floor(this.TIMELINE_HEIGHT * 960/640);
     this.TIMELINE_SLIDES_WIDTH = this.el.find(".slides .platform").width();
 
-
-    this.el.find(".timeline-height").css({
-        height: this.TIMELINE_HEIGHT + "px",
-        "line-height": this.TIMELINE_HEIGHT+"px",
-        "font-size":this.TIMELINE_HEIGHT+"px"})
-
     var images_loaded = 0;
     YARNTALE.showCover()
     
@@ -241,12 +235,6 @@ YARNTALE.ui_event_handlers_attach = function() {
     }
   })
 
-  $(document).on("click",".yarntale .timeline .slide",function() {
-      YARNTALE.pause()
-      YARNTALE.setSlideIndex($(this).data("index"))
-  })
-
-
   $(document).on("click",".yarntale .nav.next",function() {
       YARNTALE.do_while_keeping_play_state(function() {
           YARNTALE.next()
@@ -263,14 +251,6 @@ YARNTALE.ui_event_handlers_attach = function() {
   })
 
 
-  $(document).on("click",".yarntale .control .play",function() {
-      YARNTALE.play()
-  })
-
-  $(document).on("click",".yarntale .control .pause",function() {
-      YARNTALE.pause()
-  })
-  
   $(document).on("click",".yarntale .slides_line_nav.prev",function() {
       YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset - YARNTALE.slides_in_slide_line())
   })
@@ -598,7 +578,12 @@ YARNTALE.do_while_keeping_play_state = function(yield) {
   YARNTALE.pause()
   yield()
   if(was_playing) {
-    YARNTALE.play()
+    console.log("was playing")
+    if(YARNTALE.cur_slide().youtube) {
+      setTimeout(YARNTALE.play.bind(YARNTALE),200)
+    } else {
+      YARNTALE.play()
+    }
   }
 
 }
