@@ -8,9 +8,57 @@ class Timeline extends React.Component {
       width: `calc(100% - ${(1.2+0.5+0.5+3)*height}px)`
     }
     console.log(slides_style)
+    
+    const style = `
+      .yarntale .sensor.bottom:hover .caption {
+        bottom: ${height}px;
+        transition: bottom 0.15s ease-out;
+      }
+      .yarntale .sensor.bottom:hover .timeline {
+        height: ${height}px !important;
+        transition: height 0.15s ease-out;
+      }
+      .yarntale .sensor.bottom .timeline .slides .platform .slide {
+        width:  ${height*3/2}px;
+        height: ${height}px;
+      }
+      
+      .yarntale .sensor.bottom .timeline .slides .platform .slide img {
+        width:  ${height*3/2 - 8}px;
+        height: ${height-8}px;
+      }      
+      
+      .yarntale .sensor.bottom .volume_sensor {
+        width: ${height}px;
+        right: ${height*2}px;
+      }      
+      
+      .yarntale .sensor.bottom .volume_sensor .volume_slider {
+        height: calc( 100% - ${height}px - 5px);
+      }      
+      
+      .yarntale .sensor.bottom:hover .volume_sensor {
+        height: ${height*3}px;
+      }
+      
+      .yarntale .sensor.bottom .volume_sensor .volume { 
+        line-height: ${height}px;
+        font-size: ${height/2}px;
+      }      
+      
+      .yarntale .sensor.bottom:hover .volume_sensor .volume {
+        height: ${height}px;
+      }
+            
+    `
 
     return (
+      
+            
       <div className="timeline" style={{height: height, fontSize: height}}>
+        <style>
+          {style}
+        </style>
         <div className="control" style={{width: height*1.2+"px", paddingLeft: height/2 }}>
           <div className="pause"><i className="fa fa-pause" aria-hidden="true"></i></div>
           <div className="play"><i className="fa fa-play" aria-hidden="true"></i></div>

@@ -2,9 +2,6 @@
 //*= require font-awesome
 
 
-$timeline-height: 50px;
-
-
 html, body {
     height: 100%;
 }
@@ -77,18 +74,14 @@ body.no-cursor {
       height: 30%;
       &:hover {
         .volume_sensor {
-          height: $timeline-height + 100px;
           .volume {
-            height: $timeline-height;
             transition: height 0.15s ease-out;
           }
         }
       }
 
       .volume_sensor {
-        width: $timeline-height;
         position: absolute;
-        right: $timeline-height*2;
         bottom: 0px;
         height: 0px;
         overflow: hidden;
@@ -99,7 +92,6 @@ body.no-cursor {
           position: relative;
           background: #888;
           margin-top: 5px;
-          height: calc( 100% - #{$timeline-height} - 5px);
           z-index: 3;
           .button {
             width: 100%;
@@ -124,8 +116,7 @@ body.no-cursor {
           width: 50px;
           height: 0px;
           transition: height 0.15s ease-out;
-          line-height: $timeline-height;
-          font-size: 250% !important;
+          font-size: 45%;
           padding: 0px 12px;
           bottom: 0px;
           color: #eee;
@@ -143,6 +134,7 @@ body.no-cursor {
           }
         }
       }
+      
       .caption {
         &.disabled {
           display: none;
@@ -244,12 +236,11 @@ body.no-cursor {
             white-space: nowrap;
             height: 100%;
             .slide {
+
               border: 4px solid #2E2F30;
               cursor: pointer;
               display: inline-block;
               margin: 0px 2px;
-              width:  $timeline-height*3/2;
-              height: $timeline-height;
               overflow: hidden;
               img, video, iframe {
                 object-fit: cover;
@@ -260,8 +251,6 @@ body.no-cursor {
               img {
                 object-fit: cover;
                 vertical-align: top;
-                width:  $timeline-height*3/2 - 8px;
-                height: $timeline-height - 8px;
               }
               &.current {
                 border: 4px solid #EFEFEF !important;
@@ -301,16 +290,6 @@ body.no-cursor {
 
       }
 
-      &:hover {
-        .caption {
-          bottom: $timeline-height;
-          transition: bottom 0.15s ease-out;
-        }
-        .timeline {
-          height: $timeline-height !important;
-          transition: height 0.15s ease-out;
-        }
-      }
     }
 
     &.top {

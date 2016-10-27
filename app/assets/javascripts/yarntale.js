@@ -162,7 +162,11 @@ YARNTALE.render_to = function(selector) {
     var yarntale_width = $(selector).width()
     console.log("yarntale width: ", yarntale_width);
     
-    ReactDOM.render(React.createElement(Timeline,{height:50, slides:this.slides}),this.el.find(".timeline_container")[0])
+    var timeline_height = 50
+    if(window.is_mobile_browser) {
+      timeline_height = yarntale_width/9;
+    }
+    ReactDOM.render(React.createElement(Timeline,{height:timeline_height, slides:this.slides}),this.el.find(".timeline_container")[0])
     ReactDOM.render(React.createElement(SlideView,{cover:this.cover, slides:this.slides}),this.el.find(".slide_view_container")[0])
 
 
@@ -633,7 +637,4 @@ YARNTALE.youtube_player_create = function(slide_index) {
 
 $(function() {
 
-    if (localStorage['TIMELINE_FORCE']=='true') {
-      $(".timeline").css("height", "96px");
-    }
 })
