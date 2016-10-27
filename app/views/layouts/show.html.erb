@@ -5,6 +5,9 @@
   <%= stylesheet_link_tag    'yarntale', media: 'all' %>
   <%= javascript_include_tag 'yarntale' %>
   <%= csrf_meta_tags %>
+  <% if is_mobile_browser? %>
+    <meta id="viewport-meta" name="viewport" content="width=device-width, initial-scale=1">  
+  <% end %>  
 </head>
 <body>
 
