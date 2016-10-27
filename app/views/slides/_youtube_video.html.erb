@@ -1,3 +1,0 @@
-<iframe class='youtube play_toggle' data-index="<%= slide_index %>" id='youtube-slide-<%= slide_index %>' type='text/html' 
-src='https://www.youtube.com/embed/<%= slide.youtube_video_id%>?enablejsapi=1&origin=<%= request.scheme %>://<%= request.host_with_port%><%= "&end=#{slide.youtube_video_end}" if slide.youtube_video_end.present? %>&showinfo=0&controls=0'
-frameborder='0'></iframe>

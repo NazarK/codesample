@@ -4,6 +4,10 @@
 //= require fitie.apply
 //= require jquery.fullscreen
 //= require cursor-auto-hide
+//= require react
+//= require react_ujs
+//= require components
+
 
 window.YARNTALE = {
     el: null, //hosting DOM element
@@ -142,7 +146,7 @@ YARNTALE.youtube_library_load = function(callback) {
 
 
 
-YARNTALE.prepare = function(selector) {
+YARNTALE.render_to = function(selector) {
     console.log("YARNTALE.prepare")
     if(this.slides.length==0) {
       alert("No slides in this tale.")
@@ -151,20 +155,20 @@ YARNTALE.prepare = function(selector) {
         
     
     this.el = $(selector)
-
-
-    var yarntale_width = $(selector).width()
-    console.log("yarntale width: ", yarntale_width);
-    //$(selector).css("height",$(selector).width()*640/960)
+    
 
     this.el.append( "" )
 
+    var yarntale_width = $(selector).width()
+    console.log("yarntale width: ", yarntale_width);
+    
+    ReactDOM.render(React.createElement(Timeline,{height:50, slides:this.slides}),this.el.find(".timeline_container")[0])
+    ReactDOM.render(React.createElement(SlideView,{cover:this.cover, slides:this.slides}),this.el.find(".slide_view_container")[0])
+
+
+
     var self = this;
-    var timeline = this.el.find(".timeline")
-
-    YARNTALE.cover_build()
-    YARNTALE.slides_build()
-
+    
     YARNTALE.youtube_library_load(function() {
       console.log("youtube library loaded")
       $(".slide.youtube").each(function() {
@@ -212,57 +216,6 @@ YARNTALE.prepare = function(selector) {
     return this;
 }
 
-YARNTALE.cover_build = function() {
-  console.log("cover build")
-  var self = this
-  var slide_view = self.el.find(".slide_view")
-  //building cover
-  if(this.cover) {
-    slide_view.append("<img class='slide cover' src="+this.cover+">")
-  } else {
-    var slide = this.slides[0]
-    if(slide.youtube) {
-      slide_view.append("<div class='slide cover'>"+this.slides[0].youtube.thumb_html+"</div>")  
-      window.fitie.apply()
-    } else if(slide.video) {
-      slide_view.append("<div class='slide cover'><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' src="+slide.video+"></div>")
-    } else {
-      slide_view.append("<img class='slide cover' src="+this.slides[0].image.original+">")
-    }  
-  }
-  //cover to be loaded as very first image
-  self.el.find("img.slide.cover, .slide.cover img").load(function() {
-    console.log("cover loaded")
-    YARNTALE.process_data_src()
-  })
-  self.el.find(".slide.cover video").on('loadedmetadata',function() {
-    console.log("cover loaded")
-    YARNTALE.process_data_src()
-  })
-
-}
-YARNTALE.slides_build = function() {
-  var self = this
-  console.log("building timeline")
-  
-
-  var slide_view = self.el.find(".slide_view")
-  var timeline = self.el.find(".timeline .slides .platform")
-  $.each(this.slides,function(i,slide) {
-    //console.log(slide)
-    if(slide.video) {
-        slide_view.append("<div class='slide' data-index="+i+" ><video data-src="+slide.video +"></video></div>")
-        timeline.append("<div class='slide' data-index="+i+"><video onloadedmetadata='this.currentTime="+slide.video_thumb_pos+"' data-src="+slide.video+"></div>")
-    } else if(slide.youtube) {
-        slide_view.append("<div class='slide youtube' data-index="+i+" >"+slide.youtube.thumb_html+slide.youtube.video_html+"</div>")
-        timeline.append("<div class='slide' data-index="+i+">"+slide.youtube.thumb_html+"</div>")
-    } else if(slide.image) {
-        slide_view.append("<img class='slide' data-index="+i+" data-src="+slide.image.original+">")
-        timeline.append("<div class='slide' data-index="+i+"><img data-src="+slide.image.thumb+"></div>")
-    }
-    
-  })
-}
 
 YARNTALE.ui_event_handlers_attach = function() {
 
@@ -672,7 +625,6 @@ YARNTALE.youtube_player_create = function(slide_index) {
         }
     }
   }
-  
   YARNTALE.slides[slide_index].youtube_player = new YT.Player('youtube-slide-'+slide_index, {
     events: { onReady: on_youtube_ready, onStateChange: on_youtube_state_change }
   })

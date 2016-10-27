@@ -174,9 +174,8 @@ body.no-cursor {
       }
 
       .timeline {
-        height: $timeline-height;
-        line-height: $timeline-height;
-        font-size: $timeline-height;
+
+        line-height: 100%;
         display: block;
         background: rgba(0,0,0,0.8);
         overflow-x: hidden;
@@ -192,10 +191,8 @@ body.no-cursor {
           display: inline-block;
           float: left;
           font-size: 50%;
-          width: $timeline-height*1.2;
           bottom: 0px;
           left: 0px;
-          padding-left: $timeline-height/2;
           cursor: pointer;
           height: 100%;
           vertical-align: middle;
@@ -213,7 +210,6 @@ body.no-cursor {
 
         .slides_line_nav {
           position: relative;
-          width: $timeline-height/2;
           display: inline-block;
           float: left;
           font-size: 80%;
@@ -241,7 +237,6 @@ body.no-cursor {
           position: relative;
           overflow: hidden;
           height: 100%;
-          width: calc(100% - #{$timeline-height*1.2} - #{$timeline-height/2} - #{$timeline-height/2} - #{3*$timeline-height});
           float: left;
           .platform {
             transition: margin-left 0.10s ease-out;
@@ -276,7 +271,6 @@ body.no-cursor {
         }
 
         .fullscreen {
-          width: $timeline-height;
           position: absolute;
           font-size: 45%;
           height: 100%;
@@ -285,7 +279,6 @@ body.no-cursor {
           color: white;
           cursor: pointer;
           bottom: 0px;
-          right: $timeline-height;
           &.disabled {
             color: #888;
           }
@@ -295,8 +288,6 @@ body.no-cursor {
           &.disabled {
             color: #888;
           }
-
-          width: $timeline-height;
           position: absolute;
           font-size: 45%;
           height: 100%;

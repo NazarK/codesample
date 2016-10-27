@@ -76,3 +76,4 @@ gem 'jquery-ui-rails'
 gem 'streamio-ffmpeg' #for getting audio/video duration
 gem 'video_info'
 gem 'active_device'
+gem 'react-rails'

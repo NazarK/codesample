@@ -10,8 +10,12 @@
         <%= slide.to_json(except: [:id,:tale_id,:caption,:image,:video,:audio]).gsub(/^{/,"").gsub(/}$/,"").html_safe %>,
         video: "<%= slide.video.url %>",
         <% if slide.youtube_video_link.present? %>
-          youtube: { video_html: "<%== j render('slides/youtube_video', slide: slide, slide_index: slide_i) %>", 
-          thumb_html: "<%== j render('slides/youtube_thumb', slide: slide) %>" }, 
+          youtube: { 
+            video_id: "<%= slide.youtube_video_id %>",
+            <% if slide.youtube_video_end.present? %>
+              video_end: <%= slide.youtube_video_end %>,
+            <% end %>
+          }, 
           youtube_video_start_i: <%= slide.youtube_video_start.to_i %>,
         <% end %>
         position: <%= position %>,
@@ -34,7 +38,7 @@
       YARNTALE.cover = "<%= @tale.cover.url(:original) %>"
     <% end %>
 
-    YARNTALE.prepare(".yarntale")
+    YARNTALE.render_to(".yarntale")
 
   })
 </script>
@@ -95,42 +99,12 @@
         <div class="text"></div>
       </div>
 
-      <div class="timeline">
-
-        <div class="control">
-          <div class="pause"><i class="fa fa-pause" aria-hidden="true"></i></div>
-          <div class="play"><i class="fa fa-play" aria-hidden="true"></i></div>
-        </div>
-
-        <div class="slides_line_nav prev"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
-
-        <div class="slides">
-          <div class="platform">
-          </div>
-        </div>
-
-        <div class="slides_line_nav next"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
-
-        <div class="fullscreen disabled">
-          <i class="fa fa-arrows-alt" aria-hidden="true"></i>
-        </div>
-
-        <div class="cc">
-          <i class="fa fa-cc" aria-hidden="true"></i>
-        </div>
+      <div class="timeline_container">
 
       </div>
     </div>
 
-    <div class="slide_view play_toggle">
-      <div class="state_icon play">
-        <i class="fa fa-play-circle-o" aria-hidden="true"></i>
-      </div>
-      
-      <div class="state_icon pause">
-        <i class="fa fa-pause-circle-o" aria-hidden="true"></i>
-      </div>
-    </div>
+    <div class="slide_view_container"></div>
         
     <audio class="audio" loop></audio>
     <audio class="slide_audio"></audio>

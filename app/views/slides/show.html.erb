@@ -4,7 +4,9 @@ iframe {
   height: 200px;
 }
 </style>
-<%= render "slides/youtube_video", slide: @slide, slide_index: 1 %>
+
+<h1>youtube slide test</h1>
+<div class='container'></div>
 
 <script src="https://www.youtube.com/iframe_api"></script>
 
@@ -22,14 +24,7 @@ iframe {
     event.target.playVideo()
   }
   function onStateChange(event) {
-/*
--1 (unstarted)
-0 (ended)
-1 (playing)
-2 (paused)
-3 (buffering)
-5 (video cued).
-*/    
+   
     if(event.data==YT.PlayerState.ENDED) {
       console.log("stopped, next slide should be here")
     }
@@ -37,6 +32,15 @@ iframe {
   }
 
   function onYouTubeIframeAPIReady() {
+    
+    var slide = {
+      youtube: {
+        video_id: "<%= @slide.youtube_video_id %>",  
+      }      
+    }
+    
+    ReactDOM.render(React.createElement(Slide, {slide: slide, i:1}), $(".container")[0])    
+    
     window.player = new YT.Player('youtube-slide-1', {
       events: { onReady: onReady, onStateChange: onStateChange }
     })
