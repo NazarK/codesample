@@ -159,13 +159,13 @@ YARNTALE.render_to = function(selector) {
 
     this.el.append( "" )
 
-    var yarntale_width = $(selector).width()
-    console.log("yarntale width: ", yarntale_width);
-    
     var timeline_height = 50
     if(window.is_mobile_browser) {
-      timeline_height = yarntale_width/9;
+      timeline_height = Math.min(this.el.width(),this.el.height())/9;
     }
+    
+    console.log("timeline height: ", timeline_height)
+    
     ReactDOM.render(React.createElement(Timeline,{height:timeline_height, slides:this.slides}),this.el.find(".timeline_container")[0])
     ReactDOM.render(React.createElement(SlideView,{cover:this.cover, slides:this.slides}),this.el.find(".slide_view_container")[0])
 
