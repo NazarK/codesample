@@ -521,23 +521,39 @@ YARNTALE.play = function(opt) {
     return this;
 }
 
-YARNTALE.pause = function() {
-  this.playing = false
+
+//pause media with GUI feedback
+YARNTALE.pause = function(then) {
   $(this.el).removeClass("playing").removeClass("pending_next")  
-  clearTimeout(this.trigger_next_timer)
   this.el.find(".slide_audio")[0].pause()
   this.el.find(".audio")[0].pause()
   this.el.find(".control .play").show()
   this.el.find(".control .pause").hide()
+  
+  return YARNTALE.pause_media(then)
+}
+
+YARNTALE.pause_media = function(then) {
+  this.playing = false
+  clearTimeout(this.trigger_next_timer)
+
+  //in case of youtube, 'then' is called via youtube state handler
+  if(this.cur_slide().youtube) {
+    this.cur_slide().youtube_player.pauseVideo()
+    this.setSlideIndex(this.cur_slide_index)
+    YARNTALE.after_youtube_paused = then
+    return this
+  }
+  
   if(this.cur_slide().video) {
     video = this.el.find(".slide_view .slide[data-index=" + this.cur_slide_index+"] video")[0]
     video.pause()
   }
-  if(this.cur_slide().youtube) {
-    this.cur_slide().youtube_player.pauseVideo()
-  }
+  
   this.setSlideIndex(this.cur_slide_index)
+  then && then()
   return this;
+  
 }
 
 YARNTALE.showCover = function() {
@@ -568,19 +584,18 @@ YARNTALE.process_data_src = function() {
 }
 
 YARNTALE.do_while_keeping_play_state  = (yield) => {
-  var was_playing = YARNTALE.playing;
-
-  YARNTALE.pause()
-  yield()
-  if(was_playing) {
-    console.log("was playing")
-    if(YARNTALE.cur_slide().youtube) {
-      setTimeout(YARNTALE.play.bind(YARNTALE),200)
-    } else {
-      YARNTALE.play()
-    }
+  if(!YARNTALE.playing) {
+    yield()
+    return this;  
   }
-
+  
+  
+  YARNTALE.pause(() => {
+    console.log("was playing")
+    yield()
+    YARNTALE.play()
+  })
+  return this;
 }
 
 YARNTALE.youtube_player_create = function(slide_index) {
@@ -594,10 +609,13 @@ YARNTALE.youtube_player_create = function(slide_index) {
   }
 
   function on_youtube_state_change(event) {
-    console.log(event)
-    if(event.data==YT.PlayerState.PAUSED && YARNTALE.playing) {
-      $(".state_icon.pause").show().fadeOut(1000)      
-      YARNTALE.pause()
+    if(event.data==YT.PlayerState.PAUSED) {
+      console.log("youtube video paused")
+      if(YARNTALE.after_youtube_paused) {
+        console.log("calling after_youtube_paused")
+        YARNTALE.after_youtube_paused()
+        YARNTALE.after_youtube_paused = null
+      }
     }
     
     if(event.data==YT.PlayerState.ENDED) {
