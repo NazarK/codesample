@@ -1,14 +1,5 @@
 class Timeline extends React.Component {
 
-  play() {
-    YARNTALE.play()
-  }
-  
-  pause() {
-    YARNTALE.pause()
-  }
-  
-
   render() {
     //timeline height
     const {height, slides} = this.props;
@@ -69,8 +60,8 @@ class Timeline extends React.Component {
           {style}
         </style>
         <div className="control" style={{width: height*1.2+"px", paddingLeft: height/2 }}>
-          <div className="pause" onClick={this.pause}><i className="fa fa-pause" aria-hidden="true"></i></div>
-          <div className="play" onClick={this.play}><i className="fa fa-play" aria-hidden="true"></i></div>
+          <div className="pause" onClick={YARNTALE.pause.bind(YARNTALE)}><i className="fa fa-pause" aria-hidden="true"></i></div>
+          <div className="play" onClick={YARNTALE.play.bind(YARNTALE)}><i className="fa fa-play" aria-hidden="true"></i></div>
         </div>
 
         <div className="slides_line_nav prev"  style={{width: height/2}}>

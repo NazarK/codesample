@@ -38,7 +38,7 @@
       YARNTALE.cover = "<%= @tale.cover.url(:original) %>"
     <% end %>
 
-    YARNTALE.render_to(".yarntale")
+    YARNTALE.render_to(".yarntale_container")
 
   })
 </script>
@@ -72,41 +72,6 @@
 
 </style>
 
-<div  style="width:100%;margin:0 auto;height:100%;" >
+<div class="yarntale_container" style="width:100%;margin:0 auto;height:100%;">
 
-
-  <div class="yarntale">
-
-    <div class="sensor top left">
-      <div class="nav prev"><i class="fa fa-angle-left" aria-hidden="true"></i></div>
-    </div>
-
-    <div class="sensor top right">
-      <div class="nav next"><i class="fa fa-angle-right" aria-hidden="true"></i></div>
-    </div>
-
-    <div class="sensor bottom drag-enabled">
-
-      <div class="volume_sensor drag-enabled">
-        <div class="volume_slider drag-enabled">
-          <div class="button drag-enabled"></div>
-          <div class="line"></div>
-        </div>
-        <div class="volume"><i class="fa fa-volume-down" aria-hidden="true"></i></div>
-      </div>
-
-      <div class="caption">
-        <div class="text"></div>
-      </div>
-
-      <div class="timeline_container">
-
-      </div>
-    </div>
-
-    <div class="slide_view_container"></div>
-        
-    <audio class="audio" loop></audio>
-    <audio class="slide_audio"></audio>
-  </div>
 </div>

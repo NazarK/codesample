@@ -7,7 +7,7 @@
 //= require react
 //= require react_ujs
 //= require components
-
+//= require jquery-touchswipe
 
 window.YARNTALE = {
     el: null, //hosting DOM element
@@ -152,24 +152,22 @@ YARNTALE.render_to = function(selector) {
       alert("No slides in this tale.")
       return
     }
-        
-    
-    this.el = $(selector)
-    
 
-    this.el.append( "" )
 
     var timeline_height = 50
     if(window.is_mobile_browser) {
-      timeline_height = Math.min(this.el.width(),this.el.height())/9;
+      timeline_height = Math.min($(selector).width(),$(selector).height())/9;
     }
-    
     console.log("timeline height: ", timeline_height)
     
-    ReactDOM.render(React.createElement(Timeline,{height:timeline_height, slides:this.slides}),this.el.find(".timeline_container")[0])
-    ReactDOM.render(React.createElement(SlideView,{cover:this.cover, slides:this.slides}),this.el.find(".slide_view_container")[0])
+    this.element =  React.createElement(YarnTale,
+            {timeline_height:timeline_height, 
+             slides: this.slides, 
+             cover: this.cover})
+             
+    ReactDOM.render(this.element,$(selector)[0])
 
-
+    this.el = $(selector).find(".yarntale")        
 
     var self = this;
     
@@ -235,20 +233,8 @@ YARNTALE.ui_event_handlers_attach = function() {
     }
   })
 
-  $(document).on("click",".yarntale .nav.next",function() {
-      YARNTALE.do_while_keeping_play_state(function() {
-          YARNTALE.next()
-      })
-  })
-
-  $(document).on("click",".yarntale .nav.prev",function() {
-    if(YARNTALE.cur_slide_index<=0) return;
-    
-    YARNTALE.do_while_keeping_play_state(function() {
-      YARNTALE.prev()
-    })
-
-  })
+//  $(document).on("click",".yarntale .nav.next",YARNTALE.next_keep_playing)
+//  $(document).on("click",".yarntale .nav.prev",YARNTALE.prev_keep_playing)
 
 
   $(document).on("click",".yarntale .slides_line_nav.prev",function() {
@@ -261,6 +247,15 @@ YARNTALE.ui_event_handlers_attach = function() {
   
   $(document).on('fullscreenchange',function(e) {
     $(".fullscreen").toggleClass("disabled", !$(document).fullScreen())
+  })
+
+  $(".sensor.top, .slide_view").swipe( {
+    swipeLeft: function(e,dir) {
+      YARNTALE.next_keep_playing()
+    },
+    swipeRight: function() {
+      YARNTALE.prev_keep_playing()
+    }
   })
   
   $(document).on('click','.sensor.top, .slide_view', function() {
@@ -620,6 +615,17 @@ YARNTALE.youtube_player_create = function(slide_index) {
   
 }
 
-$(function() {
+YARNTALE.next_keep_playing = function() {
+  YARNTALE.do_while_keeping_play_state(function() {
+      YARNTALE.next()
+  })  
+}
 
-})
+YARNTALE.prev_keep_playing = function() {
+  if(YARNTALE.cur_slide_index<=0) return;
+  
+  YARNTALE.do_while_keeping_play_state(function() {
+    YARNTALE.prev()
+  })
+  
+}
