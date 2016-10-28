@@ -1,5 +1,22 @@
+:javascript
+  function redirect(url) {
+      if (/MSIE (\d+\.\d+);/.test(navigator.userAgent)){
+          var referLink = document.createElement('a');
+          referLink.href = url;
+          document.body.appendChild(referLink);
+          referLink.click();
+      } else {
+          location.href = url;
+      }
+  }
+
+  window.addEventListener('popstate', function(event) {
+      //refresh page on back button (returning to tales list)
+      redirect(document.referrer)
+  }, false);
+
 .col-sm-12
-  = simple_form_for(@tale, html: { class: 'form-horizontal' }, remote: !@tale.new_record?) do |f|
+  = simple_form_for(@tale, html: { class: 'form-horizontal' }, remote: true) do |f|
     %div{style: "top: 15px;position:fixed;right:15px;z-index:1;background: #fff;padding: 10px;border-radius: 10px;"}
       - if !@tale.new_record?
         = link_to "<i class='fa fa-eye'></i> Show".html_safe, "/t#{@tale.id}", class: "btn btn-default", target: ("_blank" if !is_mobile_browser?)

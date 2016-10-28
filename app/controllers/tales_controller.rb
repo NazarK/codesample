@@ -30,19 +30,18 @@ class TalesController < ApplicationController
   def create
     @tale = current_user.tales.new(tale_params)
     if @tale.save
-      flash[:notice] = 'Tale was successfully created.'
-      redirect_to tales_path
+      flash.now[:notice] = 'Tale was successfully created.'
+      render :edit
     else
-      respond_with(@tale)
+      render :create
     end
   end
 
   def update
     if @tale.update(tale_params)
-      redirect_to edit_tale_path(@tale), notice: 'Tale was successfully updated.'
-    else
-      respond_with(@tale)
-    end
+      flash.now[:notice] = 'Tale was successfully updated.'
+    end  
+    render :edit
   end
 
   def destroy

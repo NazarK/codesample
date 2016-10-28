@@ -70,6 +70,7 @@ function embed_generate() {
 
 /* ready function to be called on each load (and page:load turbolinks event) */
 var ready = function() {
+  console.log('ready')
   
   $(".flash_messages").show().delay(4000).fadeOut()  
   jquery_sortable_apply()
