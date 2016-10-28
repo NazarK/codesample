@@ -8,7 +8,6 @@ class TimelineThumb extends React.Component {
     
     YARNTALE.do_while_keeping_play_state(() => {
         YARNTALE.setSlideIndex(slide_index)
-        YARNTALE.play()
     })
     
   }
