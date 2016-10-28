@@ -6,14 +6,10 @@ class TimelineThumb extends React.Component {
     var slide_index = $(e.currentTarget).data("index")
     console.log("slide index ", slide_index)
     
-    if(YARNTALE.playing) {
-      YARNTALE.pause_media(() => {
+    YARNTALE.do_while_keeping_play_state(() => {
         YARNTALE.setSlideIndex(slide_index)
         YARNTALE.play()
-      })
-    } else {
-      YARNTALE.setSlideIndex(slide_index)
-    }
+    })
     
   }
   

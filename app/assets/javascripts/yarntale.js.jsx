@@ -233,9 +233,6 @@ YARNTALE.ui_event_handlers_attach = function() {
     }
   })
 
-//  $(document).on("click",".yarntale .nav.next",YARNTALE.next_keep_playing)
-//  $(document).on("click",".yarntale .nav.prev",YARNTALE.prev_keep_playing)
-
 
   $(document).on("click",".yarntale .slides_line_nav.prev",function() {
       YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset - YARNTALE.slides_in_slide_line())
@@ -280,12 +277,14 @@ YARNTALE.ui_event_handlers_attach = function() {
       })
     }
     if(e.key=="Home") {
-      YARNTALE.pause()
-      YARNTALE.setSlideIndex(0)
+      YARNTALE.do_while_keeping_play_state( ()=> {
+        YARNTALE.setSlideIndex(0)
+      })
     }
     if(e.key=="End") {
-      YARNTALE.pause()
-      YARNTALE.setSlideIndex(YARNTALE.slides.length-1)
+      YARNTALE.do_while_keeping_play_state( ()=> {
+        YARNTALE.setSlideIndex(YARNTALE.slides.length-1)
+      })
     }
 
     if(e.key==" ") {
@@ -589,8 +588,7 @@ YARNTALE.do_while_keeping_play_state  = (yield) => {
     return this;  
   }
   
-  
-  YARNTALE.pause(() => {
+  YARNTALE.pause_media(() => {
     console.log("was playing")
     yield()
     YARNTALE.play()
