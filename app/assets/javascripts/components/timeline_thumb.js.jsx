@@ -1,5 +1,5 @@
 class TimelineThumb extends React.Component {
-  
+
   on_thumb_click(e) {
     //YARNTALE.pause()
     YARNTALE.do_while_keeping_play_state(() => {
@@ -25,7 +25,7 @@ class TimelineThumb extends React.Component {
         )}
         
         { slide.youtube && (         
-          <YoutubeThumb videoId={slide.youtube.video_id} /> 
+          <YoutubeThumb videoId={slide.youtube.video_id} slideIndex={i} dimmed={true} /> 
         )}
         
         { slide.image && (

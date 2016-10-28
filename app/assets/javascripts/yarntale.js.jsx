@@ -567,7 +567,7 @@ YARNTALE.process_data_src = function() {
   window.fitie.apply()
 }
 
-YARNTALE.do_while_keeping_play_state = function(yield) {
+YARNTALE.do_while_keeping_play_state  = (yield) => {
   var was_playing = YARNTALE.playing;
 
   YARNTALE.pause()
@@ -599,6 +599,7 @@ YARNTALE.youtube_player_create = function(slide_index) {
       $(".state_icon.pause").show().fadeOut(1000)      
       YARNTALE.pause()
     }
+    
     if(event.data==YT.PlayerState.ENDED) {
         YARNTALE.log("youtube video ended")
         //don't skip to next if this video is shorter than default slide duration
@@ -608,9 +609,14 @@ YARNTALE.youtube_player_create = function(slide_index) {
           $(YARNTALE.el).addClass("pending_next")
         }
     }
+    if(event.data==YT.PlayerState.BUFFERING) {
+      console.log("youtube video loaded")
+      var slide_num = this.data("index")
+      $(`.slide[data-index=${slide_num}] .youtube_thumb`).removeClass("dimmed")
+    }
   }
   YARNTALE.slides[slide_index].youtube_player = new YT.Player('youtube-slide-'+slide_index, {
-    events: { onReady: on_youtube_ready, onStateChange: on_youtube_state_change }
+    events: { onReady: on_youtube_ready, onStateChange: on_youtube_state_change.bind($('#youtube-slide-'+slide_index)) }
   })
   
 }
