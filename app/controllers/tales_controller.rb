@@ -1,6 +1,7 @@
 class TalesController < ApplicationController
   before_action :authenticate_user!, except: :show
   before_action :set_tale, only: [:show, :edit, :update, :destroy,:embed]
+  skip_before_filter :verify_authenticity_token
 
   respond_to :html
 
@@ -15,7 +16,7 @@ class TalesController < ApplicationController
 
   def show
     @tale.update_attributes page_views: (@tale.page_views+1)
-    response.headers.delete('X-Frame-Options')    
+    response.headers.delete('X-Frame-Options')
     render layout: "show"
   end
 
@@ -40,7 +41,7 @@ class TalesController < ApplicationController
   def update
     if @tale.update(tale_params)
       flash.now[:notice] = 'Tale was successfully updated.'
-    end  
+    end
     render :edit
   end
 
