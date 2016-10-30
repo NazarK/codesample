@@ -159,23 +159,23 @@ YARNTALE.render_to = function(selector) {
       timeline_height = Math.min($(selector).width(),$(selector).height())/9;
     }
     console.log("timeline height: ", timeline_height)
-    
+
     this.element =  React.createElement(YarnTale,
-            {timeline_height:timeline_height, 
-             slides: this.slides, 
+            {timeline_height:timeline_height,
+             slides: this.slides,
              cover: this.cover})
-             
+
     ReactDOM.render(this.element,$(selector)[0])
 
-    this.el = $(selector).find(".yarntale")        
+    this.el = $(selector).find(".yarntale")
 
     var self = this;
-    
+
     YARNTALE.youtube_library_load(function() {
       console.log("youtube library loaded")
       $(".slide.youtube").each(function() {
         var slide_i = $(this).data("index")
-        YARNTALE.youtube_player_create(slide_i)        
+        YARNTALE.youtube_player_create(slide_i)
       })
     })
 
@@ -186,7 +186,7 @@ YARNTALE.render_to = function(selector) {
 
     var images_loaded = 0;
     YARNTALE.showCover()
-    
+
     self.el.find(".slide_view .slide").load(function() {
       images_loaded ++
       YARNTALE.log("slide loaded",$(this),images_loaded)
@@ -194,8 +194,8 @@ YARNTALE.render_to = function(selector) {
         console.log("all loadeded")
       }
     })
-    
-    
+
+
     YARNTALE.ui_event_handlers_attach()
 
 
@@ -221,7 +221,7 @@ YARNTALE.ui_event_handlers_attach = function() {
       YARNTALE.next({on_auto_next:true})
     }
   })
-  
+
   $(document).on("click",".yarntale .play_toggle", function() {
     console.log(".play_toggle clicked")
     if(YARNTALE.playing) {
@@ -241,7 +241,7 @@ YARNTALE.ui_event_handlers_attach = function() {
   $(document).on("click",".yarntale .slides_line_nav.next",function() {
       YARNTALE.set_cur_slide_line_offset(YARNTALE.cur_slide_line_offset + YARNTALE.slides_in_slide_line())
   })
-  
+
   $(document).on('fullscreenchange',function(e) {
     $(".fullscreen").toggleClass("disabled", !$(document).fullScreen())
   })
@@ -254,7 +254,7 @@ YARNTALE.ui_event_handlers_attach = function() {
       YARNTALE.prev_keep_playing()
     }
   })
-  
+
   $(document).on('click','.sensor.top, .slide_view', function() {
     //click on cover
     if(YARNTALE.cur_slide_index == -1 ) {
@@ -292,7 +292,7 @@ YARNTALE.ui_event_handlers_attach = function() {
         YARNTALE.pause()
       } else {
         YARNTALE.play()
-      }  
+      }
     }
   })
 
@@ -340,11 +340,17 @@ YARNTALE.ui_event_handlers_attach = function() {
   $('.fullscreen').click(function() {
     $(YARNTALE.el).toggleFullScreen()
   })
-  
+
   $('.cc').click(function() {
     YARNTALE.cc_enabled(!YARNTALE.cc_enabled())
   })
-    
+
+
+  if(window.is_mobile_browser) {
+    $(window).blur(YARNTALE.pause.bind(YARNTALE))
+  }
+
+
 }
 
 
@@ -421,13 +427,13 @@ YARNTALE.cur_slide_el = function() {
 
 YARNTALE.play = function(opt) {
     opt = opt || {}
-  
+
     if(this.cur_slide_index==-1) {
       this.setSlideIndex(0)
     }
 
     this.playing = true
-    
+
     $(this.el).addClass("playing")
 
     //if there is audio
@@ -450,9 +456,9 @@ YARNTALE.play = function(opt) {
       media.volume *= this.cur_slide().audio_vol
       media.play()
     }
-    
+
     if(this.cur_slide().youtube) {
-      console.log("playing youtube")      
+      console.log("playing youtube")
       var slide = YARNTALE.cur_slide()
       var start = slide.youtube_video_start_i
       slide.youtube_player.seekTo(start).playVideo()
@@ -492,7 +498,7 @@ YARNTALE.play = function(opt) {
         YARNTALE.log("playing background, volume: ", vol)
       }
       if(tale_background.volume!=vol)
-        tale_background.volume = vol      
+        tale_background.volume = vol
       //don't adjust position and click play if it is auto next slide
       if(!opt.on_auto_next) {
         if(YARNTALE.audio_snap_to_slides) {
@@ -505,12 +511,12 @@ YARNTALE.play = function(opt) {
             tale_background.play()
           }
         }
-        
+
       }
-      
+
     }
-    
-    
+
+
 
 
 
@@ -523,12 +529,12 @@ YARNTALE.play = function(opt) {
 
 //pause media with GUI feedback
 YARNTALE.pause = function(then) {
-  $(this.el).removeClass("playing").removeClass("pending_next")  
+  $(this.el).removeClass("playing").removeClass("pending_next")
   this.el.find(".slide_audio")[0].pause()
   this.el.find(".audio")[0].pause()
   this.el.find(".control .play").show()
   this.el.find(".control .pause").hide()
-  
+
   return YARNTALE.pause_media(then)
 }
 
@@ -543,16 +549,16 @@ YARNTALE.pause_media = function(then) {
     YARNTALE.after_youtube_paused = then
     return this
   }
-  
+
   if(this.cur_slide().video) {
     video = this.el.find(".slide_view .slide[data-index=" + this.cur_slide_index+"] video")[0]
     video.pause()
   }
-  
+
   this.setSlideIndex(this.cur_slide_index)
   then && then()
   return this;
-  
+
 }
 
 YARNTALE.showCover = function() {
@@ -585,9 +591,9 @@ YARNTALE.process_data_src = function() {
 YARNTALE.do_while_keeping_play_state  = (yield) => {
   if(!YARNTALE.playing) {
     yield()
-    return this;  
+    return this;
   }
-  
+
   YARNTALE.pause_media(() => {
     console.log("was playing")
     yield()
@@ -615,7 +621,7 @@ YARNTALE.youtube_player_create = function(slide_index) {
         YARNTALE.after_youtube_paused = null
       }
     }
-    
+
     if(event.data==YT.PlayerState.ENDED) {
         YARNTALE.log("youtube video ended")
         //don't skip to next if this video is shorter than default slide duration
@@ -634,20 +640,20 @@ YARNTALE.youtube_player_create = function(slide_index) {
   YARNTALE.slides[slide_index].youtube_player = new YT.Player('youtube-slide-'+slide_index, {
     events: { onReady: on_youtube_ready, onStateChange: on_youtube_state_change.bind($('#youtube-slide-'+slide_index)) }
   })
-  
+
 }
 
 YARNTALE.next_keep_playing = function() {
   YARNTALE.do_while_keeping_play_state(function() {
       YARNTALE.next()
-  })  
+  })
 }
 
 YARNTALE.prev_keep_playing = function() {
   if(YARNTALE.cur_slide_index<=0) return;
-  
+
   YARNTALE.do_while_keeping_play_state(function() {
     YARNTALE.prev()
   })
-  
+
 }
