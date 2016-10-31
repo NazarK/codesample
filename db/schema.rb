@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161031081349) do
+ActiveRecord::Schema.define(version: 20161031095113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,8 +69,8 @@ ActiveRecord::Schema.define(version: 20161031081349) do
   create_table "slides", force: :cascade do |t|
     t.integer  "tale_id"
     t.text     "caption"
-    t.datetime "created_at",                            null: false
-    t.datetime "updated_at",                            null: false
+    t.datetime "created_at",                                   null: false
+    t.datetime "updated_at",                                   null: false
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
@@ -84,13 +84,17 @@ ActiveRecord::Schema.define(version: 20161031081349) do
     t.string   "video_content_type"
     t.integer  "video_file_size"
     t.datetime "video_updated_at"
-    t.float    "video_thumb_pos",       default: 0.0
-    t.float    "audio_vol",             default: 1.0
+    t.float    "video_thumb_pos",              default: 0.0
+    t.float    "audio_vol",                    default: 1.0
     t.float    "media_duration"
     t.string   "youtube_video_link"
     t.string   "youtube_video_start"
     t.string   "youtube_video_end"
-    t.boolean  "mute_background_audio", default: false
+    t.boolean  "mute_background_audio",        default: false
+    t.string   "audio_processed_file_name"
+    t.string   "audio_processed_content_type"
+    t.integer  "audio_processed_file_size"
+    t.datetime "audio_processed_updated_at"
   end
 
   add_index "slides", ["tale_id"], name: "index_slides_on_tale_id", using: :btree

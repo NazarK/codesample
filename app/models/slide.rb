@@ -42,6 +42,11 @@ class Slide < ActiveRecord::Base
                     :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
   validates_attachment_content_type :audio, :content_type => /\A(audio|video)\/.*\Z/
 
+  has_attached_file :audio_processed,
+                    :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
+  validates_attachment_content_type :audio_processed, :content_type => /\A(audio|video)\/.*\Z/
+
+
   has_attached_file :video,
                     :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
   validates_attachment_content_type :video, :content_type => /\Avideo\/.*\Z/
@@ -49,6 +54,24 @@ class Slide < ActiveRecord::Base
 
   attr_accessor :delete_audio 
   before_validation { audio.clear if delete_audio == '1' }
+  
+  after_save do
+    if self.audio_updated_at_changed? || self.audio_vol_changed?
+        self.delay.audio_process!
+    end  
+  end  
+  
+  include ApplicationHelper
+  def audio_process!
+    return if !self.audio.present?
+    
+    tempfile = Tempfile.new(['',File.extname(Tale.find(6).audio.path)])
+    audio_volume_adjust(self.audio.path, tempfile.path, self.audio_vol)
+    self.audio_processed = File.open(tempfile.path)
+    self.save
+    tempfile.delete
+  end
+  
 
   before_audio_post_process do
     media = FFMPEG::Movie.new(audio.queued_for_write[:original].path)

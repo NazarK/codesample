@@ -7,7 +7,7 @@
       <% position = 0 %>
       <% @tale.slides.each_with_index do |slide,slide_i| %>
       {
-        <%= slide.to_json(except: [:id,:tale_id,:caption,:image,:video,:audio]).gsub(/^{/,"").gsub(/}$/,"").html_safe %>,
+        <%= slide.to_json(except: [:id,:tale_id,:caption,:image,:video,:audio,:audio_vol]).gsub(/^{/,"").gsub(/}$/,"").html_safe %>,
         video: "<%= slide.video.url %>",
         <% if slide.youtube_video_link.present? %>
           youtube: { 
@@ -22,7 +22,15 @@
         duration: <%= slide.duration %>,
         image: {original: "<%= slide.image.url(:crop) %>",
                 thumb: "<%= slide.image.url(:thumb) %>"},
-        audio: "<%= slide.audio.url if slide.audio.present? %>",
+        <% if slide.audio.present? %>        
+          <% if is_mobile_browser? %>
+            audio: "<%= slide.audio_processed.url %>",
+            audio_vol: 1,
+          <% else %>        
+            audio: "<%= slide.audio.url %>",
+            audio_vol: <%= slide.audio_vol %>,
+          <% end %>
+        <% end %>  
         caption: decodeURIComponent("<%= URI.encode(slide.caption.gsub("\n","<br>")) %>")
       },
       <% position += slide.duration %>

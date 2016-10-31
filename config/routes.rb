@@ -12,6 +12,7 @@ Rails.application.routes.draw do
     resources :slides, only: [:show]
   end
 
+  get '/t:id/edit' => "tales#edit"
   get '/t:id(/:mode)' => "tales#show"
 
 
