@@ -44,7 +44,30 @@ class Tale < ActiveRecord::Base
 
   validates_attachment_content_type :audio, :content_type => /\Aaudio\/.*\Z/
 
+  has_attached_file :bg_audio_postprocessed,
+                    :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
+  validates_attachment_content_type :bg_audio_postprocessed, :content_type => /\Aaudio\/.*\Z/
+                    
 
+  include ApplicationHelper
+  
+  #audio volume adjust
+  after_save do
+    if self.audio_updated_at_changed? || self.audio_vol_changed?
+        self.delay.bg_audio_postprocess
+    end  
+  end  
+  
+  def bg_audio_postprocess
+    return if !self.audio.present?
+    
+    tempfile = Tempfile.new(['',File.extname(Tale.find(6).audio.path)])
+    audio_volume_adjust(self.audio.path, tempfile.path, self.audio_vol)
+    self.bg_audio_postprocessed = File.open(tempfile.path)
+    self.save
+    tempfile.delete
+  end
+    
   def duration
     self.slides.to_a.sum &:duration
   end    

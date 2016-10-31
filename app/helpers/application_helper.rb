@@ -13,4 +13,9 @@ module ApplicationHelper
     end
     nil
   end
+  
+  def audio_volume_adjust input_file, output_file, volume
+    ffmpeg = FFMPEG::Movie.new input_file
+    ffmpeg.transcode output_file, "-af 'volume=#{volume}'"
+  end  
 end

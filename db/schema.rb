@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161024170527) do
+ActiveRecord::Schema.define(version: 20161031081349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,22 @@ ActiveRecord::Schema.define(version: 20161024170527) do
   add_index "admin_users", ["email"], name: "index_admin_users_on_email", unique: true, using: :btree
   add_index "admin_users", ["reset_password_token"], name: "index_admin_users_on_reset_password_token", unique: true, using: :btree
 
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer  "priority",   default: 0, null: false
+    t.integer  "attempts",   default: 0, null: false
+    t.text     "handler",                null: false
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
+
   create_table "slides", force: :cascade do |t|
     t.integer  "tale_id"
     t.text     "caption"
@@ -81,8 +97,8 @@ ActiveRecord::Schema.define(version: 20161024170527) do
 
   create_table "tales", force: :cascade do |t|
     t.string   "name"
-    t.datetime "created_at",                              null: false
-    t.datetime "updated_at",                              null: false
+    t.datetime "created_at",                                          null: false
+    t.datetime "updated_at",                                          null: false
     t.integer  "user_id"
     t.string   "audio_file_name"
     t.string   "audio_content_type"
@@ -92,14 +108,18 @@ ActiveRecord::Schema.define(version: 20161024170527) do
     t.string   "cover_content_type"
     t.integer  "cover_file_size"
     t.datetime "cover_updated_at"
-    t.integer  "slide_duration",          default: 4
-    t.float    "audio_vol",               default: 1.0
+    t.integer  "slide_duration",                      default: 4
+    t.float    "audio_vol",                           default: 1.0
     t.string   "captions_font"
     t.integer  "captions_font_size"
     t.integer  "captions_letter_spacing"
-    t.integer  "media_fit_mode",          default: 0
-    t.boolean  "audio_snap_to_slides",    default: false
-    t.integer  "page_views",              default: 0
+    t.integer  "media_fit_mode",                      default: 0
+    t.boolean  "audio_snap_to_slides",                default: false
+    t.integer  "page_views",                          default: 0
+    t.string   "bg_audio_postprocessed_file_name"
+    t.string   "bg_audio_postprocessed_content_type"
+    t.integer  "bg_audio_postprocessed_file_size"
+    t.datetime "bg_audio_postprocessed_updated_at"
   end
 
   add_index "tales", ["user_id"], name: "index_tales_on_user_id", using: :btree

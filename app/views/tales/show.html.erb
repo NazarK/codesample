@@ -30,8 +30,8 @@
     ]
 
     <% if @tale.audio.present? %>
-      YARNTALE.audio = "<%= @tale.audio.url %>"
-      YARNTALE.audio_vol = <%= @tale.audio_vol %>
+      YARNTALE.audio = "<%= @tale.bg_audio_postprocessed.url %>"
+      YARNTALE.audio_vol = 1
     <% end %>
 
     <% if @tale.cover.present? %>
