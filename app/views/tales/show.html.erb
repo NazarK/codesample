@@ -47,6 +47,11 @@
       <% end %>
     <% end %>
 
+    <% if @tale.bg_youtube_id.present? %>
+        YARNTALE.bg_youtube_id = "<%= @tale.bg_youtube_id %>"
+    <% end %>
+
+
     <% if @tale.cover.present? %>
       YARNTALE.cover = "<%= @tale.cover.url(:original) %>"
     <% end %>

@@ -58,6 +58,19 @@ class Tale < ActiveRecord::Base
     end  
   end  
   
+  attr_accessor :bg_audio_delete
+  before_validation { audio.clear if bg_audio_delete == '1' }
+  
+  before_validation do
+    if self.audio_updated_at_changed? && self.audio.present?
+      self.bg_youtube = nil
+    end
+    
+    if self.bg_youtube_changed? && self.bg_youtube.present?
+      self.audio.clear
+    end
+  end
+  
   def bg_audio_postprocess
     return if !self.audio.present?
     
@@ -88,4 +101,12 @@ class Tale < ActiveRecord::Base
   def path
     "/t#{self.id}"
   end
+  
+  def bg_youtube_id
+    if self.bg_youtube.present?
+      regex = /(?:.be\/|\/watch\?v=|\/(?=p\/))([\w\/\-]+)/
+      self.bg_youtube.match(regex)[1] rescue nil
+    end
+  end  
+  
 end

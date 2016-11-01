@@ -1,4 +1,3 @@
-
 class YarnTale extends React.Component {
 
     constructor(props) {
@@ -7,6 +6,9 @@ class YarnTale extends React.Component {
     }
     
     render() {
+      
+      var bg_youtube_src=`https://www.youtube.com/embed/${this.props.bg_youtube_id}?enablejsapi=1&origin=http://${window.location.host}&showinfo=0&controls=0&loop=1`
+      
       return(
         <div className="yarntale">
 
@@ -43,6 +45,12 @@ class YarnTale extends React.Component {
               
           <audio className="audio" loop></audio>
           <audio className="slide_audio"></audio>
+          
+          { this.props.bg_youtube_id && (
+              <iframe id='bg_youtube' type='text/html' src={bg_youtube_src} frameBorder='0'></iframe>
+            )
+          }
+          
         </div>
     )}
 }

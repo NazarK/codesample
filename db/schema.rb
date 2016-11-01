@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161031095113) do
+ActiveRecord::Schema.define(version: 20161101052712) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -124,6 +124,7 @@ ActiveRecord::Schema.define(version: 20161031095113) do
     t.string   "bg_audio_postprocessed_content_type"
     t.integer  "bg_audio_postprocessed_file_size"
     t.datetime "bg_audio_postprocessed_updated_at"
+    t.string   "bg_youtube"
   end
 
   add_index "tales", ["user_id"], name: "index_tales_on_user_id", using: :btree

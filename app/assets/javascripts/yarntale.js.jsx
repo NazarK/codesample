@@ -163,7 +163,8 @@ YARNTALE.render_to = function(selector) {
     this.element =  React.createElement(YarnTale,
             {timeline_height:timeline_height,
              slides: this.slides,
-             cover: this.cover})
+             cover: this.cover,
+             bg_youtube_id: this.bg_youtube_id })
 
     ReactDOM.render(this.element,$(selector)[0])
 
@@ -177,6 +178,9 @@ YARNTALE.render_to = function(selector) {
         var slide_i = $(this).data("index")
         YARNTALE.youtube_player_create(slide_i)
       })
+      
+      YARNTALE.bg_youtube_init()
+      
     })
 
 
@@ -205,7 +209,6 @@ YARNTALE.render_to = function(selector) {
     }
 
     this.volume(localStorage['YARN_VOL'])
-
 
     this.cc_enabled(this.cc_enabled())
 
@@ -489,35 +492,34 @@ YARNTALE.play = function(opt) {
 
 
     //background audio
-    if(this.audio) {
-      tale_background = this.el.find(".audio")[0]
+    if(this.audio || this.bg_youtube_player) {
+
       if(YARNTALE.cur_slide().mute_background_audio) {
         vol = 0;
       } else {
         vol = (localStorage['YARN_VOL'] || 1)*this.audio_vol
         YARNTALE.log("playing background, volume: ", vol)
       }
-      if(tale_background.volume!=vol)
-        tale_background.volume = vol
+
+      this.bg_volume(vol)
+      
       //don't adjust position and click play if it is auto next slide
       if(!opt.on_auto_next) {
         if(YARNTALE.audio_snap_to_slides) {
           var new_pos = (this.slides[this.cur_slide_index].position % tale_background.duration)
           YARNTALE.log("setting background audio position from to", tale_background.currentTime, new_pos )
-          tale_background.currentTime = new_pos
-          tale_background.play()
+          this.bg_play(new_pos)
         } else {
-          if(tale_background.paused) {
-            tale_background.play()
-          }
+          this.bg_play()
         }
-
       }
 
     }
-
-
-
+    
+    //background youtube
+    if(this.bg_youtube_player) {
+      
+    }
 
 
     this.el.find(".control .play").hide()
@@ -526,14 +528,51 @@ YARNTALE.play = function(opt) {
     return this;
 }
 
+YARNTALE.bg_audio_el = function() {
+  if(this.audio)
+    return this.el.find(".audio")[0]
+}
+
+YARNTALE.bg_play = function(new_pos) {
+  if(this.bg_audio_el() && this.bg_audio_el().paused) {
+    this.bg_audio_el().currentTime = new_pos
+    this.bg_audio_el().play()
+  }
+  
+  //if paused
+  if(this.bg_youtube_player && this.bg_youtube_player.getPlayerState()!=1) {
+    this.bg_youtube_player.seekTo(new_pos)
+    this.bg_youtube_player.playVideo()
+  }
+}
+
+YARNTALE.bg_pause = function() {
+  if(this.bg_audio_el())
+    this.bg_audio_el().pause()
+  if(this.bg_youtube_player)
+    this.bg_youtube_player.pauseVideo()
+}
+
+YARNTALE.bg_volume = function(vol) {
+  
+  if(this.bg_audio_el()) {
+    if(this.bg_audio_el().volume!=vol)
+      this.bg_audio_el().volume = vol
+  }
+  
+  if(this.bg_youtube_player) {
+    this.bg_youtube_player.setVolume(vol*100)
+  }
+  
+}
+
 
 //pause media with GUI feedback
 YARNTALE.pause = function(then) {
   $(this.el).removeClass("playing").removeClass("pending_next")
-  this.el.find(".slide_audio")[0].pause()
-  this.el.find(".audio")[0].pause()
   this.el.find(".control .play").show()
   this.el.find(".control .pause").hide()
+  YARNTALE.bg_pause()
 
   return YARNTALE.pause_media(then)
 }
@@ -541,6 +580,8 @@ YARNTALE.pause = function(then) {
 YARNTALE.pause_media = function(then) {
   this.playing = false
   clearTimeout(this.trigger_next_timer)
+
+  this.el.find(".slide_audio")[0].pause()
 
   //in case of youtube, 'then' is called via youtube state handler
   if(this.cur_slide().youtube) {
@@ -556,7 +597,7 @@ YARNTALE.pause_media = function(then) {
   }
 
   this.setSlideIndex(this.cur_slide_index)
-  then && then()
+  if (typeof then === "function") then()
   return this;
 
 }
@@ -637,6 +678,7 @@ YARNTALE.youtube_player_create = function(slide_index) {
       $(`.slide[data-index=${slide_num}] .youtube_thumb`).removeClass("dimmed")
     }
   }
+
   YARNTALE.slides[slide_index].youtube_player = new YT.Player('youtube-slide-'+slide_index, {
     events: { onReady: on_youtube_ready, onStateChange: on_youtube_state_change.bind($('#youtube-slide-'+slide_index)) }
   })
@@ -654,6 +696,23 @@ YARNTALE.prev_keep_playing = function() {
 
   YARNTALE.do_while_keeping_play_state(function() {
     YARNTALE.prev()
+  })
+}
+
+YARNTALE.bg_youtube_init = function() {
+  if(!$("#bg_youtube").length)
+    return;
+    
+  YARNTALE.bg_youtube_player = new YT.Player('bg_youtube',{
+    events: {
+      onReady: () => {
+        console.log("bg youtube ready")
+      },
+      onStateChange: () => {
+        console.log("bg youtube state changed")
+      }
+      
+    }      
   })
 
 }
