@@ -52,7 +52,12 @@
             audio: "<%= slide.audio.url %>",
             audio_vol: <%= slide.audio_vol %>,
           <% end %>
-        <% end %>  
+        <% end %>
+        
+        <% if slide.video.present? %>
+          audio_vol: <%= slide.audio_vol %>,
+        <% end %>
+        
         caption: decodeURIComponent("<%= URI.encode(slide.caption.gsub("\n","<br>")) %>")
       },
       <% position += slide.duration %>
