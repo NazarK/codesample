@@ -535,13 +535,15 @@ YARNTALE.bg_audio_el = function() {
 
 YARNTALE.bg_play = function(new_pos) {
   if(this.bg_audio_el() && this.bg_audio_el().paused) {
-    this.bg_audio_el().currentTime = new_pos
+    if(new_pos)
+      this.bg_audio_el().currentTime = new_pos
     this.bg_audio_el().play()
   }
   
   //if paused
   if(this.bg_youtube_player && this.bg_youtube_player.getPlayerState()!=1) {
-    this.bg_youtube_player.seekTo(new_pos)
+    if(new_pos)
+      this.bg_youtube_player.seekTo(new_pos)
     this.bg_youtube_player.playVideo()
   }
 }
@@ -698,7 +700,13 @@ YARNTALE.prev_keep_playing = function() {
     YARNTALE.prev()
   })
 }
-
+/*
+-1 – unstarted
+0 – ended
+1 – playing
+2 – paused
+3 – buffering
+5 – video cued */
 YARNTALE.bg_youtube_init = function() {
   if(!$("#bg_youtube").length)
     return;
@@ -708,8 +716,8 @@ YARNTALE.bg_youtube_init = function() {
       onReady: () => {
         console.log("bg youtube ready")
       },
-      onStateChange: () => {
-        console.log("bg youtube state changed")
+      onStateChange: (data) => {
+        console.log("bg youtube state changed", data)
       }
       
     }      
