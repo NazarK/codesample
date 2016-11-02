@@ -25,6 +25,7 @@
 #
 
 class Tale < ActiveRecord::Base
+  strip_attributes
   attr_protected [:user_id]
   belongs_to :user
   has_many :slides
@@ -47,44 +48,44 @@ class Tale < ActiveRecord::Base
   has_attached_file :bg_audio_postprocessed,
                     :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
   validates_attachment_content_type :bg_audio_postprocessed, :content_type => /\Aaudio\/.*\Z/
-                    
+
 
   include ApplicationHelper
-  
+
   #audio volume adjust
   after_save do
     if self.audio_updated_at_changed? || self.audio_vol_changed?
         self.delay.bg_audio_postprocess
-    end  
-  end  
-  
+    end
+  end
+
   attr_accessor :bg_audio_delete
   before_validation { audio.clear if bg_audio_delete == '1' }
-  
+
   before_validation do
     if self.audio_updated_at_changed? && self.audio.present?
       self.bg_youtube = nil
     end
-    
+
     if self.bg_youtube_changed? && self.bg_youtube.present?
       self.audio.clear
     end
   end
-  
+
   def bg_audio_postprocess
     return if !self.audio.present?
-    
+
     tempfile = Tempfile.new(['',File.extname(Tale.find(6).audio.path)])
     audio_volume_adjust(self.audio.path, tempfile.path, self.audio_vol)
     self.bg_audio_postprocessed = File.open(tempfile.path)
     self.save
     tempfile.delete
   end
-    
+
   def duration
     self.slides.to_a.sum &:duration
-  end    
-  
+  end
+
   def pick_cover
     if cover.present?
       self.cover.url
@@ -94,19 +95,19 @@ class Tale < ActiveRecord::Base
         first_image_slide.image.url
       else
         "/loading.jpg"
-      end    
-    end  
-  end    
-  
+      end
+    end
+  end
+
   def path
     "/t#{self.id}"
   end
-  
+
   def bg_youtube_id
     if self.bg_youtube.present?
       regex = /(?:.be\/|\/watch\?v=|\/(?=p\/))([\w\/\-]+)/
       self.bg_youtube.match(regex)[1] rescue nil
     end
-  end  
-  
+  end
+
 end
