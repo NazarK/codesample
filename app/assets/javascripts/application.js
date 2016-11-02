@@ -95,6 +95,10 @@ tale_audio_vol_change = function() {
   $("#tale_audio_vol").val(this.volume)
 }
 
+bg_youtube_vol_change = function() {
+  $("#tale_audio_vol").val($(this).val()/100)
+}
+
 slide_video_pos_change = function() {
   $(this).parents(".slide").find(".video_thumb_pos").val(this.currentTime)
 

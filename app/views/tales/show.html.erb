@@ -17,6 +17,7 @@
 
       <% if @tale.bg_youtube_id.present? %>
           bg_youtube_id: "<%= @tale.bg_youtube_id %>",
+          audio_vol: <%= @tale.audio_vol %>,
       <% end %>
 
       <% if @tale.cover.present? %>

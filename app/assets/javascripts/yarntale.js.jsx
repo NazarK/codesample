@@ -498,7 +498,6 @@ YARNTALE.play = function(opt) {
         vol = 0;
       } else {
         vol = (localStorage['YARN_VOL'] || 1)*this.audio_vol
-        YARNTALE.log("playing background, volume: ", vol)
       }
 
       this.bg_volume(vol)
@@ -516,10 +515,6 @@ YARNTALE.play = function(opt) {
 
     }
     
-    //background youtube
-    if(this.bg_youtube_player) {
-      
-    }
 
 
     this.el.find(".control .play").hide()
@@ -556,6 +551,8 @@ YARNTALE.bg_pause = function() {
 }
 
 YARNTALE.bg_volume = function(vol) {
+
+  console.log("playing background, volume: ", vol)
   
   if(this.bg_audio_el()) {
     if(this.bg_audio_el().volume!=vol)
