@@ -1,4 +1,3 @@
 json.array!(@tales) do |tale|
-  json.extract! tale, :id
-  json.url tale_url(tale, format: :json)
+  json.extract! tale, :id, :name
 end

@@ -3,8 +3,18 @@ class TalesController < ApplicationController
   before_action :set_tale, only: [:show, :edit, :update, :destroy,:embed]
   skip_before_filter :verify_authenticity_token
 
-  respond_to :html
+  respond_to :html, :json
 
+  before_filter :adjust_format, only: [:index,:test]
+  
+  private def adjust_format
+    if params[:format]=="html" || params[:format].blank?
+      set_mobile_format
+    end  
+  end
+
+  def test
+  end
   def embed
 
   end

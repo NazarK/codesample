@@ -5,9 +5,8 @@ Rails.application.routes.draw do
   root 'tales#index'
 
   resources :tales do
-    member do
-      get :embed
-    end
+    get :embed, on: :member
+    get :test, on: :collection
     #this is for internal testing only
     resources :slides, only: [:show]
   end

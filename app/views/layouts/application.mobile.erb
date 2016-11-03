@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Yarntale Mobile</title>
+  <%= stylesheet_link_tag    'application-mobile', media: 'all', 'data-turbolinks-track' => true %>
+  <%= javascript_include_tag 'application-mobile', 'data-turbolinks-track' => true %>
+  <%= csrf_meta_tags %>
+  <script>APP_HOST="<%= request.protocol + request.host_with_port %>"</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1">  
+</head>
+<body class="mobile
+    <%= [params[:controller].gsub("/","_"),params[:action]].compact.join(" ") %>    
+  ">
+
+  <div class="flash_messages">
+    <%= render "layouts/flash_messages.erb" %>
+  </div>
+
+  <div class='yield ionic-body'>
+    <%= yield %>
+  </div>
+
+</body>
+</html>
