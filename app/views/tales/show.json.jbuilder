@@ -1,1 +1,1 @@
-json.extract! @tale, :id, :created_at, :updated_at
+json.extract! @tale, :id, :name

@@ -5,7 +5,7 @@ class TalesController < ApplicationController
 
   respond_to :html, :json
 
-  before_filter :adjust_format, only: [:index,:test]
+  before_filter :adjust_format, only: [:index,:test,:edit]
   
   private def adjust_format
     if params[:format]=="html" || params[:format].blank?
@@ -15,6 +15,7 @@ class TalesController < ApplicationController
 
   def test
   end
+  
   def embed
 
   end
@@ -25,6 +26,11 @@ class TalesController < ApplicationController
   end
 
   def show
+    if params[:format]=="json"
+      render json: @tale.to_json(include: :slides)
+      return
+    end  
+    
     @tale.update_attributes page_views: (@tale.page_views+1)
     response.headers.delete('X-Frame-Options')
     render layout: "show"

@@ -1,4 +1,4 @@
-class MobileEditor extends React.Component {
+class MobileTales extends React.Component {
   
   constructor(props) {
     super(props)
@@ -6,6 +6,7 @@ class MobileEditor extends React.Component {
   }
   
   componentWillMount() {
+    console.log("MobileTales will mount")
     $.get("/tales.json",(resp)=> {
       console.log(resp)
       this.setState({tales:resp})
@@ -17,13 +18,18 @@ class MobileEditor extends React.Component {
     return (
       <div>
         <div className="bar bar-header bar-positive item-button-right">
-          <div className="title">YarnTale</div>
-          <button className="button">
-            <i className="fa fa-plus"></i>
-          </button>
+          <div className="title title-left title-bold">YarnTale</div>          
+          <div className="buttons">
+            <a href="/tales/new" className="button button-balanced button-big">
+              New Tale
+            </a>
+            <a href="/users/sign_out" className="button button-balanced button-big">
+              Logout
+            </a>
+          </div>
         </div>
         <div className="bar bar-subheader bar-secondary bar-positive">
-              <div className="h2 title">TALES</div>
+              <div className="h2 title title-left">TALES</div>
         </div>        
         <div className="content has-header has-subheader">
           <ul className="list">
@@ -32,13 +38,13 @@ class MobileEditor extends React.Component {
                 return <li className="item item-button-right" key={tale.id}>
                   {tale.name}
                   <div className="buttons">
-                    <button className="button button-positive">
+                    <a href={"/tales/"+tale.id+"/edit"} className="button button-positive">
                       <i className="fa fa-pencil-square-o"></i>
-                    </button>
+                    </a>
 
-                    <button className="button button-positive">
+                    <a href={"/t"+tale.id} className="button button-positive">
                       <i className="fa fa-eye"></i>
-                    </button>
+                    </a>
                                       
                   </div>                
                 </li>            

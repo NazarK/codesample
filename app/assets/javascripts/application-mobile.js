@@ -16,10 +16,10 @@
 //= require turbolinks
 //= require cocoon
 //= require bootstrap
+//= require jquery.fontselect
 //= require react
 //= require react_ujs
 //= require components
-//= require ionic
 
 /* JQUERY SORTABLE CLASS SUPPORT */
 /* just add class ".jquery-sortable" to elements that you plan to reorder */

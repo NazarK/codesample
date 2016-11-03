@@ -1,0 +1,24 @@
+= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+  .bar.bar-header.bar-positive
+    .title-bold.title Yarntale
+  .content.has-header
+    .list
+      %label.item
+        DEMO login: demo@demo.com
+        %br/
+        password: 12345678
+        %br/
+        %br/
+      %label.item.item-input
+        %span.input-label Email
+        %input{type:"email",required: true, autofocus:true, name: "user[email]"}
+      %label.item.item-input        
+        %span.input-label Password
+        %input{type:"password",required: true, name: "user[password]"}
+      = f.input :remember_me, :as => :hidden, :value => true        
+      .padding
+        = f.button :submit, "Log in", class: "button button-block button-positive"
+        %br
+        = render "devise/shared/links.mobile.html.haml"
+      .padding
+        = render "layouts/flash_messages.mobile.haml"

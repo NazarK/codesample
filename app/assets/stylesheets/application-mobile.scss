@@ -18,19 +18,29 @@
 /* make ionic content scrollable */ 
 .ionic-body {  
   .content {
+    height: 100vh;
+  }
+  .content {
     .list {
       height: calc(100vh);
       overflow-y: scroll;
+      overflow-x: hidden;
       padding-bottom: 87px;
     }
   }
-  .title {
+  .title-left {
     text-align: left;
   }
   .bar-header {
-    .title {
+    .title-bold {
       font-weight: bold;
       font-size: 22px;
     }
+  }
+  .button-big {
+    font-size: 18px;
+  }
+  textarea {
+    resize: none;
   }
 }

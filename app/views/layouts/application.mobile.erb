@@ -11,11 +11,6 @@
 <body class="mobile
     <%= [params[:controller].gsub("/","_"),params[:action]].compact.join(" ") %>    
   ">
-
-  <div class="flash_messages">
-    <%= render "layouts/flash_messages.erb" %>
-  </div>
-
   <div class='yield ionic-body'>
     <%= yield %>
   </div>
