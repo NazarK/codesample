@@ -139,7 +139,7 @@ YARNTALE.youtube_library_load = function(callback) {
   window.onYouTubeIframeAPIReady = callback
   var tag = document.createElement('script');
 
-  tag.src = "https://www.youtube.com/iframe_api";
+  tag.src = "//www.youtube.com/iframe_api";
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 }
@@ -178,9 +178,9 @@ YARNTALE.render_to = function(selector) {
         var slide_i = $(this).data("index")
         YARNTALE.youtube_player_create(slide_i)
       })
-      
+
       YARNTALE.bg_youtube_init()
-      
+
     })
 
 
@@ -501,7 +501,7 @@ YARNTALE.play = function(opt) {
       }
 
       this.bg_volume(vol)
-      
+
       //don't adjust position and click play if it is auto next slide
       if(!opt.on_auto_next) {
         if(YARNTALE.audio_snap_to_slides) {
@@ -514,7 +514,7 @@ YARNTALE.play = function(opt) {
       }
 
     }
-    
+
 
 
     this.el.find(".control .play").hide()
@@ -534,7 +534,7 @@ YARNTALE.bg_play = function(new_pos) {
       this.bg_audio_el().currentTime = new_pos
     this.bg_audio_el().play()
   }
-  
+
   //if paused
   if(this.bg_youtube_player && this.bg_youtube_player.getPlayerState()!=1) {
     if(new_pos)
@@ -553,16 +553,16 @@ YARNTALE.bg_pause = function() {
 YARNTALE.bg_volume = function(vol) {
 
   console.log("playing background, volume: ", vol)
-  
+
   if(this.bg_audio_el()) {
     if(this.bg_audio_el().volume!=vol)
       this.bg_audio_el().volume = vol
   }
-  
+
   if(this.bg_youtube_player) {
     this.bg_youtube_player.setVolume(vol*100)
   }
-  
+
 }
 
 
@@ -655,7 +655,7 @@ YARNTALE.youtube_player_create = function(slide_index) {
   function on_youtube_state_change(event) {
     if(event.data==YT.PlayerState.PAUSED) {
       console.log("youtube video paused")
-      if(YARNTALE.after_youtube_paused) {
+      if(typeof YARNTALE.after_youtube_paused === "function") {
         console.log("calling after_youtube_paused")
         YARNTALE.after_youtube_paused()
         YARNTALE.after_youtube_paused = null
@@ -707,7 +707,7 @@ YARNTALE.prev_keep_playing = function() {
 YARNTALE.bg_youtube_init = function() {
   if(!$("#bg_youtube").length)
     return;
-    
+
   YARNTALE.bg_youtube_player = new YT.Player('bg_youtube',{
     events: {
       onReady: () => {
@@ -716,8 +716,8 @@ YARNTALE.bg_youtube_init = function() {
       onStateChange: (data) => {
         console.log("bg youtube state changed", data)
       }
-      
-    }      
+
+    }
   })
 
 }

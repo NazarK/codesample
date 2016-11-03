@@ -1,3 +1,6 @@
+<iframe class="youtube play_toggle" data-index="0" id="youtube-slide-0" type="text/html" src="//www.youtube.com/embed/_mej5wS7viw?enablejsapi=1&amp;origin=http://localhost:3000&amp;showinfo=0&amp;controls=0" frameborder="0"></iframe>
+
+
 <style>
 iframe {
   width: 400px;
@@ -5,14 +8,14 @@ iframe {
 }
 </style>
 
-<h1>youtube slide test</h1>
+<h1>youtube embeded api test</h1>
 <div class='container'></div>
 
 <script>
 // 2. This code loads the IFrame Player API code asynchronously.
   var tag = document.createElement('script');
 
-  tag.src = "//www.youtube.com/iframe_api";
+  tag.src = "https://www.youtube.com/iframe_api";
   var firstScriptTag = document.getElementsByTagName('script')[0];
   firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 
@@ -36,9 +39,8 @@ iframe {
       }
     }
 
-    ReactDOM.render(React.createElement(Slide, {slide: slide, i:1}), $(".container")[0])
 
-    window.player = new YT.Player('youtube-slide-1', {
+    window.player = new YT.Player('youtube-slide-0', {
       events: { onReady: onReady, onStateChange: onStateChange }
     })
   }

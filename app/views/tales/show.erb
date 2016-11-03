@@ -1,10 +1,10 @@
-  <script>
+<script>
   $(function() {
 
     $.extend(YARNTALE, JSON.parse( '<%= @tale.to_json(only: [:audio_snap_to_slides, :slide_duration]).html_safe %>'))
-    
+
     $.extend(YARNTALE, {
-      
+
       <% if @tale.audio.present? %>
         <% if is_mobile_browser? %>
           audio: "<%= @tale.bg_audio_postprocessed.url %>",
@@ -23,7 +23,7 @@
       <% if @tale.cover.present? %>
         cover: "<%= @tale.cover.url(:original) %>",
       <% end %>
-      
+
     })
 
     YARNTALE.slides = [
@@ -33,33 +33,33 @@
         <%= slide.to_json(except: [:id,:tale_id,:caption,:image,:video,:audio,:audio_vol]).gsub(/^{/,"").gsub(/}$/,"").html_safe %>,
         video: "<%= slide.video.url %>",
         <% if slide.youtube_video_link.present? %>
-          youtube: { 
+          youtube: {
             video_id: "<%= slide.youtube_video_id %>",
             <% if slide.youtube_video_end.present? %>
               video_end: <%= slide.youtube_video_end %>,
             <% end %>
-          }, 
+          },
           youtube_video_start_i: <%= slide.youtube_video_start.to_i %>,
         <% end %>
         position: <%= position %>,
         duration: <%= slide.duration %>,
         image: {original: "<%= slide.image.url(:crop) %>",
                 thumb: "<%= slide.image.url(:thumb) %>"},
-        <% if slide.audio.present? %>        
+        <% if slide.audio.present? %>
           <% if is_mobile_browser? %>
             audio: "<%= slide.audio_processed.url %>",
             audio_vol: 1,
-          <% else %>        
+          <% else %>
             audio: "<%= slide.audio.url %>",
             audio_vol: <%= slide.audio_vol %>,
           <% end %>
         <% end %>
-        
+
         <% if slide.video.present? %>
           audio_vol: <%= slide.audio_vol %>,
         <% end %>
-        
-        caption: decodeURIComponent("<%= URI.encode(slide.caption.gsub("\n","<br>")) %>")
+
+        caption: decodeURIComponent("<%= URI.encode(slide.caption.to_s.gsub("\n","<br>")) %>")
       },
       <% position += slide.duration %>
       <% end %>
@@ -73,30 +73,28 @@
 
 <% if @tale.captions_font.present? %>
   <link href="//fonts.googleapis.com/css?family=<%= @tale.captions_font.gsub(' ','+') %>" rel="stylesheet" type="text/css">
-<% end %>  
-<style>
-.yarntale .sensor.bottom .caption .text {
-  <% if @tale.captions_font.present? %>
-    font-family: "<%= @tale.captions_font.gsub('+', ' ') %>";
-  <% end %>
-  <% if @tale.captions_font_size.present? %>
-    font-size: <%= @tale.captions_font_size %>px;
-  <% end %>  
-  <% if @tale.captions_letter_spacing.present? %>
-    letter-spacing: <%= @tale.captions_letter_spacing %>px;
-  <% end %>
-}
-
-<% if @tale.media_fit_mode=="cover" %>
-.yarntale .slide_view .slide { 
-  object-fit: cover;
-}
-.yarntale .slide_view .slide img, .yarntale .slide_view .slide video, .yarntale .slide_view .slide iframe {
-  object-fit: cover;
-}
 <% end %>
- 
+<style>
+  .yarntale .sensor.bottom .caption .text {
+    <% if @tale.captions_font.present? %>
+      font-family: "<%= @tale.captions_font.gsub('+', ' ') %>";
+    <% end %>
+    <% if @tale.captions_font_size.present? %>
+      font-size: <%= @tale.captions_font_size %>px;
+    <% end %>
+    <% if @tale.captions_letter_spacing.present? %>
+      letter-spacing: <%= @tale.captions_letter_spacing %>px;
+    <% end %>
+  }
 
+  <% if @tale.media_fit_mode=="cover" %>
+    .yarntale .slide_view .slide {
+      object-fit: cover;
+    }
+    .yarntale .slide_view .slide img, .yarntale .slide_view .slide video, .yarntale .slide_view .slide iframe {
+      object-fit: cover;
+    }
+  <% end %>
 </style>
 
 <div class="yarntale_container" style="width:100%;margin:0 auto;height:100%;">

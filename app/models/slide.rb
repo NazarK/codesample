@@ -30,6 +30,7 @@
 #
 
 class Slide < ActiveRecord::Base
+  strip_attributes
   attr_protected []
   belongs_to :tale
   default_scope -> { order(:position)}
@@ -52,26 +53,26 @@ class Slide < ActiveRecord::Base
   validates_attachment_content_type :video, :content_type => /\Avideo\/.*\Z/
 
 
-  attr_accessor :delete_audio 
+  attr_accessor :delete_audio
   before_validation { audio.clear if delete_audio == '1' }
-  
+
   after_save do
     if self.audio_updated_at_changed? || self.audio_vol_changed?
         self.delay.audio_process!
-    end  
-  end  
-  
+    end
+  end
+
   include ApplicationHelper
   def audio_process!
     return if !self.audio.present?
-    
+
     tempfile = Tempfile.new(['',File.extname(Tale.find(6).audio.path)])
     audio_volume_adjust(self.audio.path, tempfile.path, self.audio_vol)
     self.audio_processed = File.open(tempfile.path)
     self.save
     tempfile.delete
   end
-  
+
 
   before_audio_post_process do
     media = FFMPEG::Movie.new(audio.queued_for_write[:original].path)
@@ -86,8 +87,8 @@ class Slide < ActiveRecord::Base
     self.media_duration_will_change!
     self.media_duration = media.duration
   end
-  
-  
+
+
   after_save do
     if self.position.blank?
       self.update_attributes position: self.id
@@ -104,42 +105,42 @@ class Slide < ActiveRecord::Base
   end
 
   #keep only slide or video
-  
+
   before_validation do
     if self.youtube_video_start.to_s.include? ":"
       self.youtube_video_start = (Time.parse("0:"+self.youtube_video_start) - Time.parse("0:0:0")).to_i.to_s
-    end  
-    
+    end
+
     if self.youtube_video_end.to_s.include? ":"
       self.youtube_video_end = (Time.parse("0:"+self.youtube_video_end) - Time.parse("0:0:0")).to_i.to_s
-    end  
+    end
 
-    if self.youtube_video_link.present?       
+    if self.youtube_video_link.present?
       if self.youtube_video_link_changed? || self.media_duration.blank?
         video = VideoInfo.new(self.youtube_video_link)
         self.media_duration = video.duration
       end
     end
-    
-    
-    
-        
+
+
+
+
   end
-  
+
   validate do
-    if self.youtube_video_link.present?       
+    if self.youtube_video_link.present?
       if self.youtube_video_end.to_i > self.media_duration
         self.errors[:youtube_video_end] << "should be lower than this video length: #{self.media_duration.to_i} sec"
-      end    
+      end
     end
-    
+
     if self.youtube_video_end.present? && self.youtube_video_start.present?
       if self.youtube_video_end.to_i < self.youtube_video_start.to_i
         self.errors[:youtube_video_end] << "should be greater than start"
-      end  
-    end  
+      end
+    end
   end
-  
+
   before_save do
     if self.image_updated_at_changed?
       self.video.clear
@@ -155,7 +156,7 @@ class Slide < ActiveRecord::Base
     elsif self.youtube_video_link_changed? && self.youtube_video_link.present?
       self.image.clear
       self.audio.clear
-      self.video.clear  
+      self.video.clear
     end
 
     #reset media_duration if no audio or video
@@ -174,25 +175,25 @@ class Slide < ActiveRecord::Base
       if self.youtube_video_link.present?
         if self.youtube_video_end.present?
           ret = self.youtube_video_end.to_i
-        else  
+        else
           ret = self.media_duration
         end
-          
+
         if self.youtube_video_start.present?
           ret -= self.youtube_video_start.to_i
         end
-        ret        
+        ret
       else
         self.media_duration
-      end  
-    end      
-  end  
-  
+      end
+    end
+  end
+
   def youtube_video_id
     regex = /(?:.be\/|\/watch\?v=|\/(?=p\/))([\w\/\-]+)/
     youtube_id = youtube_video_link.match(regex)[1]
-  end  
-    
+  end
+
   validate do
     if !(self.image.present? || self.video.present? || self.youtube_video_link.present?)
       self.errors[:image] << " some media for the slide should be specified"
