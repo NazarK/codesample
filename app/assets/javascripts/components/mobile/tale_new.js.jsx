@@ -37,7 +37,7 @@ class MobileTaleNew extends React.Component {
           <div className="list">
             <label className="item item-input item-stacked-label">
               <span className="input-label">Title</span>
-              <input type="text" value={this.state.name || ''} onChange={this.nameChange.bind(this)}/>
+              <input type="text" value={this.state.name || ''} onChange={this.nameChange.bind(this)} autoFocus="true"/>
             </label>
           </div>  
 
