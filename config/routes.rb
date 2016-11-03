@@ -22,7 +22,7 @@ Rails.application.routes.draw do
     get :embed, on: :member
     get :test, on: :collection
     #this is for internal testing only
-    resources :slides, only: [:show]
+    resources :slides, only: [:show, :create, :new, :index]
   end
   
   resources :slides

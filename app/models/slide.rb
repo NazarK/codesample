@@ -188,6 +188,18 @@ class Slide < ActiveRecord::Base
       end
     end
   end
+  
+  def image_thumb
+    image.url(:thumb)
+  end  
+  
+  def audio_url
+    audio.url
+  end  
+  
+  def video_url
+    video.url
+  end  
 
   def youtube_video_id
     regex = /(?:.be\/|\/watch\?v=|\/(?=p\/))([\w\/\-]+)/
@@ -200,5 +212,9 @@ class Slide < ActiveRecord::Base
       self.errors[:video] << " some media for the slide should be specified"
       self.errors[:youtube_video_link] << "  some media for the slide should be specified"
     end
+  end
+  
+  def as_json(options={})
+    super(methods: [:image_thumb, :audio_url, :video_url])
   end
 end

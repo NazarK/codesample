@@ -28,26 +28,25 @@ class MobileTales extends React.Component {
             </a>
           </div>
         </div>
-        <div className="bar bar-subheader bar-secondary bar-positive">
-              <div className="h2 title title-left">TALES</div>
-        </div>        
-        <div className="content has-header has-subheader">
+        <div className="content has-header">
           <ul className="list">
             {
               this.state.tales.map((tale) => {
-                return <li className="item item-button-right" key={tale.id}>
-                  {tale.name}
-                  <div className="buttons">
-                    <a href={"/tales/"+tale.id+"/edit"} className="button button-positive">
-                      <i className="fa fa-pencil-square-o"></i>
-                    </a>
-
-                    <a href={"/t"+tale.id} className="button button-positive">
-                      <i className="fa fa-eye"></i>
-                    </a>
-                                      
-                  </div>                
-                </li>            
+                return <a href={"/tales/"+tale.id+"/edit"} className="item item-button-right" key={tale.id}>
+                  <h2>{tale.name}</h2>
+                  <p>
+                    <p> slides: {tale.slides_count}</p>
+                    <p> duration: {tale.duration_h}</p>
+                  </p>
+                  {
+                    tale.slides_count>0 && (
+                      <div className="buttons">
+                        <a href={"/t"+tale.id} className="button button-positive">
+                          <i className="fa fa-eye"></i>
+                        </a>
+                      </div>                
+                  )}
+                </a>            
               })
             }
           </ul>

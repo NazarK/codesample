@@ -110,4 +110,18 @@ class Tale < ActiveRecord::Base
     end
   end
 
+  def bg_audio_url
+    audio.url
+  end  
+  
+  def as_json_hash
+    { methods: [:bg_audio_url], 
+    
+      include: {
+          slides: { methods: [:audio_url, :video_url, :image_thumb]}
+        
+      }
+    }
+  end
+  
 end

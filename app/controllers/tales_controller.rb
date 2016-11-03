@@ -5,7 +5,7 @@ class TalesController < ApplicationController
 
   respond_to :html, :json
 
-  before_filter :adjust_format, only: [:index,:test,:edit]
+  before_filter :adjust_format, only: [:index,:test,:edit,:new, :update]
   
   private def adjust_format
     if params[:format]=="html" || params[:format].blank?
@@ -27,7 +27,7 @@ class TalesController < ApplicationController
 
   def show
     if params[:format]=="json"
-      render json: @tale.to_json(include: :slides)
+      render json: @tale.to_json(@tale.as_json_hash)
       return
     end  
     
@@ -48,6 +48,7 @@ class TalesController < ApplicationController
     @tale = current_user.tales.new(tale_params)
     if @tale.save
       flash.now[:notice] = 'Tale was successfully created.'
+      throw flash
       render :edit
     else
       render :create
@@ -56,6 +57,9 @@ class TalesController < ApplicationController
 
   def update
     if @tale.update(tale_params)
+      if is_mobile_browser?
+        return  redirect_to edit_tale_path(@tale)
+      end  
       flash.now[:notice] = 'Tale was successfully updated.'
     end
     render :edit
@@ -63,6 +67,11 @@ class TalesController < ApplicationController
 
   def destroy
     @tale.destroy
+
+    if is_mobile_browser?
+      return redirect_to tales_path
+    end
+
     respond_with(@tale)
   end
 

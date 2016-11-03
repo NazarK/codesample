@@ -19,7 +19,6 @@ class YarnTale extends React.Component {
           <div className="sensor top right">
             <div className="nav next" onClick={YARNTALE.next_keep_playing}>
               <i className="fa fa-angle-right" aria-hidden="true"></i>
-
             </div>
           </div>
 

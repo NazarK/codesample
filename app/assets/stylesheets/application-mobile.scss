@@ -43,4 +43,22 @@
   textarea {
     resize: none;
   }
+  .slide-edit {
+    .slide-thumb {
+      width: 100%;
+    }  
+  }
+  
+  .tale-edit {
+    .slide-thumb {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      max-width: 80px;
+      max-height: 80px;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
 }
