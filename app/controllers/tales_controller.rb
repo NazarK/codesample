@@ -48,7 +48,6 @@ class TalesController < ApplicationController
     @tale = current_user.tales.new(tale_params)
     if @tale.save
       flash.now[:notice] = 'Tale was successfully created.'
-      throw flash
       render :edit
     else
       render :create
