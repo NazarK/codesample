@@ -110,7 +110,7 @@ class MobileSlideEdit extends React.Component {
           
           
           <button type="submit" className="bar bar-footer bar-positive item-button-left">
-            <div className="title">Save Slide</div>
+            <div className="title click-sound">Save Slide</div>
           </button>  
           
       </form>  

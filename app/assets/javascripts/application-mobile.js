@@ -31,7 +31,7 @@ var ready = function() {
 $(function() {
     ready();
     $(document).on('page:load', ready);
-    $(document).on("click","a, button",function() {
+    $(document).on("click","a, button, .click-sound, [type=submit]",function() {
       $("#mobile-click")[0].play()
     })
 });

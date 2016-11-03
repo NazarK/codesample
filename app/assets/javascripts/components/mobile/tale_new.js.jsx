@@ -45,7 +45,7 @@ class MobileTaleNew extends React.Component {
         </div>
 
         <div className="bar bar-footer bar-positive item-button-left">
-          <div className="title" onClick={this.createTale.bind(this)}>Create Tale</div>
+          <div className="title click-sound" onClick={this.createTale.bind(this)}>Create Tale</div>
         </div>
         
       </div>
