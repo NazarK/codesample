@@ -4,6 +4,13 @@ class TalesController < ApplicationController
   skip_before_filter :verify_authenticity_token
 
   respond_to :html, :json
+  
+  before_filter do
+    if is_mobile_browser? && !params[:format]=="json"
+      redirect_to "/m"
+      false
+    end
+  end
 
   before_filter :adjust_format, only: [:index,:test,:edit,:new, :update]
   

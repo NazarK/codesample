@@ -6,7 +6,7 @@ class MobileTaleEdit extends React.Component {
   }
   
   componentWillMount() {
-    $.get(`/tales/${this.props.id}.json`,(resp)=> {
+    $.get(`/tales/${this.props.params.id}.json`,(resp)=> {
       console.log(resp)
       this.setState(resp)
     })
@@ -29,7 +29,7 @@ class MobileTaleEdit extends React.Component {
     if(!confirm("Delete tale?"))
       return;    
     $.ajax({
-       url: `/tales/${this.props.id}`,
+       url: `/tales/${this.props.params.id}`,
        type: 'DELETE',
        success: function(response) {
          console.log('deleted')
@@ -57,7 +57,7 @@ class MobileTaleEdit extends React.Component {
   
   render() {
     
-    var url = `/tales/${this.props.id}`
+    var url = `/tales/${this.props.params.id}`
     
     return (
       <form onSubmit={this.submit.bind(this)} noValidate="novalidate" encType="multipart/form-data" action={url} acceptCharset="UTF-8" method="post" className="tale-edit">
@@ -103,14 +103,14 @@ class MobileTaleEdit extends React.Component {
 
             <li className="item item-button-right">
               Slides
-              <a href={"/tales/"+this.props.id+"/slides/new"} className="button button-balanced button-big">
+              <a href={"/m/tales/"+this.props.params.id+"/slides/new"} className="button button-balanced button-big">
                 Add Slide
               </a>              
             </li>
             
             {
               this.state.slides.map((slide,i) => {
-                return <a onClick={this.slide_click.bind(this)} href={"/slides/"+slide.id+"/edit"} className="item item-thumbnail-left" key={slide.id}>
+                return <Link to={"/m/slides/"+slide.id+"/edit"} className="item item-thumbnail-left" key={slide.id}>
                     { slide.image_thumb && (
                         <img className="slide-thumb" src={slide.image_thumb} />
                     )}
@@ -120,7 +120,7 @@ class MobileTaleEdit extends React.Component {
                     )}
                   {i+1}.&nbsp;
                   {slide.caption}
-                </a>            
+                </Link>            
               })
             }
 

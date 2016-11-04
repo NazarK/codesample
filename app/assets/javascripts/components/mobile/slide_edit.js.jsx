@@ -10,7 +10,7 @@ class MobileSlideEdit extends React.Component {
     if(!confirm("Delete slide?"))
       return;
     $.ajax({
-       url: `/slides/${this.props.id}`,
+       url: `/slides/${this.props.params.id}`,
        type: 'DELETE',
        success: function(response) {
          console.log('deleted')
@@ -35,7 +35,7 @@ class MobileSlideEdit extends React.Component {
         this.setState(resp)
       })
     } else {
-      $.get(`/slides/${this.props.id || this.state.id}.json`,(resp)=> {
+      $.get(`/slides/${this.props.params.id || this.state.id}.json`,(resp)=> {
         console.log("edit slide resp", resp)
         this.setState(resp)
       })
@@ -79,7 +79,9 @@ class MobileSlideEdit extends React.Component {
   }
 
   back() {
-    setTimeout(()=>{ window.history.back() }, 20)
+    setTimeout(() => {
+      this.props.router.goBack()
+    },20)
   }
   render() {
 

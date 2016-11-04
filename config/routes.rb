@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  get "/test" => "home#test"
+  get "/m(*path)" => "home#mobile_app"
+  
   devise_for :users, controllers: {
           sessions: 'users/sessions',
           registrations: 'users/registrations'

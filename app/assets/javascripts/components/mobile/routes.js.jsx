@@ -9,8 +9,10 @@ class MobileRoutes extends React.Component {
   render() {
     return(
       <Router history={History}>
-        <Route path="/test" component={MobileTales}>
-        </Route>
+        <Route path="/m(/)" component={MobileTales} />
+        <Route path="/m/tales" component={MobileTales} />
+        <Route path="/m/tales/:id/edit" component={MobileTaleEdit} />
+        <Route path="/m/slides/:id/edit" component={MobileSlideEdit} />
       </Router>
     )
   }

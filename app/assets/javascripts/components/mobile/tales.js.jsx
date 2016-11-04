@@ -21,6 +21,9 @@ class MobileTales extends React.Component {
   tale_click() {
     localStorage['tales-list-scrollTop'] = this.refs.list.scrollTop
     localStorage['tale-edit-scrollTop'] = 0  
+    var tale_id = $(event.currentTarget).attr("data-id")
+    console.log("tale_id", tale_id)
+    this.props.router.push(`/m/tales/${tale_id}/edit`)
   }
   
   render() {
@@ -41,7 +44,7 @@ class MobileTales extends React.Component {
           <ul className="list" ref="list">
             {
               this.state.tales.map((tale) => {
-                return <a href={"/tales/"+tale.id+"/edit"} onClick={this.tale_click.bind(this)} className="item item-thumbnail-left item-button-right" key={tale.id}>
+                return <div data-id={tale.id} onClick={this.tale_click.bind(this)} className="item item-thumbnail-left item-button-right" key={tale.id}>
                   <h2>{tale.name}</h2>
                   <p>
                     <span className="label-info"> slides: {tale.slides_count}</span>
@@ -60,7 +63,7 @@ class MobileTales extends React.Component {
                   {
                     <img src={tale.cover_url} className="thumb"/>
                   }
-                </a>            
+                </div>            
               })
             }
           </ul>
