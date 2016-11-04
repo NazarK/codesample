@@ -133,7 +133,7 @@ class MobileSlideEdit extends React.Component {
               </label>
               <label className="item item-input item-stacked-label">
                 <span className="input-label">Audio</span>
-                <input type="file" ref="audio" name="slide[audio]"/>
+                <input type="file" ref="audio" name="slide[audio]" accept="audio/*;capture=microphone" />
               </label>
               <label className="item item-input item-stacked-label">
                 <span className="input-label">Video</span>
