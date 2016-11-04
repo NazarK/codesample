@@ -17,7 +17,6 @@ class TalesController < ApplicationController
   end
   
   def embed
-
   end
 
   def index

@@ -16,7 +16,7 @@ class MobileTales extends React.Component {
   
   render() {
     return (
-      <div>
+      <div className="tales">
         <div className="bar bar-header bar-positive item-button-right">
           <div className="title title-left title-bold">YarnTale</div>          
           <div className="buttons">
@@ -32,18 +32,25 @@ class MobileTales extends React.Component {
           <ul className="list">
             {
               this.state.tales.map((tale) => {
-                return <a href={"/tales/"+tale.id+"/edit"} className="item item-button-right" key={tale.id}>
+                return <a href={"/tales/"+tale.id+"/edit"} className="item item-thumbnail-left item-button-right" key={tale.id}>
                   <h2>{tale.name}</h2>
-                  <p> slides: {tale.slides_count}</p>
-                  <p> duration: {tale.duration_h}</p>
-                  {
-                    tale.slides_count>0 && (
-                      <div className="buttons">
-                        <a href={"/t"+tale.id} className="button button-positive">
-                          <i className="fa fa-eye"></i>
-                        </a>
-                      </div>                
+                  <p>
+                    <span className="label-info"> slides: {tale.slides_count}</span>
+                    <span className="label-info"> duration: {tale.duration_h}</span>
+                  <p>
+                  </p>
+                    <span className="label-info"> views: {tale.page_views}</span>
+                  </p>
+                  {                    tale.slides_count>0 && (
+
+                    <a href={"/t"+tale.id} className="button button-positive">
+                      <i className="fa fa-play"></i>
+                    </a>                  
                   )}
+                  
+                  {
+                    <img src={tale.cover_url} className="thumb"/>
+                  }
                 </a>            
               })
             }
