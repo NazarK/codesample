@@ -102,9 +102,9 @@ class MobileTaleEdit extends React.Component {
 
             <li className="item item-button-right">
               Slides
-              <a href={"/m/tales/"+this.props.params.id+"/slides/new"} className="button button-balanced button-big">
+              <Link to={"/m/tales/"+this.props.params.id+"/slides/new"} className="button button-balanced button-big">
                 Add Slide
-              </a>              
+              </Link>              
             </li>
             
             {
