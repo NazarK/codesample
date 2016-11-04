@@ -11,6 +11,6 @@
       APP_HOST="#{request.protocol + request.host_with_port}"
     %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
   %body{:class => "mobile #{[params[:controller].gsub("/","_"),params[:action]].compact.join(" ")}"}
+    %audio#mobile-click{:src => "/mobile-click.wav"}
     .yield.ionic-body
       = yield
-    %audio#mobile-click{:src => "/mobile-click.wav"}

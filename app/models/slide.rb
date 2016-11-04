@@ -215,6 +215,7 @@ class Slide < ActiveRecord::Base
       self.errors[:image] << " some media for the slide should be specified"
       self.errors[:video] << " some media for the slide should be specified"
       self.errors[:youtube_video_link] << "  some media for the slide should be specified"
+      self.errors[:base] << "some media for the slide should be specified"
     end
   end
   

@@ -13,6 +13,7 @@
 //= require jquery
 //= require jquery_ujs
 //= require jquery-ui
+//= require jquery.form
 //= require turbolinks
 //= require cocoon
 //= require bootstrap
@@ -31,7 +32,7 @@ var ready = function() {
 $(function() {
     ready();
     $(document).on('page:load', ready);
-    $(document).on("click","a, button, .click-sound, [type=submit]",function() {
+    $(document).on("click","a, button, .button, .click-sound, [type=submit]",function() {
       $("#mobile-click")[0].play()
     })
 });

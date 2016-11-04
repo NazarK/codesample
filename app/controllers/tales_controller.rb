@@ -65,11 +65,9 @@ class TalesController < ApplicationController
 
   def destroy
     @tale.destroy
-
-    if is_mobile_browser?
-      return redirect_to tales_path
+    if is_mobile_browser?      
+      return render nothing: true
     end
-
     respond_with(@tale)
   end
 

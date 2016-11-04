@@ -4,16 +4,39 @@ class MobileSlideEdit extends React.Component {
     super(props)
     this.state = {}
   }
+
+  delete(event) {
+    event.preventDefault()
+    if(!confirm("Delete slide?"))
+      return;    
+    $.ajax({
+       url: `/slides/${this.props.id}`,
+       type: 'DELETE',
+       success: function(response) {
+         console.log('deleted')
+         window.history.back();
+       }
+    })
+        
+  }
+
+  componentDidMount() {
+    console.log("slide component did mount")
+    this.refs.audio.value=''
+    this.refs.video.value=''
+    this.refs.image.value=''
+  }
   
   componentWillMount() {
-    if(this.props.id) {
-      $.get(`/slides/${this.props.id}.json`,(resp)=> {
-        console.log(resp)
+    console.log("slide component will mount")
+    if(!this.state.id && this.props.tale_id) {
+      $.get(`/tales/${this.props.tale_id}/slides/new.json`,(resp)=> {
+        console.log("new slide resp", resp)
         this.setState(resp)
       })
     } else {
-      $.get(`/tales/${this.props.tale_id}/slides/new.json`,(resp)=> {
-        console.log(resp)
+      $.get(`/slides/${this.props.id || this.state.id}.json`,(resp)=> {
+        console.log("edit slide resp", resp)
         this.setState(resp)
       })
     }
@@ -23,58 +46,70 @@ class MobileSlideEdit extends React.Component {
     this.setState({caption: event.target.value})
   }
   
-  post() {
-    if(this.props.id) {
-      $.ajax({
-        type: "POST",
-        url: `/slides.json`,
-        data: { slide: this.state },
-        error: function(resp) {
-          console.log("error",resp)
-        },
-        success: function(resp) {
-          console.log("success",resp)
-        }
-      });    
-    } else {
-      $.ajax({
-        type: "POST",
-        url: `/tales/${this.props.tale_id}/slides.json`,
-        data: { slide: this.state },
-        error: function(resp) {
-          console.log("error",resp.responseJSON)
-        },
-        success: function(resp) {
-          console.log("success",resp)
-        }  
-      });
+  submit(event) {
+    event.preventDefault()
+
+    if(!this.state.id) {
+      console.log("new record")
+      $(event.target).ajaxSubmit({
+          success: (resp)=>{
+            console.log("response from ajax new record", resp);
+            window.history.replaceState('','',`/slides/${resp.id}/edit`)
+            console.log("setting state")
+            this.setState(resp)
+            this.componentWillMount()
+            this.componentDidMount()
+          },
+          error: (resp)=>{
+            console.log("new record error response:", resp)
+            alert(resp.responseJSON.error)
+          }
+          
+      })
+    } else {    
+      $(event.target).ajaxSubmit({
+          success: ()=>{
+            console.log('form submitted');
+            this.componentWillMount()
+            this.componentDidMount()
+          }
+      })
     }
-    
-    
+    return false;    
   }
-  
-  render() {
     
-    url = `/slides/${this.props.id}`
-    if(this.props.new_record) {
-      var url = `/tales/${this.props.tale_id}/slides`
+  back() {
+    setTimeout(()=>{ window.history.back() }, 20)
+  }
+  render() {
+
+    console.log("slide component render", this.state)
+    
+    var new_record = (this.state.id === null)
+    console.log("new record: ", new_record)
+    
+    url = `/slides/${this.state.id}`
+    
+    if(new_record) {
+      var url = `/tales/${this.state.tale_id}/slides`
     }
+  
     
     return (
-      <form noValidate="novalidate" encType="multipart/form-data" action={url} acceptCharset="UTF-8" method="post" className="slide-edit">
-        { !this.props.new_record && (
+      <form noValidate="novalidate"  onSubmit={this.submit.bind(this)} encType="multipart/form-data" action={url} acceptCharset="UTF-8" method="post" className="slide-edit">
+        { !new_record && (
           <input type="hidden" name="_method" value="patch" />
         )}
 
         <div className="bar bar-header bar-positive">
-          <a href={"/tales/"+this.state.tale_id+"/edit"} className="button button-positive button-big">
+          <div onClick={this.back.bind(this)} className="button button-positive button-big click-sound">
             <i className="fa fa-arrow-left"></i>
-          </a>
+          </div>
           <div className="title title-bold">slide</div>
-          { !this.props.new_record && (
-            <a href={url} data-method="delete"  data-confirm="Delete slide?" className="button button-assertive button-big">
+          { !new_record && (
+            <div onClick={this.delete.bind(this)} className="delete button button-assertive button-big">
               delete
-            </a>          
+            </div>
           )}
         </div>
 
@@ -94,16 +129,16 @@ class MobileSlideEdit extends React.Component {
               </label>
               <label className="item item-input item-stacked-label">
                 <span className="input-label">Image</span>
-                <input type="file" accept="image/*;capture=camera" name="slide[image]"/>
+                <input type="file" ref="image" accept="image/*;capture=camera" name="slide[image]"/>
               </label>
               <label className="item item-input item-stacked-label">
                 <span className="input-label">Audio</span>
-                <input type="file" name="slide[audio]"/>
+                <input type="file" ref="audio" name="slide[audio]"/>
               </label>
               <label className="item item-input item-stacked-label">
                 <span className="input-label">Video</span>
 
-                <input type="file"  accept="video/*;capture=camera" name="slide[video]"/>
+                <input type="file"  ref="video" accept="video/*;capture=camera" name="slide[video]"/>
               </label>
             </div>  
           </div>

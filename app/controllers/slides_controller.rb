@@ -37,13 +37,11 @@ class SlidesController < ApplicationController
     @slide = current_user.tales.find(params[:tale_id]).slides.new(slide_params)
     if !@slide.save
       if is_mobile_browser?
-        redirect_to new_tale_slide_path(id:params[:tale_id]), alert: @slide.errors.full_messages.join("")
-        return
+        return render json: {error: @slide.errors[:base].join(" / ")}, status: 400
       end  
     else
       if is_mobile_browser?
-        redirect_to edit_tale_path(id:params[:tale_id])
-        return
+        return render json: @slide
       end  
     end    
 
@@ -64,8 +62,8 @@ class SlidesController < ApplicationController
 
   def destroy
     @slide.destroy
-    if is_mobile_browser?
-      return redirect_to edit_tale_path(@slide.tale)
+    if is_mobile_browser?      
+      return render nothing: true
     end
     respond_with(@slide)
   end

@@ -41,7 +41,7 @@ class MobileTales extends React.Component {
                   </p>
                     <span className="label-info"> views: {tale.page_views}</span>
                   </p>
-                  {                    tale.slides_count>0 && (
+                  { tale.slides_count>0 && (
 
                     <a href={"/t"+tale.id} className="button button-positive">
                       <i className="fa fa-play"></i>

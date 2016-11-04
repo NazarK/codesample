@@ -62,7 +62,7 @@
     }
   }
   
-  a[data-method="delete"] {
+  .button.delete, a[data-method="delete"] {
     text-transform: capitalize;
   }
   
@@ -91,5 +91,10 @@
     padding: 0 24px;
     top: 21px;
   }
-    
+  
+  
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
 }
