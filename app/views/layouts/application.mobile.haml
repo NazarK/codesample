@@ -9,7 +9,8 @@
     = csrf_meta_tags
     :javascript
       APP_HOST="#{request.protocol + request.host_with_port}"
-    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+    %meta{:content => "width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=0", :name => "viewport"}
+    %meta{name:"apple-mobile-web-app-capable",content: "yes"}
   %body{:class => "mobile #{[params[:controller].gsub("/","_"),params[:action]].compact.join(" ")}"}
     %audio#mobile-click{:src => "/mobile-click.wav"}
     .yield.ionic-body

@@ -1,5 +1,5 @@
 class MobileSlideEdit extends React.Component {
-  
+
   constructor(props) {
     super(props)
     this.state = {}
@@ -8,7 +8,7 @@ class MobileSlideEdit extends React.Component {
   delete(event) {
     event.preventDefault()
     if(!confirm("Delete slide?"))
-      return;    
+      return;
     $.ajax({
        url: `/slides/${this.props.id}`,
        type: 'DELETE',
@@ -17,7 +17,7 @@ class MobileSlideEdit extends React.Component {
          window.history.back();
        }
     })
-        
+
   }
 
   componentDidMount() {
@@ -26,7 +26,7 @@ class MobileSlideEdit extends React.Component {
     this.refs.video.value=''
     this.refs.image.value=''
   }
-  
+
   componentWillMount() {
     console.log("slide component will mount")
     if(!this.state.id && this.props.tale_id) {
@@ -41,11 +41,11 @@ class MobileSlideEdit extends React.Component {
       })
     }
   }
-  
+
   captionChange(event) {
     this.setState({caption: event.target.value})
   }
-  
+
   submit(event) {
     event.preventDefault()
 
@@ -64,9 +64,9 @@ class MobileSlideEdit extends React.Component {
             console.log("new record error response:", resp)
             alert(resp.responseJSON.error)
           }
-          
+
       })
-    } else {    
+    } else {
       $(event.target).ajaxSubmit({
           success: ()=>{
             console.log('form submitted');
@@ -75,26 +75,26 @@ class MobileSlideEdit extends React.Component {
           }
       })
     }
-    return false;    
+    return false;
   }
-    
+
   back() {
     setTimeout(()=>{ window.history.back() }, 20)
   }
   render() {
 
     console.log("slide component render", this.state)
-    
+
     var new_record = (this.state.id === null)
     console.log("new record: ", new_record)
-    
+
     url = `/slides/${this.state.id}`
-    
+
     if(new_record) {
       var url = `/tales/${this.state.tale_id}/slides`
     }
-  
-    
+
+
     return (
       <form noValidate="novalidate"  onSubmit={this.submit.bind(this)} encType="multipart/form-data" action={url} acceptCharset="UTF-8" method="post" className="slide-edit">
         { !new_record && (
@@ -113,7 +113,7 @@ class MobileSlideEdit extends React.Component {
           )}
         </div>
 
-          <div className="content has-header">
+          <div className="content has-header has-footer">
             <div className="list">
               {  this.props.flash && (
                   <div className="button button-full button-assertive flash_messages">
@@ -133,22 +133,28 @@ class MobileSlideEdit extends React.Component {
               </label>
               <label className="item item-input item-stacked-label">
                 <span className="input-label">Audio</span>
-                <input type="file" ref="audio" name="slide[audio]"/>
+                <input type="file" ref="audio" name="slide[audio]" accept="audio/*;capture=microphone" />
               </label>
               <label className="item item-input item-stacked-label">
                 <span className="input-label">Video</span>
 
                 <input type="file"  ref="video" accept="video/*;capture=camera" name="slide[video]"/>
               </label>
-            </div>  
+              <div className="item" style={{opacity:0}}></div>
+              <div className="item" style={{opacity:0}}></div>
+              <div className="item" style={{opacity:0}}></div>
+              <div className="item" style={{opacity:0}}></div>
+
+            </div>
+
           </div>
-          
-          
+
+
           <button type="submit" className="bar bar-footer bar-positive item-button-left">
             <div className="title click-sound">Save Slide</div>
-          </button>  
-          
-      </form>  
+          </button>
+
+      </form>
     )
   }
 }
