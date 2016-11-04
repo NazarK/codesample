@@ -1,0 +1,16 @@
+!!!
+%html
+  %head
+    %meta{:content => "text/html; charset=UTF-8", "http-equiv" => "Content-Type"}/
+    %title Yarntale
+    %meta{:content => "#387ef5", :name => "theme-color"}/
+    = stylesheet_link_tag    'application.mobile', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application.mobile', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+    :javascript
+      APP_HOST="#{request.protocol + request.host_with_port}"
+    %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
+  %body{:class => "mobile #{[params[:controller].gsub("/","_"),params[:action]].compact.join(" ")}"}
+    .yield.ionic-body
+      = yield
+    %audio#mobile-click{:src => "/mobile-click.wav"}

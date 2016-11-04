@@ -61,4 +61,8 @@
       object-fit: contain;
     }
   }
+  
+  a[data-method="delete"] {
+    text-transform: capitalize;
+  }
 }

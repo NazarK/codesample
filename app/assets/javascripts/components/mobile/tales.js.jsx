@@ -34,10 +34,8 @@ class MobileTales extends React.Component {
               this.state.tales.map((tale) => {
                 return <a href={"/tales/"+tale.id+"/edit"} className="item item-button-right" key={tale.id}>
                   <h2>{tale.name}</h2>
-                  <p>
-                    <p> slides: {tale.slides_count}</p>
-                    <p> duration: {tale.duration_h}</p>
-                  </p>
+                  <p> slides: {tale.slides_count}</p>
+                  <p> duration: {tale.duration_h}</p>
                   {
                     tale.slides_count>0 && (
                       <div className="buttons">
