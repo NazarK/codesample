@@ -47,8 +47,8 @@ class MobileTaleEdit extends React.Component {
     setTimeout(()=>{ window.history.back() }, 20)
   }
 
-  listScroll(event) {
-    localStorage['tale-edit-scrollTop'] = event.target.scrollTop
+  slide_click() {
+    localStorage['tale-edit-scrollTop'] = this.refs.list.scrollTop
   }
   
   componentDidUpdate(event) {
@@ -80,7 +80,7 @@ class MobileTaleEdit extends React.Component {
         </div>
         
         <div className="content has-header">
-          <div className="list" onScroll={this.listScroll.bind(this)} ref="list">
+          <div className="list" ref="list">
             <label className="item item-input item-stacked-label">
               <span className="input-label">Title</span>
               <input type="text" name="tale[name]" value={this.state.name || ''} onChange={this.nameChange.bind(this)}/>
@@ -110,7 +110,7 @@ class MobileTaleEdit extends React.Component {
             
             {
               this.state.slides.map((slide,i) => {
-                return <a href={"/slides/"+slide.id+"/edit"} className="item item-thumbnail-left" key={slide.id}>
+                return <a onClick={this.slide_click.bind(this)} href={"/slides/"+slide.id+"/edit"} className="item item-thumbnail-left" key={slide.id}>
                     { slide.image_thumb && (
                         <img className="slide-thumb" src={slide.image_thumb} />
                     )}
