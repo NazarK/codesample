@@ -15,11 +15,15 @@ class MobileTaleNew extends React.Component {
       url: "/tales.json",
       data: {tale: { name: this.state.name} },
       dataType: "JSON",
-      success: function(resp) {
-        window.location = `/tales/${resp.id}/edit`
+      success: (resp) => {
+        this.props.router.push(`/m/tales/${resp.id}/edit`)    
       }
     });    
 
+  }
+  
+  back(event) {
+    this.props.router.goBack()
   }
   
   
@@ -27,9 +31,9 @@ class MobileTaleNew extends React.Component {
     return (
       <div>
         <div className="bar bar-header bar-positive">
-          <a href="/tales" className="button button-positive button-big">
+          <div onClick={this.back.bind(this)} className="button button-positive button-big click-sound">
             <i className="fa fa-arrow-left"></i>
-          </a>
+          </div>
           <div className="title title-bold">tale</div>
         </div>
         

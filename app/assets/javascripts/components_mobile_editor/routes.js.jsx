@@ -11,6 +11,7 @@ class MobileRoutes extends React.Component {
       <Router history={History}>
         <Route path="/m" component={MobileTales} />
         <Route path="/m/tales" component={MobileTales} />
+        <Route path="/m/tales/new" component={MobileTaleNew} />
         <Route path="/m/tales/:id/edit" component={MobileTaleEdit} />
         <Route path="/m/slides/:id/edit" component={MobileSlideEdit} />
         <Route path="/m/tales/:tale_id/slides/new" component={MobileSlideEdit} />        

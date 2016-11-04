@@ -107,8 +107,8 @@ class MobileSlideEdit extends React.Component {
           </div>
           <div className="title title-bold">slide</div>
           { !new_record && (
-            <div onClick={this.delete.bind(this)} className="delete button button-assertive button-big">
-              delete
+            <div onClick={this.delete.bind(this)} className="delete button button-clear button-big">
+              <i className="fa-2x ion-android-delete"></i>
             </div>
           )}
         </div>

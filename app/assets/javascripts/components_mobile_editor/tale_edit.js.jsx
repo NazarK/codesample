@@ -72,8 +72,8 @@ class MobileTaleEdit extends React.Component {
 
           <div className="title title-bold">tale</div>
             { !this.props.new_record && (
-              <div onClick={this.delete.bind(this)} className="delete button button-assertive button-big">
-                delete
+              <div onClick={this.delete.bind(this)} className="delete button button-clear button-big">
+                <i className="fa-2x ion-android-delete"></i>
               </div>                
             )}          
         </div>
