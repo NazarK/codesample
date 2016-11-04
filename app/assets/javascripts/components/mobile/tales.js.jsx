@@ -36,7 +36,7 @@ class MobileTales extends React.Component {
                   <h2>{tale.name}</h2>
                   <p>
                     <span className="label-info"> slides: {tale.slides_count}</span>
-                    <span className="label-info"> duration: {tale.duration_h}</span>
+                    <span className="label-info"> {tale.duration_h}</span>
                   <p>
                   </p>
                     <span className="label-info"> views: {tale.page_views}</span>
