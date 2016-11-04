@@ -47,6 +47,14 @@ class MobileTaleEdit extends React.Component {
     setTimeout(()=>{ window.history.back() }, 20)
   }
 
+  listScroll(event) {
+    localStorage['tale-edit-scrollTop'] = event.target.scrollTop
+  }
+  
+  componentDidUpdate(event) {
+    $(this.refs.list)[0].scrollTop = localStorage['tale-edit-scrollTop']
+  }
+  
   render() {
     
     var url = `/tales/${this.props.id}`
@@ -72,7 +80,7 @@ class MobileTaleEdit extends React.Component {
         </div>
         
         <div className="content has-header">
-          <div className="list">
+          <div className="list" onScroll={this.listScroll.bind(this)} ref="list">
             <label className="item item-input item-stacked-label">
               <span className="input-label">Title</span>
               <input type="text" name="tale[name]" value={this.state.name || ''} onChange={this.nameChange.bind(this)}/>

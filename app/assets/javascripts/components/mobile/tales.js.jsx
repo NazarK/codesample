@@ -14,6 +14,18 @@ class MobileTales extends React.Component {
     
   }
   
+  listScroll(event) {
+    localStorage['tales-list-scrollTop'] = event.target.scrollTop
+  }
+  
+  componentDidUpdate(event) {
+    $(this.refs.list)[0].scrollTop = localStorage['tales-list-scrollTop']
+  }
+  
+  tale_click() {
+    localStorage['tale-edit-scrollTop'] = 0  
+  }
+  
   render() {
     return (
       <div className="tales">
@@ -29,10 +41,10 @@ class MobileTales extends React.Component {
           </div>
         </div>
         <div className="content has-header">
-          <ul className="list">
+          <ul className="list" ref="list" onScroll={this.listScroll.bind(this)}>
             {
               this.state.tales.map((tale) => {
-                return <a href={"/tales/"+tale.id+"/edit"} className="item item-thumbnail-left item-button-right" key={tale.id}>
+                return <a href={"/tales/"+tale.id+"/edit"} onClick={this.tale_click.bind(this)} className="item item-thumbnail-left item-button-right" key={tale.id}>
                   <h2>{tale.name}</h2>
                   <p>
                     <span className="label-info"> slides: {tale.slides_count}</span>
