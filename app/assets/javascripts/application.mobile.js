@@ -20,13 +20,14 @@
 //= require jquery.fontselect
 //= require react
 //= require react_ujs
+//= require ReactRouter
 //= require components
 
 /* ready function to be called on each load (and page:load turbolinks event) */
+window.reactRouter = require("react-router")
 var ready = function() {
   console.log('ready')
 };
-
 
 
 $(function() {
