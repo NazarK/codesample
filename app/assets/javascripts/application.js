@@ -20,7 +20,9 @@
 //= require jquery.fontselect
 //= require react
 //= require react_ujs
-//= require components
+//= require_tree ./components_viewer
+
+//this is browser editor layout
 
 
 /* JQUERY SORTABLE CLASS SUPPORT */

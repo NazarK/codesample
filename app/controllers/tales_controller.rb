@@ -12,7 +12,7 @@ class TalesController < ApplicationController
     end
   end
 
-  before_filter :adjust_format, only: [:index,:test,:edit,:new, :update]
+  before_filter :adjust_format, only: [:test,:edit,:new, :update]
   
   private def adjust_format
     if params[:format]=="html" || params[:format].blank?

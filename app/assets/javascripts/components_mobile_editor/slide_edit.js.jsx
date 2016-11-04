@@ -29,8 +29,8 @@ class MobileSlideEdit extends React.Component {
 
   componentWillMount() {
     console.log("slide component will mount")
-    if(!this.state.id && this.props.tale_id) {
-      $.get(`/tales/${this.props.tale_id}/slides/new.json`,(resp)=> {
+    if(!this.state.id && this.props.params.tale_id) {
+      $.get(`/tales/${this.props.params.tale_id}/slides/new.json`,(resp)=> {
         console.log("new slide resp", resp)
         this.setState(resp)
       })
@@ -79,9 +79,7 @@ class MobileSlideEdit extends React.Component {
   }
 
   back() {
-    setTimeout(() => {
-      this.props.router.goBack()
-    },20)
+    this.props.router.goBack()
   }
   render() {
 
@@ -93,7 +91,7 @@ class MobileSlideEdit extends React.Component {
     url = `/slides/${this.state.id}`
 
     if(new_record) {
-      var url = `/tales/${this.state.tale_id}/slides`
+      var url = `/tales/${this.props.params.tale_id}/slides`
     }
 
 

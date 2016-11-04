@@ -11,24 +11,18 @@
 // about supported directives.
 //
 //= require jquery
-//= require jquery-ui
-//= require turbolinks
+//= require jquery.fontselect
+//= require jquery.form
+//= require react
+//= require ReactRouter
+//= require_tree ./components_mobile_editor
 
-//this layout is used only for login
-
-/* ready function to be called on each load (and page:load turbolinks event) */
-var ready = function() {
-  console.log('application.mobile layout ready')
-};
-
-
-
+//ReactRouter is just copied to assets folder
 $(function() {
-    ready();
-    $(document).on('page:load', ready);
-    $(document).on("click","a, button, .button, .click-sound, [type=submit]",function() {
-      console.log("click!!!")
-      $("#mobile-click")[0].play()
-    })
+  console.log('application.mobile_app layout ready')
+  $(document).on("click","a, button, .button, .click-sound, [type=submit]",function() {
+    console.log("click!!!")
+    $("#mobile-click")[0].play()
+  })  
+  ReactDOM.render(React.createElement(MobileRoutes), $("#root")[0])
 });
-

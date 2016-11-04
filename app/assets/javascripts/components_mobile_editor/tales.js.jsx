@@ -8,7 +8,11 @@ class MobileTales extends React.Component {
   componentWillMount() {
     console.log("MobileTales will mount")
     $.get("/tales.json",(resp)=> {
-      console.log(resp)
+      console.log("got tales:",resp.length)
+      if(this.state.tales.length==resp.length) {
+        console.log("already got tales, not updating state")
+        return
+      }
       this.setState({tales:resp})
     })
     
@@ -21,9 +25,12 @@ class MobileTales extends React.Component {
   tale_click() {
     localStorage['tales-list-scrollTop'] = this.refs.list.scrollTop
     localStorage['tale-edit-scrollTop'] = 0  
+  }
+  
+  tale_view(event) {
     var tale_id = $(event.currentTarget).attr("data-id")
-    console.log("tale_id", tale_id)
-    this.props.router.push(`/m/tales/${tale_id}/edit`)
+    window.open(`/t${tale_id}`, '_blank');
+    event.preventDefault()
   }
   
   render() {
@@ -44,7 +51,7 @@ class MobileTales extends React.Component {
           <ul className="list" ref="list">
             {
               this.state.tales.map((tale) => {
-                return <div data-id={tale.id} onClick={this.tale_click.bind(this)} className="item item-thumbnail-left item-button-right" key={tale.id}>
+                return <Link to={`/m/tales/${tale.id}/edit`} onClick={this.tale_click.bind(this)} className="item item-thumbnail-left item-button-right" key={tale.id}>
                   <h2>{tale.name}</h2>
                   <p>
                     <span className="label-info"> slides: {tale.slides_count}</span>
@@ -55,15 +62,15 @@ class MobileTales extends React.Component {
                   </p>
                   { tale.slides_count>0 && (
 
-                    <a href={"/t"+tale.id} className="button button-positive">
+                    <div data-id={tale.id} onClick={this.tale_view.bind(this)} className="button button-positive">
                       <i className="fa fa-play"></i>
-                    </a>                  
+                    </div>                  
                   )}
                   
                   {
                     <img src={tale.cover_url} className="thumb"/>
                   }
-                </div>            
+                </Link>
               })
             }
           </ul>

@@ -6,7 +6,7 @@
 //= require cursor-auto-hide
 //= require react
 //= require react_ujs
-//= require components
+//= require_tree ./components_viewer
 //= require jquery-touchswipe
 
 window.YARNTALE = {

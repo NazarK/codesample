@@ -7,7 +7,6 @@ class MobileTaleEdit extends React.Component {
   
   componentWillMount() {
     $.get(`/tales/${this.props.params.id}.json`,(resp)=> {
-      console.log(resp)
       this.setState(resp)
     })
   }
@@ -43,8 +42,8 @@ class MobileTaleEdit extends React.Component {
     this.setState({name: event.target.value})
   }
   
-  back() {
-    setTimeout(()=>{ window.history.back() }, 20)
+  back(event) {
+    this.props.router.goBack()
   }
 
   slide_click() {
