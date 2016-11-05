@@ -1,10 +1,10 @@
 class MobileTales extends React.Component {
-  
+
   constructor(props) {
     super(props)
     this.state = {tales: []}
   }
-  
+
   componentWillMount() {
     console.log("MobileTales will mount")
     $.get("/tales.json",(resp)=> {
@@ -15,35 +15,35 @@ class MobileTales extends React.Component {
       }
       this.setState({tales:resp})
     })
-    
+
   }
-    
+
   componentDidUpdate(event) {
-    $(this.refs.list)[0].scrollTop = localStorage['tales-list-scrollTop']
+    this.refs.list.scrollTop = localStorage['tales-list-scrollTop']
   }
-  
+
   save_list_top() {
     localStorage['tales-list-scrollTop'] = this.refs.list.scrollTop
   }
   tale_click() {
     this.save_list_top()
-    localStorage['tale-edit-scrollTop'] = 0  
+    localStorage['tale-edit-scrollTop'] = 0
   }
-  
+
   tale_view(event) {
     var tale_id = $(event.currentTarget).attr("data-id")
     window.open(`/t${tale_id}`, '_blank');
     event.preventDefault()
   }
-  
+
   render() {
     return (
       <div className="tales">
         <div className="bar bar-header bar-positive item-button-right">
-          <div className="title title-left title-bold">YarnTale</div>          
+          <div className="title title-left title-bold">YarnTale</div>
           <div className="buttons">
             <Link to="/m/tales/new" onClick={this.save_list_top.bind(this)} className="button button-positive button-big">
-              <i className="fa-2x ion-plus-circled" data-pack="default"></i>              
+              <i className="fa-2x ion-plus-circled" data-pack="default"></i>
             </Link>
             <a href="/users/sign_out" className="button button-positive button-big">
               <i className="fa-2x ion-android-exit" data-pack="default"></i>
@@ -67,9 +67,9 @@ class MobileTales extends React.Component {
 
                     <div data-id={tale.id} onClick={this.tale_view.bind(this)} className="button button-outline button-positive">
                       <i className="fa-2x ion-play" data-pack="default"></i>
-                    </div>                  
+                    </div>
                   )}
-                  
+
                   {
                     <img src={tale.cover_url} className="thumb"/>
                   }

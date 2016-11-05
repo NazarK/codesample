@@ -1,16 +1,16 @@
 class MobileTaleEdit extends React.Component {
-  
+
   constructor(props) {
     super(props)
     this.state = {slides: []}
   }
-  
+
   componentWillMount() {
     $.get(`/tales/${this.props.params.id}.json`,(resp)=> {
       this.setState(resp)
     })
   }
-  
+
   submit(event) {
     event.preventDefault()
     $(event.target).ajaxSubmit({
@@ -20,13 +20,13 @@ class MobileTaleEdit extends React.Component {
           this.componentWillMount()
         }
     });
-    return false;    
+    return false;
   }
-  
+
   delete(event) {
     event.preventDefault()
     if(!confirm("Delete tale?"))
-      return;    
+      return;
     $.ajax({
        url: `/tales/${this.props.params.id}`,
        type: 'DELETE',
@@ -35,13 +35,13 @@ class MobileTaleEdit extends React.Component {
          window.history.back();
        }
     })
-        
+
   }
-  
+
   nameChange(event) {
     this.setState({name: event.target.value})
   }
-  
+
   back(event) {
     this.props.router.goBack()
   }
@@ -49,23 +49,23 @@ class MobileTaleEdit extends React.Component {
   slide_click() {
     localStorage['tale-edit-scrollTop'] = this.refs.list.scrollTop
   }
-  
+
   componentDidUpdate(event) {
-    $(this.refs.list)[0].scrollTop = localStorage['tale-edit-scrollTop']
+    this.refs.list.scrollTop = localStorage['tale-edit-scrollTop']
   }
-  
+
   render() {
-    
+
     var url = `/tales/${this.props.params.id}`
-    
+
     return (
       <form onSubmit={this.submit.bind(this)} noValidate="novalidate" encType="multipart/form-data" action={url} acceptCharset="UTF-8" method="post" className="tale-edit">
         { !this.props.new_record && (
           <input type="hidden" name="_method" value="patch" />
         )}
-        
+
         <div className="bar bar-header bar-positive">
-          
+
           <div onClick={this.back.bind(this)} className="button button-positive button-big click-sound">
             <i className="fa fa-arrow-left"></i>
           </div>
@@ -74,10 +74,10 @@ class MobileTaleEdit extends React.Component {
             { !this.props.new_record && (
               <div onClick={this.delete.bind(this)} className="delete button button-clear button-big">
                 <i className="fa-2x ion-android-delete"></i>
-              </div>                
-            )}          
+              </div>
+            )}
         </div>
-        
+
         <div className="content has-header">
           <div className="list" ref="list">
             <label className="item item-input item-stacked-label">
@@ -89,46 +89,46 @@ class MobileTaleEdit extends React.Component {
               { this.state.bg_audio_url && (
                 <div>
                   <audio controls src={this.state.bg_audio_url} />
-                </div>  
+                </div>
               )}
               <input type="file" name="tale[audio]"  ref="bg_audio"/>
             </label>
-            
+
             <div className="padding">
               <button type="submit" className="button button-block button-positive">
                 Save Tale Properties
-              </button>              
+              </button>
             </div>
 
             <li className="item item-button-right">
               Slides
               <Link to={"/m/tales/"+this.props.params.id+"/slides/new"} className="button button-balanced button-big">
                 Add Slide
-              </Link>              
+              </Link>
             </li>
-            
+
             {
               this.state.slides.map((slide,i) => {
-                return <Link to={"/m/slides/"+slide.id+"/edit"} className="item item-thumbnail-left" key={slide.id}>
+                return <Link to={"/m/slides/"+slide.id+"/edit"} onClick={this.slide_click.bind(this)} className="item item-thumbnail-left" key={slide.id}>
                     { slide.image_thumb && (
                         <img className="slide-thumb" src={slide.image_thumb} />
                     )}
-                    
+
                     { slide.video_url && (
                         <video className="slide-thumb" src={slide.video_url} />
                     )}
                   {i+1}.&nbsp;
                   {slide.caption}
-                </Link>            
+                </Link>
               })
             }
 
-          </div>  
+          </div>
 
 
         </div>
 
-        
+
       </form>
     )
   }
