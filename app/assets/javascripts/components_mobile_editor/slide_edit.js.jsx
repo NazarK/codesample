@@ -31,12 +31,12 @@ class MobileSlideEdit extends React.Component {
     console.log("slide component will mount")
     if(!this.state.id && this.props.params.tale_id) {
       $.get(`/tales/${this.props.params.tale_id}/slides/new.json`,(resp)=> {
-        console.log("new slide resp", resp)
+        //console.log("new slide resp", resp)
         this.setState(resp)
       })
     } else {
       $.get(`/slides/${this.props.params.id || this.state.id}.json`,(resp)=> {
-        console.log("edit slide resp", resp)
+        //console.log("edit slide resp", resp)
         this.setState(resp)
       })
     }
