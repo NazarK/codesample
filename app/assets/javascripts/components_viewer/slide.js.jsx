@@ -20,7 +20,7 @@ class Slide extends React.Component {
       return (
         <div className='slide youtube' data-index={i} >
           <YoutubeThumb videoId={slide.youtube.video_id} />
-          <iframe className='youtube play_toggle' data-index={i} id={`youtube-slide-${i}`} type='text/html'
+          <iframe className='youtube play_toggle youtube-player' data-index={i} id={`youtube-slide-${i}`} type='text/html'
             src={youtube_src}
           frameBorder='0'></iframe>
         </div>
