@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161101052712) do
+ActiveRecord::Schema.define(version: 20161122075113) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -69,8 +69,8 @@ ActiveRecord::Schema.define(version: 20161101052712) do
   create_table "slides", force: :cascade do |t|
     t.integer  "tale_id"
     t.text     "caption"
-    t.datetime "created_at",                                   null: false
-    t.datetime "updated_at",                                   null: false
+    t.datetime "created_at",                                        null: false
+    t.datetime "updated_at",                                        null: false
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 20161101052712) do
     t.string   "audio_processed_content_type"
     t.integer  "audio_processed_file_size"
     t.datetime "audio_processed_updated_at"
+    t.text     "crop",                         default: "--- {}\n"
   end
 
   add_index "slides", ["tale_id"], name: "index_slides_on_tale_id", using: :btree

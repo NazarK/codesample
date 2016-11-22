@@ -21,9 +21,11 @@
 //= require react
 //= require react_ujs
 //= require_tree ./components_viewer
+//= require_tree ./components_editor
+//= require cropper
 
 //this is browser editor layout
-
+console.log("application.js")
 
 /* JQUERY SORTABLE CLASS SUPPORT */
 /* just add class ".jquery-sortable" to elements that you plan to reorder */

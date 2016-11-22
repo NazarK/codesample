@@ -1,5 +1,8 @@
 .nested-fields.well.padding.slide{data: {slide_id: f.object.id}}
   .row
+    - if Rails.env.development?
+      %div{style:"position:absolute;right:0px;"}
+        = f.object.id
     = f.hidden_field :id
     = f.hidden_field :position
     .col-sm-1
@@ -13,8 +16,16 @@
           = f.input :image, input_html: { style: "margin:0"}
           - if f.object.image.present?
             .row
-              %a{href: f.object.image.url(:crop), target: "_blank",style:"cursor:pointer;"}
-                = image_tag f.object.image.url(:thumb), style: "height:60px;"
+              .pull-right
+                %button.btn.btn-xs.btn-default{onclick: "CropEditEl.popup(#{f.object.id}, '#{f.object.image.url}');return false;"}
+                  %i.fa.fa-crop{title: "crop image"}
+                = f.simple_fields_for :crop do |crop|
+                  = crop.input :w, as: :hidden, input_html: { value: f.object.crop.dig(:w) }
+                  = crop.input :h, as: :hidden, input_html: { value: f.object.crop.dig(:h) }
+                  = crop.input :x, as: :hidden, input_html: { value: f.object.crop.dig(:x) }
+                  = crop.input :y, as: :hidden, input_html: { value: f.object.crop.dig(:y) }
+              %a.no-decoration{href: f.object.image.url(:crop), target: "_blank",style:"cursor:pointer;"}
+                = image_tag f.object.image.url(:display), style: "vertical-align:top;max-height:80px;max-width:80px;"
         .col-sm-7
           = f.input :audio, label: "Image Audio", input_html: { accept: "audio/*" }
           - if f.object.audio.present?

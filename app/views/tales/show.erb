@@ -43,8 +43,8 @@
         <% end %>
         position: <%= position %>,
         duration: <%= slide.duration %>,
-        image: {original: "<%= slide.image.url(:crop) %>",
-                thumb: "<%= slide.image.url(:thumb) %>"},
+        image: {original: "<%= slide.image.url(:display) %>",
+                thumb: "<%= slide.image.url(:display) %>"},
         <% if slide.audio.present? %>
           <% if is_mobile_browser? %>
             audio: "<%= slide.audio_processed.url %>",

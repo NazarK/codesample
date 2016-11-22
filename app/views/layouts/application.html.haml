@@ -12,7 +12,7 @@
       APP_HOST="#{request.protocol + request.host_with_port}"
     - if is_mobile_browser?
       %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
-  %body{class: [params[:controller].gsub("/","_"),params[:action]].compact.join(" ")+(is_mobile_browser? ? "mobile" : "desktop")}
+  %body{class: [params[:controller].gsub("/","_"),params[:action]].compact.join(" ")+(is_mobile_browser? ? " mobile" : " desktop")}
     .flash_messages
       = render "layouts/flash_messages"
     .yield

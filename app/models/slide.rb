@@ -38,9 +38,34 @@ class Slide < ActiveRecord::Base
   attr_protected []
   belongs_to :tale
   default_scope -> { order(:position)}
+  serialize :crop
   has_attached_file :image,
-                    :styles => { original: "2048x2048>", crop: "960x640#", thumb: "150x100#" },
+                    :styles => { 
+                      original: "2048x2048>",
+                      display: { :processors => [:cropper], thumb: "2048x2048>" },
+                      crop: "960x640#", 
+                      thumb: "150x100#" },
                     :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
+                    
+
+  attr_accessor :reprocessing_crop
+  before_save do
+    #crop_changed doesn't work here
+    if (crop_changed? || (image_updated_at_changed? && crop.present?))
+      image.assign(image)      
+      image.save
+      self.image_updated_at = Time.now
+    end
+    true
+  end
+  
+  before_validation do 
+    self.crop.delete_if { |key, value| value.blank? }    
+    if crop.blank? && crop_was.blank?
+      self.restore_attributes([:crop])
+    end  
+  end  
+    
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
   has_attached_file :audio,

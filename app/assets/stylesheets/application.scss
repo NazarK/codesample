@@ -15,6 +15,7 @@
  *= require style-classes
  *= require fontselect
  *= require_self
+ *= require cropper
  */
 
 .sort-handle {
@@ -84,4 +85,15 @@ body.desktop.devise_sessions {
     right: 10px;
     left: auto;
   }
+}
+
+.no-decoration {
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.modal-open {
+    overflow: auto;
+    padding-right: 0px!important;
 }
