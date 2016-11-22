@@ -16,7 +16,7 @@
           = f.input :image, input_html: { style: "margin:0"}
           - if f.object.image.present?
             .row
-              .pull-right
+              %div{style:"position:absolute;margin: 5px"}
                 %button.btn.btn-xs.btn-default{onclick: "CropEditEl.popup(#{f.object.id}, '#{f.object.image.url}');return false;"}
                   %i.fa.fa-crop{title: "crop image"}
                 = f.simple_fields_for :crop do |crop|

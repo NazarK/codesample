@@ -48,22 +48,20 @@ class Slide < ActiveRecord::Base
                     :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
                     
 
-  attr_accessor :reprocessing_crop
-  before_save do
-    #crop_changed doesn't work here
-    if (crop_changed? || (image_updated_at_changed? && crop.present?))
-      image.assign(image)      
-      image.save
-      self.image_updated_at = Time.now
-    end
-    true
-  end
   
   before_validation do 
     self.crop.delete_if { |key, value| value.blank? }    
     if crop.blank? && crop_was.blank?
       self.restore_attributes([:crop])
     end  
+
+    if (crop_changed? || (image_updated_at_changed? && crop.present?))
+      #instead of calling reprocess, which causes infinite callbacks loop
+      image.assign(image)      
+      image.save
+      #fix for cache buster
+      self.image_updated_at = Time.now
+    end
   end  
     
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
