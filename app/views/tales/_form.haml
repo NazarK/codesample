@@ -20,7 +20,7 @@
     %div{style: "top: 15px;position:fixed;right:15px;z-index:1;background: #fff;padding: 10px;border-radius: 10px;"}
       - if !@tale.new_record?
         = link_to "<i class='fa fa-eye'></i> Show".html_safe, "/t#{@tale.id}", class: "btn btn-default", target: ("_blank" if !is_mobile_browser?)
-      %button.btn.btn-default{type: :submit}
+      %button.btn.btn-default.tale-save{type: :submit}
         %i.fa.fa-check
         Save
     - if f.object.errors.any?
@@ -97,4 +97,5 @@
         .links
           = link_to_add_association '<i class="fa fa-plus" style="vertical-align:middle" aria-hidden="true"></i> add slide'.html_safe, f, :slides, class: "btn btn-default"
           
-= react_component "CropEdit"
+= react_component "ImageCrop"
+= react_component "ImageFilters"

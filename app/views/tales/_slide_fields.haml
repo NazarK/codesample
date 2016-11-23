@@ -16,16 +16,28 @@
           = f.input :image, input_html: { style: "margin:0"}
           - if f.object.image.present?
             .row
-              %div{style:"position:absolute;margin: 5px"}
-                %button.btn.btn-xs.btn-default{onclick: "CropEditEl.popup(#{f.object.id}, '#{f.object.image.url}');return false;"}
-                  %i.fa.fa-crop{title: "crop image"}
-                = f.simple_fields_for :crop do |crop|
-                  = crop.input :w, as: :hidden, input_html: { value: f.object.crop.dig(:w) }
-                  = crop.input :h, as: :hidden, input_html: { value: f.object.crop.dig(:h) }
-                  = crop.input :x, as: :hidden, input_html: { value: f.object.crop.dig(:x) }
-                  = crop.input :y, as: :hidden, input_html: { value: f.object.crop.dig(:y) }
+              %div{style:"position:absolute;padding:5px;z-index:2;"}
+                %span
+                  %button.btn.btn-xs.btn-default{onclick: "ImageCropComp.popup(#{f.object.id}, '#{f.object.image.url}');return false;"}
+                    %i.fa.fa-crop{title: "crop image"}
+                  = f.simple_fields_for :crop do |crop|
+                    = crop.input :w, as: :hidden, input_html: { value: f.object.crop.dig(:w) }
+                    = crop.input :h, as: :hidden, input_html: { value: f.object.crop.dig(:h) }
+                    = crop.input :x, as: :hidden, input_html: { value: f.object.crop.dig(:x) }
+                    = crop.input :y, as: :hidden, input_html: { value: f.object.crop.dig(:y) }                  
+                %span
+                  %button.btn.btn-xs.btn-default{onclick: "ImageFiltersComp.popup(#{f.object.id}, '#{f.object.image.url(:display)}');return false;"}
+                    %i.fa.fa-adjust{title: "image filters"}
+                  = f.simple_fields_for :filters do |filters|
+                    = filters.input :filters, as: :hidden, input_html: { value: f.object.filters.dig(:filters) }
+                    = filters.input :brightness, as: :hidden, input_html: { value: f.object.filters.dig(:brightness) }
+                    = filters.input :contrast, as: :hidden, input_html: { value: f.object.filters.dig(:contrast) }
+                    = filters.input :grayscale, as: :hidden, input_html: { value: f.object.filters.dig(:grayscale) }
+                    = filters.input :saturate, as: :hidden, input_html: { value: f.object.filters.dig(:saturate) }
+                    = filters.input :blur, as: :hidden, input_html: { value: f.object.filters.dig(:blur) }
+
               %a.no-decoration{href: f.object.image.url(:crop), target: "_blank",style:"cursor:pointer;"}
-                = image_tag f.object.image.url(:display), style: "vertical-align:top;max-height:80px;max-width:80px;"
+                = image_tag f.object.image.url(:display), style: "vertical-align:top;max-height:80px;max-width:80px;filter: #{f.object.filters[:filters]};z-index:1;"
         .col-sm-7
           = f.input :audio, label: "Image Audio", input_html: { accept: "audio/*" }
           - if f.object.audio.present?

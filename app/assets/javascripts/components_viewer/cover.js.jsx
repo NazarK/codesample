@@ -43,7 +43,7 @@ class Cover extends React.Component {
         )
       } else {        
         return (
-          <img className='slide cover' src={firstSlide.image.original} />
+          <img className='slide cover' src={firstSlide.image.url} />
         )
       }  
     }

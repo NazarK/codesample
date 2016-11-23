@@ -43,7 +43,7 @@
         <% end %>
         position: <%= position %>,
         duration: <%= slide.duration %>,
-        image: {original: "<%= slide.image.url(:display) %>",
+        image: {url: "<%= slide.image.url(:display) %>",
                 thumb: "<%= slide.image.url(:display) %>"},
         <% if slide.audio.present? %>
           <% if is_mobile_browser? %>
@@ -59,7 +59,8 @@
           audio_vol: <%= slide.audio_vol %>,
         <% end %>
 
-        caption: decodeURIComponent("<%= URI.encode(slide.caption.to_s.gsub("\n","<br>")) %>")
+        caption: decodeURIComponent("<%= URI.encode(slide.caption.to_s.gsub("\n","<br>")) %>"),
+        css_filters: "<%= slide.filters[:filters] %>"
       },
       <% position += slide.duration %>
       <% end %>

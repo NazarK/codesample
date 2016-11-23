@@ -39,6 +39,7 @@ class Slide < ActiveRecord::Base
   belongs_to :tale
   default_scope -> { order(:position)}
   serialize :crop
+  serialize :filters
   has_attached_file :image,
                     :styles => { 
                       original: "2048x2048>",
