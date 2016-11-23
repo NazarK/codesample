@@ -20,6 +20,7 @@
 //= require jquery.fontselect
 //= require react
 //= require react_ujs
+//= require jquery.blockUI
 //= require_tree ./components_viewer
 //= require_tree ./components_editor
 //= require cropper
@@ -92,6 +93,13 @@ var ready = function() {
 $(function() {
     ready();
     $(document).on('page:load', ready);
+    $(document)
+      .ajaxStart(function() { 
+        $.blockUI({ message: '' , fadeIn: 0, fadeOut:0, overlayCSS: { opacity: 0.1 } }) 
+      })
+      .ajaxStop(function() {
+        $.unblockUI({fadeOut:0, fadeIn:0})
+      });    
 });
 
 
