@@ -61,6 +61,13 @@ class TalesController < ApplicationController
   end
 
   def update
+    if params[:ids_ordered].present?
+      params[:ids_ordered].each_with_index do |id,i|
+        @tale.slides.find(id).update_attributes position: (i+1)
+      end
+      return render nothing: true
+    end  
+    
     if @tale.update(tale_params)
       if is_mobile_browser?
         return  redirect_to edit_tale_path(@tale)

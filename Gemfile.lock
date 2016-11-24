@@ -228,6 +228,7 @@ GEM
       rails-assets-angular-ui-router (= 0.2.13)
     rails-assets-jquery (2.2.4)
     rails-assets-jquery-touchswipe (1.6.18)
+    rails-assets-jqueryui-touch-punch-improved (0.3.1)
     rails-deprecated_sanitizer (1.0.3)
       activesupport (>= 4.2.0.alpha)
     rails-dom-testing (1.0.7)
@@ -352,6 +353,7 @@ DEPENDENCIES
   rails-assets-cropper!
   rails-assets-ionic!
   rails-assets-jquery-touchswipe!
+  rails-assets-jqueryui-touch-punch-improved!
   rails_12factor
   react-rails
   responders

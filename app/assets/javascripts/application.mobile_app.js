@@ -11,6 +11,8 @@
 // about supported directives.
 //
 //= require jquery
+//= require jquery-ui
+//= require jqueryui-touch-punch-improved
 //= require jquery.fontselect
 //= require jquery.form
 //= require react

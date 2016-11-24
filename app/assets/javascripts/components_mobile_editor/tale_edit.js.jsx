@@ -5,9 +5,16 @@ class MobileTaleEdit extends React.Component {
     this.state = {slides: []}
   }
 
-  componentWillMount() {
+  componentWillMount() {   
     $.get(`/tales/${this.props.params.id}.json`,(resp)=> {
       this.setState(resp)
+      $(".slides.sortable").sortable({
+        handle: ".sortable-handle",
+        stop: () => {
+          this.slidePositionsUpdate()
+        }
+      })
+
     })
   }
 
@@ -52,6 +59,28 @@ class MobileTaleEdit extends React.Component {
 
   componentDidUpdate(event) {
     this.refs.list.scrollTop = localStorage['tale-edit-scrollTop']
+  }
+  
+  slidePositionsUpdate() {
+    var ids_ordered = []
+    $("form.tale-edit .slide").each(function() {
+      ids_ordered.push($(this).data("id"))
+    })
+    console.log(ids_ordered)
+
+    var slides = this.state.slides
+    $.each(slides,function(index,slide) {
+      slide.position = ids_ordered.indexOf(slide.id)+1
+    })
+    this.setState({slides:slides})
+    
+    $.ajax({
+       data: {ids_ordered: ids_ordered},
+       url: `/tales/${this.props.params.id}`,
+       type: 'PATCH',
+       success: (response) => {
+       }
+    })
   }
 
   render() {
@@ -106,22 +135,25 @@ class MobileTaleEdit extends React.Component {
                 Add Slide
               </Link>
             </li>
+            
+            <div className="slides sortable">
+              {
+                this.state.slides.map((slide,i) => {
+                  return <Link to={"/m/slides/"+slide.id+"/edit"} onClick={this.slide_click.bind(this)} className="item item-thumbnail-left slide item-button-right" data-id={slide.id} key={slide.id}  >
+                      { slide.image_thumb && (
+                          <img className="slide-thumb" src={slide.image_thumb} />
+                      )}
 
-            {
-              this.state.slides.map((slide,i) => {
-                return <Link to={"/m/slides/"+slide.id+"/edit"} onClick={this.slide_click.bind(this)} className="item item-thumbnail-left" key={slide.id}>
-                    { slide.image_thumb && (
-                        <img className="slide-thumb" src={slide.image_thumb} />
-                    )}
-
-                    { slide.video_url && (
-                        <video className="slide-thumb" src={slide.video_url} />
-                    )}
-                  {i+1}.&nbsp;
-                  {slide.caption}
-                </Link>
-              })
-            }
+                      { slide.video_url && (
+                          <video className="slide-thumb" src={slide.video_url} />
+                      )}
+                    {slide.position}.&nbsp;
+                    {slide.caption}
+                    <div className="button sortable-handle"><i className="fa fa-bars"></i></div>
+                  </Link>
+                })
+              }
+            </div>
 
           </div>
 
