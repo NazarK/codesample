@@ -84,7 +84,7 @@ class TalesController < ApplicationController
     end
     respond_with(@tale)
   end
-
+  
   private
     def set_tale
       if params[:action] == "show"

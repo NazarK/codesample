@@ -10,9 +10,9 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-//= require jquery
+//= require ./jquery-1.12.4
 //= require jquery-ui
-//= require jqueryui-touch-punch-improved
+//= require ./jquery.touch-punch
 //= require jquery.fontselect
 //= require jquery.form
 //= require react

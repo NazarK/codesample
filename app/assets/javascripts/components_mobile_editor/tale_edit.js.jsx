@@ -9,7 +9,8 @@ class MobileTaleEdit extends React.Component {
     $.get(`/tales/${this.props.params.id}.json`,(resp)=> {
       this.setState(resp)
       $(".slides.sortable").sortable({
-        handle: ".sortable-handle",
+        handler: ".sortable-handle",
+        axis: 'y',
         stop: () => {
           this.slidePositionsUpdate()
         }
