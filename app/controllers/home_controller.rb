@@ -1,5 +1,5 @@
 class HomeController < ApplicationController
-  before_action :authenticate_user!, only: :mobile_app
+  #before_action :authenticate_user!, only: :mobile_app
 
   def index
   end

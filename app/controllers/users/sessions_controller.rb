@@ -3,7 +3,9 @@ class Users::SessionsController < Devise::SessionsController
 
   include ActiveDevice
   skip_before_filter :set_mobile_format, only: :create
-
+  respond_to :json
+  skip_before_filter :verify_authenticity_token  
+ 
   # GET /resource/sign_in
 #  def new
 #    super

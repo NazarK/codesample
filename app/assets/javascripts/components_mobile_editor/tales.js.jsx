@@ -14,6 +14,9 @@ class MobileTales extends React.Component {
         return
       }
       this.setState({tales:resp})
+    }).fail((resp) => {
+      if(resp.status==401)
+        this.props.router.push("/m/sign_in")
     })
 
   }
@@ -35,6 +38,13 @@ class MobileTales extends React.Component {
     window.open(`/t${tale_id}`, '_blank');
     event.preventDefault()
   }
+  
+  sign_out(event) {
+    event.preventDefault()
+    $.get("/users/sign_out",()=> {
+      this.props.router.push("/m/sign_in")
+    })
+  }
 
   render() {
     return (
@@ -45,7 +55,7 @@ class MobileTales extends React.Component {
             <Link to="/m/tales/new" onClick={this.save_list_top.bind(this)} className="button button-positive button-big">
               <i className="fa-2x ion-plus-circled" data-pack="default"></i>
             </Link>
-            <a href="/users/sign_out" className="button button-positive button-big">
+            <a href="#" onClick={this.sign_out.bind(this)} className="button button-positive button-big">
               <i className="fa-2x ion-android-exit" data-pack="default"></i>
             </a>
           </div>

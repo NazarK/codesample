@@ -4,6 +4,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   include ActiveDevice  
   skip_before_filter :set_mobile_format
+  respond_to :json
   
   before_filter :set_mobile_format, only: :new
 
