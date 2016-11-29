@@ -10,7 +10,7 @@ export default class MobileTales extends React.Component {
 
   componentWillMount() {
     console.log("MobileTales will mount")
-    $.get(DATA_HOST+"/tales.json",(resp)=> {
+    $.get(`${DATA_HOST}/tales.json`,(resp)=> {
       console.log("got tales:",resp.length)
       if(this.state.tales.length==resp.length) {
         console.log("already got tales, not updating state")

@@ -31,6 +31,7 @@ class MobileRoutes extends React.Component {
 Meteor.startup(() => {
   
   window.DATA_HOST = "http://localhost:3000"
+  window.DATA_HOST = "http://yarntale.cloudspaint.com"
   
   $.ajaxSetup({
       type: "POST",
