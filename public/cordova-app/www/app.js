@@ -1,25 +1,14 @@
-/*
- This demo lets the audioinput plugin decode the raw microphone data, and connects the plugin object to the
- Web Audio API AudioContext.destination in order to play it to the speakers.
- */
-
 var initUIEvents = function () {
-    document.getElementById("startCapture").addEventListener("click", startCapture);
-    document.getElementById("stopCapture").addEventListener("click", stopCapture);
+    $("#startCapture").click(startCapture);
+    $("#stopCapture").click(stopCapture);
 };
 
 
-/**
- * Called when a plugin error happens.
- */
 function onAudioInputError(error) {
     alert("audioinputerror event recieved: " + JSON.stringify(error));
 }
 
 
-/**
- * Start Audio capture
- */
 var startCapture = function () {
     try {
         if (window.audioinput) {
@@ -66,6 +55,7 @@ var stopCapture = function () {
  * When cordova fires the deviceready event, we initialize everything needed for audio input.
  */
 var onDeviceReady = function () {
+    console.log("onDeviceReady")
     if (window.cordova && window.audioinput) {
         initUIEvents();
 
@@ -83,6 +73,44 @@ var onDeviceReady = function () {
 // Make it possible to run the demo on desktop
 if (!window.cordova) {
     console.log("Running on desktop!");
+    navigator.mediaDevices.enumerateDevices()
+    .then(function(devices) {
+      devices.forEach(function(device) {
+        console.log(device.kind + ": " + device.label +
+                    " id = " + device.deviceId);
+      });
+    })
+    
+    navigator.getUserMedia({audio:true},function(stream) {
+      console.log("got mic stream",stream)
+      var audio_context = new AudioContext;
+      var mic_node = audio_context.createMediaStreamSource(stream)
+      console.log(mic_node)
+      
+      window.audioRecorder = new WebAudioRecorder(mic_node,{workerDir: "./js/"})
+
+      saveRecording = function(blob, enc) {
+        console.log("saving recording")
+        var html, time, url;
+        time = new Date();
+        url = URL.createObjectURL(blob);
+        console.log(url)
+        html = ("<p recording='" + url + "'>") + 
+        ("<audio controls src='" + url + "'></audio> ") + 
+        ("(" + enc + ") " + (time.toString()) + " ") + 
+        ("<a class='btn btn-default' href='" + url + "' download='recording." + enc + "'>") + "Save..." + "</a> " 
+        + ("<button class='btn btn-danger' recording='" + url + "'>Delete</button>");
+        "</p>";
+        $("#res").append($(html));
+      };
+
+      audioRecorder.onComplete = function(recorder, blob) {
+        saveRecording(blob, recorder.encoding);
+      };
+
+    },function() {
+      console.log("ERRROR get user media")
+    })
     onDeviceReady();
 }
 else {
