@@ -1,0 +1,15 @@
+/* CSS declarations go here */
+
+body {
+  padding: 20px;
+}
+
+.icon {
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.account {
+  margin: 5px;
+  line-height: 24px;
+}

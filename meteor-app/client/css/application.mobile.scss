@@ -1,0 +1,100 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or any plugin's vendor/assets/stylesheets directory can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the bottom of the
+ * compiled file so the styles you add here take precedence over styles defined in any styles
+ * defined in the other CSS/SCSS files in this directory. It is generally better to create a new
+ * file per style scope.
+ *
+ *= require ionic
+ *= require font-awesome
+ *= require_self
+ */
+
+/* make ionic content scrollable */ 
+.ionic-body {  
+  .content {
+    height: 100vh;
+  }
+  .content {
+    .list {
+      height: calc(100vh);
+      overflow-y: scroll;
+      overflow-x: hidden;
+      padding-bottom: 87px;
+    }
+  }
+  .title-left {
+    text-align: left;
+  }
+  .bar-header {
+    .title-bold {
+      font-weight: bold;
+      font-size: 22px;
+    }
+  }
+  .button-big {
+    font-size: 18px;
+  }
+  textarea {
+    resize: none;
+  }
+  .slide-edit {
+    .slide-thumb {
+      width: 100%;
+    }  
+  }
+  
+  .tale-edit {
+    .slide-thumb {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      max-width: 80px;
+      max-height: 80px;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  
+  .button.delete, a[data-method="delete"] {
+    text-transform: capitalize;
+  }
+  
+  .label-info {
+    padding: 1px 5px;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    background: #f7f7f7;
+    text-align: center;
+    margin-right: 5px;
+  }  
+  .item-thumbnail-left .thumb {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    max-width: 80px;
+    max-height: 80px;
+    object-fit: cover;
+    width: 100%;
+    height: 100%;  
+  }
+  
+  .tales .item .button {
+    min-width: 60px;
+    min-height: 50px;
+    padding: 0 24px;
+    top: 21px;
+  }
+  
+  
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset;
+}

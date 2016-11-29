@@ -1,4 +1,6 @@
-class SignIn extends React.Component {
+import React from 'react'
+
+export default class SignIn extends React.Component {
 
   constructor(props) {
     super(props)
@@ -8,12 +10,18 @@ class SignIn extends React.Component {
   submit(event) {
     event.preventDefault()
     $(event.target).ajaxSubmit({
-        success: ()=>{
-          this.props.router.push(`/m/`)    
+        success: (resp)=>{
+          if(resp.id) {
+            this.props.router.push(`/m/`)    
+          }
         },
-        error: ()=>{
-          alert("Wrong email or password")
+        error: (resp)=>{
+          console.log(resp)
           this.setState({pass: null})
+          if(resp.responseJSON.error)
+            alert(resp.responseJSON.error)
+          else 
+            alert("unknown error");
         }
     });
     return false;
@@ -28,7 +36,8 @@ class SignIn extends React.Component {
   }      
   
   render() {
-    url = "/users/sign_in.json"
+    url = DATA_HOST + "/users/sign_in.json"
+    
     return (
       <form noValidate="novalidate"  onSubmit={this.submit.bind(this)} encType="multipart/form-data" action={url} acceptCharset="UTF-8" method="post">
 
