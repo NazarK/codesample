@@ -9,8 +9,13 @@ export default class MobileTales extends React.Component {
   }
 
   componentWillMount() {
-    console.log("MobileTales will mount")
-    $.get(`${DATA_HOST}/tales.json`,(resp)=> {
+    console.log("MobileTales will mount, getting tales")
+    $.ajax({
+      url: `${DATA_HOST}/tales.json`,
+      xhrFields: {
+           withCredentials: true
+      }
+    }).done((resp)=> {
       console.log("got tales:",resp.length)
       if(this.state.tales.length==resp.length) {
         console.log("already got tales, not updating state")
@@ -18,8 +23,11 @@ export default class MobileTales extends React.Component {
       }
       this.setState({tales:resp})
     }).fail((resp) => {
-      if(resp.status==401)
+      console.log("fail",resp)
+      if(resp.status==401) {
+        console.log("unauthorized")
         this.props.router.push("/m/sign_in")
+      }
     })
 
   }
@@ -41,7 +49,7 @@ export default class MobileTales extends React.Component {
     window.open(`/t${tale_id}`, '_blank');
     event.preventDefault()
   }
-  
+
   sign_out(event) {
     event.preventDefault()
     console.log("sign out")

@@ -19,7 +19,7 @@ class MobileRoutes extends React.Component {
         <Route path="/m/tales/new" component={MobileTaleNew} />
         <Route path="/m/tales/:id/edit" component={MobileTaleEdit} />
         <Route path="/m/slides/:id/edit" component={MobileSlideEdit} />
-        <Route path="/m/tales/:tale_id/slides/new" component={MobileSlideEdit} />        
+        <Route path="/m/tales/:tale_id/slides/new" component={MobileSlideEdit} />
       </Router>
     )
   }
@@ -29,22 +29,20 @@ class MobileRoutes extends React.Component {
 
 
 Meteor.startup(() => {
-  
+
   window.DATA_HOST = "http://localhost:3000"
   window.DATA_HOST = "http://yarntale.cloudspaint.com"
-  
+  window.DATA_HOST = "http://192.168.1.108:3000"
+
   $.ajaxSetup({
-      type: "POST",
-      data: {},
-      dataType: 'json',
+      cache: false,
       xhrFields: {
          withCredentials: true
       },
       crossDomain: true
   })
-  
+
   render((
     <MobileRoutes />
   ), document.getElementById('root'))
 })
-

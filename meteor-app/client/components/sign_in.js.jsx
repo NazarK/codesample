@@ -11,33 +11,34 @@ export default class SignIn extends React.Component {
     event.preventDefault()
     $(event.target).ajaxSubmit({
         success: (resp)=>{
+          console.log("sign in success", resp)
           if(resp.id) {
-            this.props.router.push(`/m/`)    
+            this.props.router.push(`/m/`)
           }
         },
         error: (resp)=>{
-          console.log(resp)
+          console.log("sign in error", resp)
           this.setState({pass: null})
           if(resp.responseJSON.error)
             alert(resp.responseJSON.error)
-          else 
+          else
             alert("unknown error");
         }
     });
     return false;
   }
-    
+
   passChange(event) {
     this.setState({pass: event.target.value})
   }
 
   emailChange(event) {
     this.setState({email: event.target.value})
-  }      
-  
+  }
+
   render() {
     url = DATA_HOST + "/users/sign_in.json"
-    
+
     return (
       <form noValidate="novalidate"  onSubmit={this.submit.bind(this)} encType="multipart/form-data" action={url} acceptCharset="UTF-8" method="post">
 
@@ -67,15 +68,15 @@ export default class SignIn extends React.Component {
               <button type="submit" className="button button-block button-positive">
                 Log in
               </button>
-              
+
               <a className="button button-clear button-dark" href="/users/sign_up">Register</a>&nbsp;
-              
+
               <a className="button button-clear button-dark" href="/users/password/new">Forgot your password?</a>
             </div>
           </div>
 
       </form>
-    )            
+    )
   }
 
 }
