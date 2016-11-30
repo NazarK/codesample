@@ -1,9 +1,10 @@
 class TalesController < ApplicationController
 
+  acts_as_token_authentication_handler_for User, except: :show
+
   before_action :set_tale, only: [:show, :edit, :update, :destroy,:embed]
   skip_before_filter :verify_authenticity_token
 
-  acts_as_token_authentication_handler_for User, except: :show
 
   respond_to :html, :json
   

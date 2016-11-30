@@ -31,8 +31,9 @@ class MobileRoutes extends React.Component {
 Meteor.startup(() => {
 
 
-  window.DATA_HOST = "http://localhost:3000"
   window.DATA_HOST = "http://yarntale.cloudspaint.com"
+  if(location.host=="localhost:8080")
+    window.DATA_HOST = "http://localhost:3000"
   //window.DATA_HOST = "http://192.168.1.108:3000"
 
 
