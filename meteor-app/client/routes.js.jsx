@@ -30,9 +30,11 @@ class MobileRoutes extends React.Component {
 
 Meteor.startup(() => {
 
+
   window.DATA_HOST = "http://localhost:3000"
   window.DATA_HOST = "http://yarntale.cloudspaint.com"
   //window.DATA_HOST = "http://192.168.1.108:3000"
+
 
   $.ajaxSetup({
       cache: false,
@@ -40,8 +42,8 @@ Meteor.startup(() => {
       error: (resp) => {
         console.log("fail",resp)
         if(resp.status==401) {
-          console.log("unauthorized")
-          this.props.router.push("/m/sign_in")
+          console.log("unauthorized, redirecting to sign in")
+          browserHistory.push("/m/sign_in")
         }
       }
   })
@@ -51,8 +53,9 @@ Meteor.startup(() => {
           options.data = $.param($.extend(originalOptions.data, { user_email: localStorage['user_email'], user_token: localStorage['user_token'] }));
   });  
   
-  
+
   render((
     <MobileRoutes />
   ), document.getElementById('root'))
+  
 })

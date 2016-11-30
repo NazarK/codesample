@@ -75,8 +75,8 @@ export default class MobileTales extends React.Component {
                   <p>
                     <span className="label-info"> slides: {tale.slides_count}</span>
                     <span className="label-info"> {tale.duration_h}</span>
-                  <p>
                   </p>
+                  <p>
                     <span className="label-info"> views: {tale.page_views}</span>
                   </p>
                   { tale.slides_count>0 && (
