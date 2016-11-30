@@ -20,7 +20,7 @@ export default class MobileTaleNew extends React.Component {
       data: data,
       dataType: "JSON",
       success: (resp) => {
-        this.props.router.push(`/m/tales/${resp.id}/edit`)    
+        this.props.router.replace(`/m/tales/${resp.id}/edit`)    
       }
     });    
 
