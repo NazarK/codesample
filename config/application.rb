@@ -30,6 +30,7 @@ module Yarntale
       :bucket => "yarn-#{Rails.env[0]}"
     }
 
+    config.web_console.whiny_requests = false
   end
 end
 

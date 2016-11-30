@@ -32,7 +32,7 @@ Meteor.startup(() => {
 
   window.DATA_HOST = "http://localhost:3000"
   window.DATA_HOST = "http://yarntale.cloudspaint.com"
-  window.DATA_HOST = "http://192.168.1.108:3000"
+  //window.DATA_HOST = "http://192.168.1.108:3000"
 
   $.ajaxSetup({
       cache: false,
