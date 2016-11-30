@@ -29,6 +29,7 @@ class MobileRoutes extends React.Component {
 
 
 Meteor.startup(() => {
+  console.log("meteor.startup")
 
 
   window.DATA_HOST = "http://yarntale.cloudspaint.com"
