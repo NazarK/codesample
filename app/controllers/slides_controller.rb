@@ -1,4 +1,6 @@
 class SlidesController < ApplicationController
+  acts_as_token_authentication_handler_for User
+
   before_action :set_slide, only: [:show, :edit, :update, :destroy]
 
   skip_before_action :verify_authenticity_token

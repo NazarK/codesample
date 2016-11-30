@@ -14,6 +14,8 @@ export default class SignIn extends React.Component {
           console.log("sign in success", resp)
           if(resp.id) {
             this.props.router.push(`/m/`)
+            localStorage['user_email'] = resp.email
+            localStorage['user_token'] = resp.authentication_token
           }
         },
         error: (resp)=>{

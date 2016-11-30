@@ -5,15 +5,6 @@ class Users::SessionsController < Devise::SessionsController
   skip_before_filter :set_mobile_format, only: :create
   respond_to :json
   skip_before_filter :verify_authenticity_token  
-
-  
-  before_filter :add_cors_headers
-  def add_cors_headers
-    headers['Access-Control-Allow-Origin'] = '*'
-    headers['Access-Control-Allow-Methods'] = 'POST, PUT, DELETE, GET, OPTIONS'
-    headers['Access-Control-Request-Method'] = '*'
-    headers['Access-Control-Allow-Headers'] = 'Origin, X-Requested-With, Content-Type, Accept, Authorization'    
-  end
      
   # GET /resource/sign_in
 #  def new

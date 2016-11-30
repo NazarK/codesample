@@ -9,12 +9,9 @@ export default class MobileTales extends React.Component {
   }
 
   componentWillMount() {
-    console.log("MobileTales will mount, getting tales")
+    console.log("MobileTales will mount, getting tales")    
     $.ajax({
-      url: `${DATA_HOST}/tales.json`,
-      xhrFields: {
-           withCredentials: true
-      }
+      url: `${DATA_HOST}/tales.json`
     }).done((resp)=> {
       console.log("got tales:",resp.length)
       if(this.state.tales.length==resp.length) {
@@ -22,12 +19,6 @@ export default class MobileTales extends React.Component {
         return
       }
       this.setState({tales:resp})
-    }).fail((resp) => {
-      console.log("fail",resp)
-      if(resp.status==401) {
-        console.log("unauthorized")
-        this.props.router.push("/m/sign_in")
-      }
     })
 
   }

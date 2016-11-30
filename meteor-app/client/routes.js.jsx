@@ -36,12 +36,22 @@ Meteor.startup(() => {
 
   $.ajaxSetup({
       cache: false,
-      xhrFields: {
-         withCredentials: true
-      },
-      crossDomain: true
+      crossDomain: true,
+      error: (resp) => {
+        console.log("fail",resp)
+        if(resp.status==401) {
+          console.log("unauthorized")
+          this.props.router.push("/m/sign_in")
+        }
+      }
   })
 
+  $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
+      if(options.type.toUpperCase() === "GET")
+          options.data = $.param($.extend(originalOptions.data, { user_email: localStorage['user_email'], user_token: localStorage['user_token'] }));
+  });  
+  
+  
   render((
     <MobileRoutes />
   ), document.getElementById('root'))
