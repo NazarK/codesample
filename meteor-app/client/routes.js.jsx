@@ -37,6 +37,14 @@ Meteor.startup(() => {
   //window.DATA_HOST = "http://192.168.1.108:3000"
 
 
+  window.AUTH_PARAMS = () => { 
+    return {
+      "user_email": localStorage['user_email'],
+      "user_token": localStorage['user_token']
+    }
+  }
+
+
   $.ajaxSetup({
       cache: false,
       crossDomain: true,
@@ -51,9 +59,8 @@ Meteor.startup(() => {
 
   $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
       if(options.type.toUpperCase() === "GET")
-          options.data = $.param($.extend(originalOptions.data, { user_email: localStorage['user_email'], user_token: localStorage['user_token'] }));
-  });  
-  
+          options.data = $.param($.extend(originalOptions.data, AUTH_PARAMS()));
+  });    
 
   render((
     <MobileRoutes />

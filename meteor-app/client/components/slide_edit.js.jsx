@@ -56,6 +56,7 @@ export default class MobileSlideEdit extends React.Component {
     if(!this.state.id) {
       console.log("new record")
       $(event.target).ajaxSubmit({
+          data: AUTH_PARAMS(),
           success: (resp)=>{
             console.log("response from ajax new record", resp);
             window.history.replaceState('','',`/slides/${resp.id}/edit`)
@@ -72,6 +73,7 @@ export default class MobileSlideEdit extends React.Component {
       })
     } else {
       $(event.target).ajaxSubmit({
+          data: AUTH_PARAMS(),  
           success: ()=>{
             console.log('form submitted');
             this.componentWillMount()
@@ -92,10 +94,10 @@ export default class MobileSlideEdit extends React.Component {
     var new_record = (this.state.id === null)
     console.log("new record: ", new_record)
 
-    url = `/slides/${this.state.id}`
+    url = `${DATA_HOST}/slides/${this.state.id}`
 
     if(new_record) {
-      var url = `/tales/${this.props.params.tale_id}/slides`
+      var url = `${DATA_HOST}/tales/${this.props.params.tale_id}/slides`
     }
 
 

@@ -12,10 +12,12 @@ export default class MobileTaleNew extends React.Component {
   }
   
   createTale() {
+    var data = AUTH_PARAMS()
+    data.tale = { name: this.state.name}
     $.ajax({
       type: "POST",
-      url: "/tales.json",
-      data: {tale: { name: this.state.name} },
+      url: `${DATA_HOST}/tales.json`,
+      data: data,
       dataType: "JSON",
       success: (resp) => {
         this.props.router.push(`/m/tales/${resp.id}/edit`)    

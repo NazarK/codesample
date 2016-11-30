@@ -27,10 +27,7 @@ export default class MobileTaleEdit extends React.Component {
   submit(event) {
     event.preventDefault()
     $(event.target).ajaxSubmit({
-        data: { 
-          "user_email": localStorage['user_email'],
-          "user_token": localStorage['user_token']
-        },
+        data: AUTH_PARAMS(),
         success: ()=>{
           console.log('form submitted');
           this.refs.bg_audio.value=''
