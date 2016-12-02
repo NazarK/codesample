@@ -53,12 +53,13 @@ group :development do
 
 end
 
+gem 'rails_12factor', group: :production
+
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-bootstrap'
 end
 
-gem 'rails_12factor'
 gem 'thin'
 gem 'pg'
 gem 'activeadmin', github: 'gregbell/active_admin'

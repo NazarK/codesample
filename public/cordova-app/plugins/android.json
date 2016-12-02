@@ -8,12 +8,15 @@
     },
     "installed_plugins": {
         "cordova-plugin-audioinput": {
-            "PACKAGE_NAME": "com.example.hello"
+            "PACKAGE_NAME": "com.yarntale.app"
+        },
+        "cordova-plugin-whitelist": {
+            "PACKAGE_NAME": "com.yarntale.app"
         }
     },
     "dependent_plugins": {
         "cordova-plugin-compat": {
-            "PACKAGE_NAME": "com.example.hello"
+            "PACKAGE_NAME": "com.yarntale.app"
         }
     }
 }

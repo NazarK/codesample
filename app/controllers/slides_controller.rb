@@ -53,13 +53,12 @@ class SlidesController < ApplicationController
 
   def update
     if @slide.update(slide_params)
-      if is_mobile_browser?
+      if is_mobile_browser? && params[:format]!="json"
         redirect_to edit_slide_path
         return
       end
     end  
-    
-    respond_with(@slide)
+    render json: @slide
   end
 
   def destroy

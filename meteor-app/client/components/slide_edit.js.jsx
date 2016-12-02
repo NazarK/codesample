@@ -50,43 +50,57 @@ export default class MobileSlideEdit extends React.Component {
     this.setState({caption: event.target.value})
   }
 
-  submit(event) {
+  form_submit(event) {
     event.preventDefault()
+    var new_record = !this.state.id
 
-    if(!this.state.id) {
-      console.log("new record")
-      $(event.target).ajaxSubmit({
-          data: AUTH_PARAMS(),
-          success: (resp)=>{
-            console.log("response from ajax new record", resp);
-            window.history.replaceState('','',`/slides/${resp.id}/edit`)
-            console.log("setting state")
-            this.setState(resp)
-            this.componentWillMount()
-            this.componentDidMount()
-          },
-          error: (resp)=>{
-            console.log("new record error response:", resp)
-            alert(resp.responseJSON.error)
-          }
+    form = $(event.currentTarget)    
+    var formData = new FormData(form[0])
+    formData.append("user_email", localStorage['user_email'])
+    formData.append("user_token", localStorage['user_token'])
 
-      })
-    } else {
-      $(event.target).ajaxSubmit({
-          data: AUTH_PARAMS(),  
-          success: ()=>{
-            console.log('form submitted');
-            this.componentWillMount()
-            this.componentDidMount()
-          }
-      })
-    }
+    if(this.state.audio_blob)
+      formData.append("slide[audio]",this.state.audio_blob,"audio.wav")
+        
+    $.ajax({
+        url: form.attr("action"),
+        data: formData,
+        type: 'POST',
+        contentType: false,
+        processData: false,
+    }).done( (resp)=>{
+        console.log("submitted",resp)
+        this.setState({audio_blob: null})
+        this.setState(resp)        
+        //WAS NEW RECORD
+        if(new_record)
+          window.history.replaceState('','',`/m/slides/${resp.id}/edit`)
+    })
+    
     return false;
   }
 
   back() {
     this.props.router.goBack()
   }
+  
+  record(e) {
+    console.log("record")
+    e.preventDefault()  
+  }
+  
+  stop(e) {
+    console.log("stop")
+    //desktop env
+    if(!window.cordova) {
+      var debug = {hello: "world"};
+      var blob = new Blob([JSON.stringify(debug, null, 2)], {type : 'application/wav'});
+    }
+    this.setState({audio_blob: blob})
+    console.log("blob recorded")
+    e.preventDefault()
+  }
+  
   render() {
 
     console.log("slide component render", this.state)
@@ -94,15 +108,15 @@ export default class MobileSlideEdit extends React.Component {
     var new_record = (this.state.id === null)
     console.log("new record: ", new_record)
 
-    url = `${DATA_HOST}/slides/${this.state.id}`
+    url = `${DATA_HOST}/slides/${this.state.id}.json`
 
     if(new_record) {
-      var url = `${DATA_HOST}/tales/${this.props.params.tale_id}/slides`
+      var url = `${DATA_HOST}/tales/${this.props.params.tale_id}/slides.json`
     }
 
 
     return (
-      <form noValidate="novalidate"  onSubmit={this.submit.bind(this)} encType="multipart/form-data" action={url} acceptCharset="UTF-8" method="post" className="slide-edit">
+      <form noValidate="novalidate"  onSubmit={this.form_submit.bind(this)} encType="multipart/form-data" action={url} acceptCharset="UTF-8" method="post" className="slide-edit">
         { !new_record && (
           <input type="hidden" name="_method" value="patch" />
         )}
@@ -140,6 +154,9 @@ export default class MobileSlideEdit extends React.Component {
               <label className="item item-input item-stacked-label">
                 <span className="input-label">Audio</span>
                 <input type="file" ref="audio" name="slide[audio]" accept="audio/*;capture=microphone" />
+                <button ref="record" onClick={this.record.bind(this)}>Record</button>
+                <button ref="stop" onClick={this.stop.bind(this)}>Stop</button>
+              
               </label>
               <label className="item item-input item-stacked-label">
                 <span className="input-label">Video</span>

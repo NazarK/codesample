@@ -49,6 +49,7 @@ var stopRecording = function () {
     }
 
     consoleMessage("Stopped!");
+    console.log("DONE!!!")
 };
 
 
@@ -72,8 +73,10 @@ var onDeviceReady = function () {
 
 
 onFinishRecord = function(recorder, blob) {
+  console.log("onFinishRecord", recorder, blob)
+  window.RECORDER = recorder
+  window.BLOB = blob
   var enc = recorder.encoding
-  console.log("saving recording")
   var html, time, url;
   time = new Date();
   url = URL.createObjectURL(blob);

@@ -33,9 +33,11 @@ Meteor.startup(() => {
 
 
   window.DATA_HOST = "http://yarntale.cloudspaint.com"
-  if(location.host=="localhost:8080")
+  if(location.host == "localhost:8080") {
     window.DATA_HOST = "http://localhost:3000"
-  //window.DATA_HOST = "http://192.168.1.108:3000"
+  }
+  
+  console.log("using DATA_HOST", DATA_HOST)
 
 
   window.AUTH_PARAMS = () => { 
@@ -51,6 +53,11 @@ Meteor.startup(() => {
       crossDomain: true,
       error: (resp) => {
         console.log("fail",resp)
+        if(resp.status==400) {
+          if(resp.responseJSON.error) {
+            alert(resp.responseJSON.error)
+          }
+        }
         if(resp.status==401) {
           console.log("unauthorized, redirecting to sign in")
           browserHistory.push("/m/sign_in")
