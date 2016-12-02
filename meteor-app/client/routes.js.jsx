@@ -36,7 +36,7 @@ Meteor.startup(() => {
   if(location.host == "localhost:8080") {
     window.DATA_HOST = "http://localhost:3000"
   }
-  window.DATA_HOST = "http://10.0.2.2:3000" //for android emulator
+  //window.DATA_HOST = "http://10.0.2.2:3000" //for android emulator
   
   console.log("using DATA_HOST", DATA_HOST)
 
