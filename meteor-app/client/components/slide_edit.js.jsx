@@ -59,8 +59,10 @@ export default class MobileSlideEdit extends React.Component {
     formData.append("user_email", localStorage['user_email'])
     formData.append("user_token", localStorage['user_token'])
 
-    if(this.state.audio_blob)
-      formData.append("slide[audio]",this.state.audio_blob,"audio.wav")
+    if(this.state.recorded_audio_blob) {
+      console.log("got recorded audio blob, adding to form data")
+      formData.append("slide[audio]",this.state.recorded_audio_blob,"audio.wav")
+    }
         
     $.ajax({
         url: form.attr("action"),
@@ -70,7 +72,7 @@ export default class MobileSlideEdit extends React.Component {
         processData: false,
     }).done( (resp)=>{
         console.log("submitted",resp)
-        this.setState({audio_blob: null})
+        this.setState({recorded_audio_blob: null})
         this.setState(resp)        
         //WAS NEW RECORD
         if(new_record)
@@ -86,19 +88,52 @@ export default class MobileSlideEdit extends React.Component {
   
   record(e) {
     console.log("record")
-    e.preventDefault()  
+    e.preventDefault()      
+    try {
+        if (window.audioinput) {
+            if (!audioinput.isCapturing()) {
+                // Start with default values and let the plugin handle conversion from raw data to web audio                
+                audioinput.start({ streamToWebAudio: true });                
+                window.audioRecorder = new WebAudioRecorder(audioinput,{workerDir: "/"})
+                console.log("created window.audioRecorder", window.audioRecorder)
+
+                window.audioRecorder.onComplete = (recorder, blob) => {
+                  console.log("onFinishRecord", recorder, blob)
+                  this.setState({recorded_audio_blob: blob})
+                  var url = URL.createObjectURL(blob);
+                  this.setState({recorded_audio_url: url})
+                }
+
+                window.audioRecorder.startRecording()
+                console.log("Capturing audio!");
+            }  else {
+                alert("Already capturing!");
+            }
+        }
+    } catch (ex) {
+        alert("startCapture exception: " + ex);
+    }  
   }
   
   stop(e) {
+    e.preventDefault()
     console.log("stop")
+
     //desktop env
     if(!window.cordova) {
       var debug = {hello: "world"};
       var blob = new Blob([JSON.stringify(debug, null, 2)], {type : 'application/wav'});
+      console.log("blob recorded")
+      this.setState({recorded_audio_blob: blob})
+      var url = URL.createObjectURL(blob);
+      this.setState({recorded_audio_url: url})
+    //device env  
+    } else {
+      if (window.audioinput && audioinput.isCapturing()) {
+          audioRecorder.finishRecording()
+          audioinput.stop();
+      }      
     }
-    this.setState({audio_blob: blob})
-    console.log("blob recorded")
-    e.preventDefault()
   }
   
   render() {
