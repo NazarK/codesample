@@ -115,3 +115,8 @@ task :push do
   system "git commit -am \"#{comment}\""
   system "git push origin master"  
 end
+
+task :launch_locally do
+  queue launch_cmd
+  queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job start"  
+end
