@@ -89,9 +89,8 @@ export default class MobileSlideEdit extends React.Component {
   
   record(e) {
     console.log("record")
-    $(this.refs.record_btn).hide()
-    $(this.refs.stop_record_btn).show()
-    
+    $(this.refs.record_btn).addClass("got-file").hide()
+    $(this.refs.stop_record_btn).addClass("got-file").show()    
     e.preventDefault()      
     try {
         if (window.audioinput) {
@@ -122,8 +121,8 @@ export default class MobileSlideEdit extends React.Component {
   stop(e) {
     e.preventDefault()
     console.log("stop")
-    $(this.refs.stop_record_btn).addClass("got-file").hide()
-    $(this.refs.record_btn).addClass("got-file").show()
+    $(this.refs.stop_record_btn).hide()
+    $(this.refs.record_btn).show()
 
     //desktop env
     if(!window.cordova) {
