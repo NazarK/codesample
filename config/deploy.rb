@@ -117,6 +117,6 @@ task :push do
 end
 
 task :launch_locally do
-  queue launch_cmd
-  queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job start"  
+  system launch_cmd
+  system "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job start"  
 end
