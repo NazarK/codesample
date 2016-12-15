@@ -74,6 +74,7 @@ export default class MobileSlideEdit extends React.Component {
         console.log("submitted",resp)
         this.setState({recorded_audio_blob: null})
         this.setState(resp)        
+        $(".got-file").removeClass("got-file")
         //WAS NEW RECORD
         if(new_record)
           window.history.replaceState('','',`/m/slides/${resp.id}/edit`)
@@ -88,6 +89,9 @@ export default class MobileSlideEdit extends React.Component {
   
   record(e) {
     console.log("record")
+    $(this.refs.record_btn).hide()
+    $(this.refs.stop_record_btn).show()
+    
     e.preventDefault()      
     try {
         if (window.audioinput) {
@@ -118,6 +122,8 @@ export default class MobileSlideEdit extends React.Component {
   stop(e) {
     e.preventDefault()
     console.log("stop")
+    $(this.refs.stop_record_btn).addClass("got-file").hide()
+    $(this.refs.record_btn).addClass("got-file").show()
 
     //desktop env
     if(!window.cordova) {
@@ -134,6 +140,10 @@ export default class MobileSlideEdit extends React.Component {
           audioinput.stop();
       }      
     }
+  }
+  
+  file_chosen(e) {
+    $(e.currentTarget).parents(".btn").addClass("got-file")
   }
   
   render() {
@@ -183,20 +193,31 @@ export default class MobileSlideEdit extends React.Component {
                 <MobileSlidePreview slide={this.state} />
               </label>
               <label className="item item-input item-stacked-label">
-                <span className="input-label">Image</span>
-                <input type="file" ref="image" accept="image/*;capture=camera" name="slide[image]"/>
+                <span className="input-label float-left">Image</span>
+                <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>                
+                  Choose File <input type="file" onChange={this.file_chosen.bind(this)} ref="image" accept="image/*;capture=camera" name="slide[image]"/>
+                </span>
               </label>
               <label className="item item-input item-stacked-label">
-                <span className="input-label">Audio</span>
-                <input type="file" ref="audio" name="slide[audio]" accept="audio/*;capture=microphone" />
-                <button ref="record" onClick={this.record.bind(this)}>Record</button>
-                <button ref="stop" onClick={this.stop.bind(this)}>Stop</button>
-              
+                <div className="input-label float-left" >Audio</div>
+                <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>                
+                  Choose File <input type="file" ref="audio" onChange={this.file_chosen.bind(this)}  name="slide[audio]" accept="audio/*;capture=microphone" style={{float:"left"}}/>
+                </span>              
+                <div ref="record_btn" className="btn btn-default float-left"  onClick={this.record.bind(this)} style={{width:"60px", textAlign: "center" }}>
+                  <i  className='fa fa-microphone fa-2x' style={{color:"red" }}></i>
+                </div>
+                <div ref="stop_record_btn" className="btn btn-default float-left" onClick={this.stop.bind(this)} style={{width:"60px", textAlign: "center", display: "none"}}>
+                  <i  className='fa fa-stop-circle-o fa-2x' style={{color:"red" }}></i>
+                </div>
+                <div className="float-left" ref="recorded_time">                  
+                </div>
               </label>
               <label className="item item-input item-stacked-label">
-                <span className="input-label">Video</span>
+                <span className="input-label float-left">Video</span>
 
-                <input type="file"  ref="video" accept="video/*;capture=camera" name="slide[video]"/>
+                <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>                
+                  Choose File <input type="file"  ref="video" accept="video/*;capture=camera" onChange={this.file_chosen.bind(this)}  name="slide[video]"/>
+                </span>
               </label>
               <div className="item" style={{opacity:0}}></div>
               <div className="item" style={{opacity:0}}></div>
