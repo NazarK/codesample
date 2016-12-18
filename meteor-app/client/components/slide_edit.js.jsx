@@ -24,11 +24,43 @@ export default class MobileSlideEdit extends React.Component {
 
   }
 
+  
+  
   componentDidMount() {
     console.log("slide component did mount")
     this.refs.audio.value=''
     this.refs.video.value=''
     this.refs.image.value=''
+    console.log("audio input events")
+    window.addEventListener('audioinput', (evt) => {
+      try {
+          if (evt && evt.data) {
+            let max = Math.max.apply(null,evt.data)
+            max = Math.abs(max)
+            console.log("data received: ", evt.data.length, " max:",max)
+            this.totalReceivedData += evt.data.length;
+            this.lastMax = max;
+
+            this.audioDataBuffer = this.audioDataBuffer.concat(evt.data);
+             
+             
+          }
+      }
+      catch (ex) {
+          console.log("onAudioInputCapture ex: " + ex);
+      }      
+    }, false);
+    
+  }
+  
+  force_stop_rec() {
+    if (window.audioinput && audioinput.isCapturing()) {
+      this.stop()
+    }    
+  }
+  
+  componentWillUnmount() {
+    this.force_stop_rec()
   }
 
   componentWillMount() {
@@ -52,6 +84,7 @@ export default class MobileSlideEdit extends React.Component {
 
   form_submit(event) {
     event.preventDefault()
+    this.force_stop_rec()
     var new_record = !this.state.id
 
     form = $(event.currentTarget)    
@@ -91,24 +124,31 @@ export default class MobileSlideEdit extends React.Component {
     console.log("record")
     $(this.refs.record_btn).addClass("got-file").hide()
     $(this.refs.stop_record_btn).addClass("got-file").show()    
+    $(this.refs.progress).addClass("got-file")
     e.preventDefault()      
     try {
         if (window.audioinput) {
             if (!audioinput.isCapturing()) {
                 // Start with default values and let the plugin handle conversion from raw data to web audio                
-                audioinput.start({ streamToWebAudio: true });                
-                window.audioRecorder = new WebAudioRecorder(audioinput,{workerDir: "/"})
-                console.log("created window.audioRecorder", window.audioRecorder)
+                this.captureCfg = {
+                    sampleRate: 44100,
+                    bufferSize: 4096,
+                    channels: 1,
+                    format: "PCM_16BIT",
+                    audioSourceType: 0
+                };
+                                
+                this.totalReceivedData = 0;
+                this.audioDataBuffer = []
+                audioinput.start(this.captureCfg);                
 
-                window.audioRecorder.onComplete = (recorder, blob) => {
-                  console.log("onFinishRecord", recorder, blob)
-                  this.setState({recorded_audio_blob: blob})
-                  var url = URL.createObjectURL(blob);
-                  this.setState({recorded_audio_url: url})
-                }
-
-                window.audioRecorder.startRecording()
                 console.log("Capturing audio!");
+                
+                this.progressUpdate = setInterval(() => {
+                    $("#progress #time").html(Math.round(10*this.totalReceivedData/44100) / 10 + "s")
+                    $("#progress #level").css({width: Math.round(100*this.lastMax)+"%"})
+                }, 300);
+                
             }  else {
                 alert("Already capturing!");
             }
@@ -119,7 +159,7 @@ export default class MobileSlideEdit extends React.Component {
   }
   
   stop(e) {
-    e.preventDefault()
+    e && e.preventDefault()
     console.log("stop")
     $(this.refs.stop_record_btn).hide()
     $(this.refs.record_btn).show()
@@ -135,8 +175,21 @@ export default class MobileSlideEdit extends React.Component {
     //device env  
     } else {
       if (window.audioinput && audioinput.isCapturing()) {
-          audioRecorder.finishRecording()
           audioinput.stop();
+          clearInterval(this.progressUpdate)
+
+          console.log("encoding WAV...");
+          var encoder = new WavAudioEncoder(this.captureCfg.sampleRate,1)
+          console.log("audionDataBuffer size: ",this.audioDataBuffer.length)
+          encoder.encode([this.audioDataBuffer]);
+
+          console.log("encoding WAV finished");
+
+          var blob = encoder.finish("audio/wav");
+          this.setState({recorded_audio_blob: blob})
+          var url = URL.createObjectURL(blob);
+          this.setState({recorded_audio_url: url})
+
       }      
     }
   }
@@ -192,13 +245,13 @@ export default class MobileSlideEdit extends React.Component {
                 <MobileSlidePreview slide={this.state} />
               </label>
               <label className="item item-input item-stacked-label">
-                <span className="input-label float-left">Image</span>
+                <span className="input-label float-left"  style={{width:"80px"}}>Image</span>
                 <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>                
                   Choose File <input type="file" onChange={this.file_chosen.bind(this)} ref="image" accept="image/*;capture=camera" name="slide[image]"/>
                 </span>
               </label>
               <label className="item item-input item-stacked-label">
-                <div className="input-label float-left" >Audio</div>
+                <div className="input-label float-left" style={{width:"80px"}}>Audio</div>
                 <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>                
                   Choose File <input type="file" ref="audio" onChange={this.file_chosen.bind(this)}  name="slide[audio]" accept="audio/*;capture=microphone" style={{float:"left"}}/>
                 </span>              
@@ -208,11 +261,15 @@ export default class MobileSlideEdit extends React.Component {
                 <div ref="stop_record_btn" className="btn btn-default float-left" onClick={this.stop.bind(this)} style={{width:"60px", textAlign: "center", display: "none"}}>
                   <i  className='fa fa-stop-circle-o fa-2x' style={{color:"red" }}></i>
                 </div>
-                <div className="float-left" ref="recorded_time">                  
+                <div className="float-left" ref="progress" id="progress" style={{marginLeft:"10px", height:"40px", position: "relative", textAlign: "center", display: "none"}}>
+                  <div style={{width:"50px",height:"8px",position:"relative",border:"1px solid #aaa", marginTop: "10px"}}>
+                    <div id="level" style={{backgroundColor:"red",width:"0%",position:"relative",height:"100%"}}></div>  
+                  </div>                  
+                  <div id="time"></div>
                 </div>
               </label>
               <label className="item item-input item-stacked-label">
-                <span className="input-label float-left">Video</span>
+                <span className="input-label float-left"  style={{width:"80px"}}>Video</span>
 
                 <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>                
                   Choose File <input type="file"  ref="video" accept="video/*;capture=camera" onChange={this.file_chosen.bind(this)}  name="slide[video]"/>

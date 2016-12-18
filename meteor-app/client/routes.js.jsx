@@ -52,6 +52,12 @@ Meteor.startup(() => {
   $.ajaxSetup({
       cache: false,
       crossDomain: true,
+      beforeSend: () => {
+        $("#ajax-overlay").show()
+      },
+      complete: () => {
+        $("#ajax-overlay").hide()
+      },
       error: (resp) => {
         console.log("fail",resp)
         if(resp.status==400) {
