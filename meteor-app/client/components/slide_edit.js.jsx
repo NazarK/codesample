@@ -245,20 +245,20 @@ export default class MobileSlideEdit extends React.Component {
                 <MobileSlidePreview slide={this.state} />
               </label>
               <label className="item item-input item-stacked-label">
-                <span className="input-label float-left"  style={{width:"80px"}}>Image</span>
+                <span className="input-label short-label float-left vertical-middle-label">Image</span>
                 <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>                
                   Choose File <input type="file" onChange={this.file_chosen.bind(this)} ref="image" accept="image/*;capture=camera" name="slide[image]"/>
                 </span>
               </label>
               <label className="item item-input item-stacked-label">
-                <div className="input-label float-left" style={{width:"80px"}}>Audio</div>
+                <div className="input-label short-label float-left  vertical-middle-label">Audio</div>
                 <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>                
                   Choose File <input type="file" ref="audio" onChange={this.file_chosen.bind(this)}  name="slide[audio]" accept="audio/*;capture=microphone" style={{float:"left"}}/>
                 </span>              
-                <div ref="record_btn" className="btn btn-default float-left"  onClick={this.record.bind(this)} style={{width:"60px", textAlign: "center" }}>
+                <div ref="record_btn" className="btn btn-default float-left"  onClick={this.record.bind(this)} style={{width:"50px", textAlign: "center" }}>
                   <i  className='fa fa-microphone fa-2x' style={{color:"red" }}></i>
                 </div>
-                <div ref="stop_record_btn" className="btn btn-default float-left" onClick={this.stop.bind(this)} style={{width:"60px", textAlign: "center", display: "none"}}>
+                <div ref="stop_record_btn" className="btn btn-default float-left" onClick={this.stop.bind(this)} style={{width:"50px", textAlign: "center", display: "none"}}>
                   <i  className='fa fa-stop-circle-o fa-2x' style={{color:"red" }}></i>
                 </div>
                 <div className="float-left" ref="progress" id="progress" style={{marginLeft:"10px", height:"40px", position: "relative", textAlign: "center", display: "none"}}>
@@ -269,7 +269,7 @@ export default class MobileSlideEdit extends React.Component {
                 </div>
               </label>
               <label className="item item-input item-stacked-label">
-                <span className="input-label float-left"  style={{width:"80px"}}>Video</span>
+                <span className="input-label short-label float-left  vertical-middle-label" >Video</span>
 
                 <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>                
                   Choose File <input type="file"  ref="video" accept="video/*;capture=camera" onChange={this.file_chosen.bind(this)}  name="slide[video]"/>

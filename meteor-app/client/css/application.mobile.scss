@@ -145,3 +145,12 @@ input:-webkit-autofill {
   background-color: black;
   display: none;
 }
+
+.input-label.short-label {
+  width: 60px;
+}
+
+.input-label.vertical-middle-label {
+  height: 35px;
+  line-height: 35px;
+}
