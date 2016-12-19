@@ -27,6 +27,7 @@ window.URL = window.URL || window.webkitURL;
 function onAudioInputCapture(evt) {
     try {
         if (evt && evt.data) {
+            console.log("onAudioInputCapture")
             // Increase the debug counter for received data
             totalReceivedData += evt.data.length;
 
@@ -70,7 +71,7 @@ var startCapture = function () {
                 audioSourceType: parseInt(audioSourceType)
             };
 
-
+            console.log(captureCfg)
             audioinput.start(captureCfg);
             consoleMessage("Microphone input started!");
 
