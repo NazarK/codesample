@@ -2,6 +2,39 @@ import React from 'react'
 import MobileSlidePreview from './slide_preview.js.jsx'
 
 
+// Capture configuration object
+var captureCfg = {};
+
+// Audio Buffer
+var audioDataBuffer = [];
+
+// Timers
+var timerInterVal, timerGenerateSimulatedData;
+
+var objectURL = null;
+
+// Info/Debug
+var totalReceivedData = 0;
+
+function onAudioInputCapture(evt) {
+    try {
+        if (evt && evt.data) {
+            console.log("onAudioInputCapture")
+            // Increase the debug counter for received data
+            totalReceivedData += evt.data.length;
+
+            // Add the chunk to the buffer
+            audioDataBuffer = audioDataBuffer.concat(evt.data);
+        }
+        else {
+            alert("Unknown audioinput event!");
+        }
+    }
+    catch (ex) {
+        alert("onAudioInputCapture ex: " + ex);
+    }
+}
+
 export default class MobileSlideEdit extends React.Component {
 
   constructor(props) {
@@ -123,6 +156,15 @@ export default class MobileSlideEdit extends React.Component {
                   this.setState({recorded_audio_blob: blob})
                   var url = URL.createObjectURL(blob);
                   this.setState({recorded_audio_url: url})
+                  
+                  html = ("<p recording='" + url + "'>") + 
+                  ("<audio controls src='" + url + "'></audio> ") + 
+                  ("(" + enc + ") " + (time.toString()) + " ") + 
+                  ("<a class='btn btn-default' href='" + url + "' download='recording." + enc + "'>") + "Save..." + "</a> " 
+                  + ("<button class='btn btn-danger' recording='" + url + "'>Delete</button>");
+                  "</p>";
+                  $("#audio_select").append($(html));
+                                    
                 }
 
                 window.audioRecorder.startRecording()
@@ -226,7 +268,7 @@ export default class MobileSlideEdit extends React.Component {
                   Choose File <input type="file" onChange={this.file_chosen.bind(this)} ref="image" accept="image/*;capture=camera" name="slide[image]"/>
                 </span>
               </label>
-              <label className="item item-input item-stacked-label">
+              <label className="item item-input item-stacked-label" id="audio_select">
                 <div className="input-label short-label float-left  vertical-middle-label">Audio</div>
                 <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>
                   Choose File <input type="file" ref="audio" onChange={this.file_chosen.bind(this)}  name="slide[audio]" accept="audio/*;capture=microphone" style={{float:"left"}}/>
