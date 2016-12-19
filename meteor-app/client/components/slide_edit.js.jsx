@@ -93,7 +93,7 @@ export default class MobileSlideEdit extends React.Component {
 
     if(this.state.recorded_audio_blob) {
       console.log("got recorded audio blob, adding to form data")
-      formData.append("slide[audio]",this.state.recorded_audio_blob,"audio.wav")
+      formData.append("slide[audio]",this.state.recorded_audio_blob,"audio.mp3")
     }
 
     $.ajax({
@@ -180,13 +180,14 @@ export default class MobileSlideEdit extends React.Component {
 
         totalReceivedData = 0;
 
-        console.log("Encoding WAV...");
-        var encoder = new WavAudioEncoder(captureCfg.sampleRate, captureCfg.channels);
-        encoder.encode([audioDataBuffer]);
+        console.log("Encoding MP3..");
+        
+        var encoder = new Mp3LameEncoder(captureCfg.sampleRate, 192)        
+        encoder.encode([audioDataBuffer,audioDataBuffer]);
 
-        console.log("Encoding WAV finished");
+        console.log("Encoding MP3 finished");
 
-        var blob = encoder.finish("audio/wav");
+        var blob = encoder.finish("audio/mpeg");
         console.log("BLOB created");
         
         this.setState({recorded_audio_blob: blob})
