@@ -6,7 +6,7 @@ var audioDataBuffer = [];
 var totalReceivedData = 0;
 var audioPeak = 0;
 
-onAudioInputCapture(evt) {
+function onAudioInputCapture(evt) {
     try {
         if (evt && evt.data) {
             totalReceivedData += evt.data.length;
