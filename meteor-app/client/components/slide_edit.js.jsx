@@ -1,36 +1,22 @@
 import React from 'react'
 import MobileSlidePreview from './slide_preview.js.jsx'
 
-
-// Capture configuration object
 var captureCfg = {};
-
-// Audio Buffer
 var audioDataBuffer = [];
-
-// Timers
-var timerInterVal, timerGenerateSimulatedData;
-
-var objectURL = null;
-
-// Info/Debug
 var totalReceivedData = 0;
+var audioPeak = 0;
 
-function onAudioInputCapture(evt) {
+onAudioInputCapture(evt) {
     try {
         if (evt && evt.data) {
-            console.log("onAudioInputCapture")
-            // Increase the debug counter for received data
             totalReceivedData += evt.data.length;
-
-            // Add the chunk to the buffer
+            audioPeak = Math.abs(Math.max.apply(null,evt.data))
             audioDataBuffer = audioDataBuffer.concat(evt.data);
         } else {
             alert("Unknown audioinput event!");
         }
-    }
-    catch (ex) {
-        alert("onAudioInputCapture ex: " + ex);
+    } catch (ex) {
+      alert("onAudioInputCapture ex: " + ex);
     }
 }
 
@@ -56,15 +42,12 @@ export default class MobileSlideEdit extends React.Component {
 
   }
 
-
-
   componentDidMount() {
     console.log("slide component did mount")
     this.refs.audio.value=''
     this.refs.video.value=''
     this.refs.image.value=''
-    console.log("audio input events")
-
+    window.addEventListener('audioinput', onAudioInputCapture, false);    
   }
 
   force_stop_rec() {
@@ -75,11 +58,11 @@ export default class MobileSlideEdit extends React.Component {
 
   componentWillUnmount() {
     this.force_stop_rec()
+    window.removeEventListener('audioinput', onAudioInputCapture, false);    
   }
 
   componentWillMount() {
     
-    window.addEventListener('audioinput', onAudioInputCapture, false);    
     console.log("slide component will mount")
     if(!this.state.id && this.props.params.tale_id) {
       $.get(`${DATA_HOST}/tales/${this.props.params.tale_id}/slides/new.json`,(resp)=> {
@@ -124,6 +107,7 @@ export default class MobileSlideEdit extends React.Component {
         this.setState({recorded_audio_blob: null})
         this.setState(resp)
         $(".got-file").removeClass("got-file")
+        $("#audio_select audio").remove()
         //WAS NEW RECORD
         if(new_record)
           window.history.replaceState('','',`/m/slides/${resp.id}/edit`)
@@ -153,7 +137,6 @@ export default class MobileSlideEdit extends React.Component {
                     audioSourceType: 0
                 };
     
-                console.log(captureCfg)
                 audioinput.start(captureCfg);
                 console.log("Capturing audio!");
                 
@@ -161,7 +144,7 @@ export default class MobileSlideEdit extends React.Component {
                 
                 this.progressUpdate = setInterval(() => {
                     $("#progress #time").html(Math.round(10*(Date.now() - startTime) * 0.001 )/10+"s")
-                    //$("#progress #level").css({height: Math.round(100*window.audioRecorder.audioPeak)+"%"})
+                    $("#progress #level").css({height: Math.round(100*audioPeak)+"%"})
                 }, 300);
 
             }  else {
@@ -204,9 +187,9 @@ export default class MobileSlideEdit extends React.Component {
         console.log("Encoding WAV finished");
 
         var blob = encoder.finish("audio/wav");
-        this.setState({recorded_audio_blob: blob})
-
         console.log("BLOB created");
+        
+        this.setState({recorded_audio_blob: blob})
 
         var reader = new FileReader();
 
@@ -217,11 +200,11 @@ export default class MobileSlideEdit extends React.Component {
             audio.src = evt.target.result;
             audio.type = "audio/wav";
             $("#audio_select").append(audio);
-            console.log("Audio created");
+            console.log("audio preview element created");
             audioDataBuffer = [];
         };
 
-        console.log("Loading from BLOB");
+        console.log("loading from BLOB");
         reader.readAsDataURL(blob);
 
       }
