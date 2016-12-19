@@ -32,24 +32,6 @@ export default class MobileSlideEdit extends React.Component {
     this.refs.video.value=''
     this.refs.image.value=''
     console.log("audio input events")
-    window.addEventListener('audioinput', (evt) => {
-      try {
-          if (evt && evt.data) {
-            let max = Math.max.apply(null,evt.data)
-            max = Math.abs(max)
-            console.log("data received: ", evt.data.length, " max:",max)
-            this.totalReceivedData += evt.data.length;
-            this.lastMax = max;
-
-            this.audioDataBuffer = this.audioDataBuffer.concat(evt.data);
-
-
-          }
-      }
-      catch (ex) {
-          console.log("onAudioInputCapture ex: " + ex);
-      }
-    }, false);
 
   }
 
@@ -129,17 +111,10 @@ export default class MobileSlideEdit extends React.Component {
     try {
         if (window.audioinput) {
             if (!audioinput.isCapturing()) {
-                // Start with default values and let the plugin handle conversion from raw data to web audio
-                this.captureCfg = {
-                    sampleRate: 44100,
-                    bufferSize: 4096,
-                    channels: 1,
-                    format: "PCM_16BIT",
-                    audioSourceType: 0
-                };
 
                 // Start with default values and let the plugin handle conversion from raw data to web audio
                 audioinput.start({ streamToWebAudio: true });
+                //this.attachPeakProcessor(audioinput.getAudioContext())
                 window.audioRecorder = new WebAudioRecorder(audioinput,{workerDir: "/"})
                 console.log("created window.audioRecorder", window.audioRecorder)
 
@@ -152,10 +127,13 @@ export default class MobileSlideEdit extends React.Component {
 
                 window.audioRecorder.startRecording()
                 console.log("Capturing audio!");
+                
+                startTime = Date.now()
+                
 
                 this.progressUpdate = setInterval(() => {
-                    $("#progress #time").html(Math.round(10*window.audioRecorder.recordingTime())/10+"s")
-                    //$("#progress #level").css({width: Math.round(100*this.lastMax)+"%"})
+                    $("#progress #time").html(Math.round(10*(Date.now() - startTime) * 0.001 )/10+"s")
+                    $("#progress #level").css({height: Math.round(100*window.audioRecorder.audioPeak)+"%"})
                 }, 300);
 
             }  else {
@@ -260,10 +238,10 @@ export default class MobileSlideEdit extends React.Component {
                   <i  className='fa fa-stop-circle-o fa-2x' style={{color:"red" }}></i>
                 </div>
                 <div className="float-left" ref="progress" id="progress" style={{marginLeft:"10px", height:"40px", position: "relative", textAlign: "center", display: "none"}}>
-                  <div id="level_wrap" style={{width:"50px",height:"8px",position:"relative",border:"1px solid #aaa", marginTop: "10px", display: "none"}}>
-                    <div id="level" style={{backgroundColor:"red",width:"0%",position:"relative",height:"100%"}}></div>
+                  <div id="level_wrap" style={{width:"8px",height:"40px",position:"relative",border:"1px solid #aaa", marginTop: "1px", display: "inline-block"}}>
+                    <div id="level" style={{backgroundColor:"red",height:"0%",position:"absolute",bottom:"0px",width:"100%"}}></div>
                   </div>
-                  <div id="time"></div>
+                  <div id="time" style={{verticalAlign:"top",display: "inline-block",margin: "12px 5px"}}></div>
                 </div>
               </label>
               <label className="item item-input item-stacked-label">

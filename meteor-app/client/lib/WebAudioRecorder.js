@@ -63,6 +63,8 @@
 
   // instance methods
   extend(WebAudioRecorder.prototype, {
+    audioPeak: 0,
+    
     isRecording: function() { return this.processor != null; },
 
     setEncoding: function(encoding) {
@@ -95,11 +97,18 @@
                                 this.numChannels, this.numChannels);
         this.input.connect(this.processor);
         this.processor.connect(this.context.destination);
+        
+        self = this;
         this.processor.onaudioprocess = function(event) {
-          for (var ch = 0; ch < numChannels; ++ch)
+          var channel_max = []
+          for (var ch = 0; ch < numChannels; ++ch) {
             buffer[ch] = event.inputBuffer.getChannelData(ch);
+            self.audioPeak = Math.abs(Math.max.apply(null,buffer[ch]))
+          }
+          //self.audioPeak = Math.max.apply(null,channel_max)          
           worker.postMessage({ command: "record", buffer: buffer });
         };
+        
         this.worker.postMessage({
           command: "start",
           bufferSize: this.processor.bufferSize
