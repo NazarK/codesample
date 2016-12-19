@@ -47,7 +47,7 @@ export default class MobileSlideEdit extends React.Component {
     this.refs.audio.value=''
     this.refs.video.value=''
     this.refs.image.value=''
-    window.addEventListener('audioinput', onAudioInputCapture, false);    
+    window.addEventListener('audioinput', onAudioInputCapture, false);
   }
 
   force_stop_rec() {
@@ -58,11 +58,11 @@ export default class MobileSlideEdit extends React.Component {
 
   componentWillUnmount() {
     this.force_stop_rec()
-    window.removeEventListener('audioinput', onAudioInputCapture, false);    
+    window.removeEventListener('audioinput', onAudioInputCapture, false);
   }
 
   componentWillMount() {
-    
+
     console.log("slide component will mount")
     if(!this.state.id && this.props.params.tale_id) {
       $.get(`${DATA_HOST}/tales/${this.props.params.tale_id}/slides/new.json`,(resp)=> {
@@ -121,11 +121,13 @@ export default class MobileSlideEdit extends React.Component {
   }
 
   record(e) {
+    e.preventDefault()
+
     console.log("record")
     $(this.refs.record_btn).addClass("got-file").hide()
     $(this.refs.stop_record_btn).addClass("got-file").show()
     $(this.refs.progress).addClass("got-file")
-    e.preventDefault()
+    $("#audio_select audio").remove()
     try {
         if (window.audioinput) {
             if (!audioinput.isCapturing()) {
@@ -136,12 +138,12 @@ export default class MobileSlideEdit extends React.Component {
                     format: "PCM_16BIT",
                     audioSourceType: 0
                 };
-    
+
                 audioinput.start(captureCfg);
                 console.log("Capturing audio!");
-                
+
                 startTime = Date.now()
-                
+
                 this.progressUpdate = setInterval(() => {
                     $("#progress #time").html(Math.round(10*(Date.now() - startTime) * 0.001 )/10+"s")
                     $("#progress #level").css({height: Math.round(100*audioPeak)+"%"})
@@ -175,21 +177,21 @@ export default class MobileSlideEdit extends React.Component {
     } else {
       if (window.audioinput && audioinput.isCapturing()) {
         console.log("stop")
-        
+
         audioinput.stop();
 
         totalReceivedData = 0;
 
         console.log("Encoding MP3..");
-        
-        var encoder = new Mp3LameEncoder(captureCfg.sampleRate, 192)        
+
+        var encoder = new Mp3LameEncoder(captureCfg.sampleRate, 192)
         encoder.encode([audioDataBuffer,audioDataBuffer]);
 
         console.log("Encoding MP3 finished");
 
         var blob = encoder.finish("audio/mpeg");
         console.log("BLOB created");
-        
+
         this.setState({recorded_audio_blob: blob})
 
         var reader = new FileReader();
