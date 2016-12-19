@@ -25,8 +25,7 @@ function onAudioInputCapture(evt) {
 
             // Add the chunk to the buffer
             audioDataBuffer = audioDataBuffer.concat(evt.data);
-        }
-        else {
+        } else {
             alert("Unknown audioinput event!");
         }
     }
@@ -79,6 +78,8 @@ export default class MobileSlideEdit extends React.Component {
   }
 
   componentWillMount() {
+    
+    window.addEventListener('audioinput', onAudioInputCapture, false);    
     console.log("slide component will mount")
     if(!this.state.id && this.props.params.tale_id) {
       $.get(`${DATA_HOST}/tales/${this.props.params.tale_id}/slides/new.json`,(resp)=> {
@@ -144,38 +145,23 @@ export default class MobileSlideEdit extends React.Component {
     try {
         if (window.audioinput) {
             if (!audioinput.isCapturing()) {
-
-                // Start with default values and let the plugin handle conversion from raw data to web audio
-                audioinput.start({ streamToWebAudio: true });
-                //this.attachPeakProcessor(audioinput.getAudioContext())
-                window.audioRecorder = new WebAudioRecorder(audioinput,{workerDir: "/"})
-                console.log("created window.audioRecorder", window.audioRecorder)
-
-                window.audioRecorder.onComplete = (recorder, blob) => {
-                  console.log("onFinishRecord", recorder, blob)
-                  this.setState({recorded_audio_blob: blob})
-                  var url = URL.createObjectURL(blob);
-                  this.setState({recorded_audio_url: url})
-                  
-                  html = ("<p recording='" + url + "'>") + 
-                  ("<audio controls src='" + url + "'></audio> ") + 
-                  ("(" + enc + ") " + (time.toString()) + " ") + 
-                  ("<a class='btn btn-default' href='" + url + "' download='recording." + enc + "'>") + "Save..." + "</a> " 
-                  + ("<button class='btn btn-danger' recording='" + url + "'>Delete</button>");
-                  "</p>";
-                  $("#audio_select").append($(html));
-                                    
-                }
-
-                window.audioRecorder.startRecording()
+                captureCfg = {
+                    sampleRate: 44100,
+                    bufferSize: 16384,
+                    channels: 1,
+                    format: "PCM_16BIT",
+                    audioSourceType: 0
+                };
+    
+                console.log(captureCfg)
+                audioinput.start(captureCfg);
                 console.log("Capturing audio!");
                 
                 startTime = Date.now()
                 
-
                 this.progressUpdate = setInterval(() => {
                     $("#progress #time").html(Math.round(10*(Date.now() - startTime) * 0.001 )/10+"s")
-                    $("#progress #level").css({height: Math.round(100*window.audioRecorder.audioPeak)+"%"})
+                    //$("#progress #level").css({height: Math.round(100*window.audioRecorder.audioPeak)+"%"})
                 }, 300);
 
             }  else {
@@ -192,6 +178,7 @@ export default class MobileSlideEdit extends React.Component {
     console.log("stop")
     $(this.refs.stop_record_btn).hide()
     $(this.refs.record_btn).show()
+    clearInterval(this.progressUpdate)
 
     //desktop env
     if(!window.cordova) {
@@ -204,9 +191,38 @@ export default class MobileSlideEdit extends React.Component {
     //device env
     } else {
       if (window.audioinput && audioinput.isCapturing()) {
-          audioRecorder.finishRecording()
-          audioinput.stop();
-          clearInterval(this.progressUpdate)
+        console.log("stop")
+        
+        audioinput.stop();
+
+        totalReceivedData = 0;
+
+        console.log("Encoding WAV...");
+        var encoder = new WavAudioEncoder(captureCfg.sampleRate, captureCfg.channels);
+        encoder.encode([audioDataBuffer]);
+
+        console.log("Encoding WAV finished");
+
+        var blob = encoder.finish("audio/wav");
+        this.setState({recorded_audio_blob: blob})
+
+        console.log("BLOB created");
+
+        var reader = new FileReader();
+
+        reader.onload = function (evt) {
+            $("#audio_select audio").remove()
+            var audio = document.createElement("AUDIO");
+            audio.controls = true;
+            audio.src = evt.target.result;
+            audio.type = "audio/wav";
+            $("#audio_select").append(audio);
+            console.log("Audio created");
+            audioDataBuffer = [];
+        };
+
+        console.log("Loading from BLOB");
+        reader.readAsDataURL(blob);
 
       }
     }
