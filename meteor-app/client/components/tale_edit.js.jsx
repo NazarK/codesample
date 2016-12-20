@@ -32,6 +32,7 @@ export default class MobileTaleEdit extends React.Component {
           console.log('form submitted');
           this.refs.bg_audio.value=''
           this.componentWillMount()
+          $(".got-file").removeClass("got-file")
         }
     });
     return false;
@@ -90,6 +91,10 @@ export default class MobileTaleEdit extends React.Component {
     })
   }
 
+  file_chosen(e) {
+    $(e.currentTarget).parents(".btn").addClass("got-file")
+  }
+
   render() {
 
     var url = `${DATA_HOST}/tales/${this.props.params.id}`
@@ -127,7 +132,9 @@ export default class MobileTaleEdit extends React.Component {
                   <audio controls src={DATA_HOST + this.state.bg_audio_url} />
                 </div>
               )}
-              <input type="file" name="tale[audio]"  ref="bg_audio"/>
+              <div className="btn btn-default btn-file">
+                Upload ...<input type="file" name="tale[audio]"  ref="bg_audio" onChange={this.file_chosen.bind(this)} />
+              </div>
             </label>
 
             <div className="padding">

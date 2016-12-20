@@ -276,13 +276,13 @@ export default class MobileSlideEdit extends React.Component {
               <label className="item item-input item-stacked-label">
                 <span className="input-label short-label float-left vertical-middle-label">Image</span>
                 <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>
-                  Choose File <input type="file" onChange={this.file_chosen.bind(this)} ref="image" accept="image/*;capture=camera" name="slide[image]"/>
+                  Upload ... <input type="file" onChange={this.file_chosen.bind(this)} ref="image" accept="image/*;capture=camera" name="slide[image]"/>
                 </span>
               </label>
               <label className="item item-input item-stacked-label" id="audio_select">
                 <div className="input-label short-label float-left  vertical-middle-label">Audio</div>
                 <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>
-                  Choose File <input type="file" ref="audio" onChange={this.file_chosen.bind(this)}  name="slide[audio]" accept="audio/*;capture=microphone" style={{float:"left"}}/>
+                  Upload ... <input type="file" ref="audio" onChange={this.file_chosen.bind(this)}  name="slide[audio]" accept="audio/*;capture=microphone" style={{float:"left"}}/>
                 </span>
                 <div ref="record_btn" className="btn btn-default float-left"  onClick={this.record.bind(this)} style={{width:"50px", textAlign: "center" }}>
                   <i  className='fa fa-microphone fa-2x' style={{color:"red" }}></i>
@@ -301,7 +301,7 @@ export default class MobileSlideEdit extends React.Component {
                 <span className="input-label short-label float-left  vertical-middle-label" >Video</span>
 
                 <span className="btn btn-default btn-file float-left" style={{margin:"5px 10px 5px 0px"}}>
-                  Choose File <input type="file"  ref="video" accept="video/*;capture=camera" onChange={this.file_chosen.bind(this)}  name="slide[video]"/>
+                  Upload ... <input type="file"  ref="video" accept="video/*;capture=camera" onChange={this.file_chosen.bind(this)}  name="slide[video]"/>
                 </span>
               </label>
               <div className="item" style={{opacity:0}}></div>
