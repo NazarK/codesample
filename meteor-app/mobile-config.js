@@ -9,3 +9,10 @@ App.info({
   buildNumber: '108008'
 });
 
+App.appendToConfig(`
+  <platform name="ios">
+    <config-file platform="ios" target="*-Info.plist" parent="NSMicrophoneUsageDescription">
+        <string>Create slide show.</string>
+    </config-file>
+  </platform>
+`);

@@ -31,17 +31,16 @@ class MobileRoutes extends React.Component {
 Meteor.startup(() => {
   console.log("meteor.startup")
 
-
   window.DATA_HOST = "http://yarntale.cloudspaint.com"
   if(location.host == "localhost:8080") {
     window.DATA_HOST = "http://localhost:3000"
   }
   //window.DATA_HOST = "http://10.0.2.2:3000" //for android emulator
-  
+
   console.log("using DATA_HOST", DATA_HOST)
 
 
-  window.AUTH_PARAMS = () => { 
+  window.AUTH_PARAMS = () => {
     return {
       "user_email": localStorage['user_email'],
       "user_token": localStorage['user_token']
@@ -75,10 +74,10 @@ Meteor.startup(() => {
   $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
       if(options.type.toUpperCase() === "GET")
           options.data = $.param($.extend(originalOptions.data, AUTH_PARAMS()));
-  });    
+  });
 
   render((
     <MobileRoutes />
   ), document.getElementById('root'))
-  
+
 })
