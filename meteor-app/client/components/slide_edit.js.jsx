@@ -128,6 +128,7 @@ export default class MobileSlideEdit extends React.Component {
     $(this.refs.stop_record_btn).addClass("got-file").show()
     $(this.refs.progress).addClass("got-file")
     $("#audio_select audio").remove()
+
     try {
         if (window.audioinput) {
             if (!audioinput.isCapturing()) {
@@ -161,8 +162,6 @@ export default class MobileSlideEdit extends React.Component {
   stop(e) {
     e && e.preventDefault()
     console.log("stop")
-    $(this.refs.stop_record_btn).hide()
-    $(this.refs.record_btn).show()
     clearInterval(this.progressUpdate)
 
     //desktop env
@@ -184,31 +183,41 @@ export default class MobileSlideEdit extends React.Component {
 
         console.log("Encoding MP3..");
 
-        var encoder = new Mp3LameEncoder(captureCfg.sampleRate, 192)
-        encoder.encode([audioDataBuffer,audioDataBuffer]);
+        $("#ajax-overlay").show()
 
-        console.log("Encoding MP3 finished");
+        setTimeout(() => {
+          var encoder = new Mp3LameEncoder(captureCfg.sampleRate, 160)
+          encoder.encode([audioDataBuffer,audioDataBuffer]);
 
-        var blob = encoder.finish("audio/mpeg");
-        console.log("BLOB created");
+          console.log("Encoding MP3 finished");
 
-        this.setState({recorded_audio_blob: blob})
 
-        var reader = new FileReader();
+          var blob = encoder.finish("audio/mpeg");
+          $("#ajax-overlay").hide()
+          console.log("BLOB created");
+          audioDataBuffer = []
 
-        reader.onload = function (evt) {
-            $("#audio_select audio").remove()
-            var audio = document.createElement("AUDIO");
-            audio.controls = true;
-            audio.src = evt.target.result;
-            audio.type = "audio/wav";
-            $("#audio_select").append(audio);
-            console.log("audio preview element created");
-            audioDataBuffer = [];
-        };
+          this.setState({recorded_audio_blob: blob})
 
-        console.log("loading from BLOB");
-        reader.readAsDataURL(blob);
+          var reader = new FileReader();
+
+          reader.onload = function (evt) {
+              $("#audio_select audio").remove()
+              var audio = document.createElement("AUDIO");
+              audio.controls = true;
+              audio.src = evt.target.result;
+              audio.type = "audio/wav";
+              $("#audio_select").append(audio);
+              console.log("audio preview element created");
+              audioDataBuffer = [];
+          };
+
+          console.log("loading from BLOB");
+          reader.readAsDataURL(blob);
+          $("#ajax-overlay").hide()
+          $(this.refs.stop_record_btn).hide()
+          $(this.refs.record_btn).show()
+        },200)
 
       }
     }
