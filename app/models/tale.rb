@@ -102,6 +102,19 @@ class Tale < ActiveRecord::Base
       end
     end
   end
+  
+  def cover_thumb_url
+    if cover.present?
+      self.cover.url(:thumb)
+    else
+      first_image_slide = self.slides.where("image_file_name is not null").first
+      if first_image_slide.present?
+        first_image_slide.image.url(:thumb)
+      else
+        "/slideshow-icon.png"
+      end
+    end
+  end
 
   def path
     "/t#{self.id}"
