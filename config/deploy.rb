@@ -113,10 +113,14 @@ task :push do
   puts "commit comment: #{comment}"
   system "git add ."
   system "git commit -am \"#{comment}\""
-  system "git push origin master"  
+  system "git push origin master"
 end
 
 task :launch_locally do
   system launch_cmd
-  system "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job start"  
+  system "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job start"
+end
+
+task :thinlog => :environment do
+  queue %[tail -f #{deploy_to}/#{current_path}/log/thin.8080.log]
 end

@@ -33,3 +33,6 @@ module Yarntale
 end
 
 VideoInfo.provider_api_keys = { youtube: ENV['YOUTUBE_API_KEY'] }
+
+Paperclip.options[:log] = true
+Paperclip.options[:log_command] = true
