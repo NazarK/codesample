@@ -1,11 +1,11 @@
 class Timeline extends React.Component {
 
   pause() {
-    YARNTALE.pause({no_icon_fade:true})
+    YARNTALE.pause()
   }
 
   play() {
-    YARNTALE.play({no_icon_fade:true})
+    YARNTALE.play()
   }
 
   render() {
