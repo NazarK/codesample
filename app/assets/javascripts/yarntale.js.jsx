@@ -228,17 +228,8 @@ YARNTALE.ui_event_handlers_attach = function() {
   $(document).on("click",".yarntale .play_toggle", function() {
     console.log(".play_toggle clicked")
     if(YARNTALE.playing) {
-      $(".state_icon.pause").show().fadeOut(1000)
       YARNTALE.pause()
     } else {
-      var play_icon = $(".state_icon.play")
-
-      if(play_icon.is(":visible")) {
-        play_icon.hide()
-      } else {
-        play_icon.show().fadeOut(1000)
-      }
-
       YARNTALE.play()
     }
   })
@@ -438,6 +429,14 @@ YARNTALE.cur_slide_el = function() {
 YARNTALE.play = function(opt) {
     opt = opt || {}
 
+    var play_icon = $(".state_icon.play")
+    if(play_icon.is(":visible")) {
+      play_icon.hide()
+    } else {
+      if(!opt.no_icon_fade)
+        play_icon.show().fadeOut(1000)
+    }
+
     if(this.cur_slide_index==-1) {
       this.setSlideIndex(0)
     }
@@ -574,13 +573,17 @@ YARNTALE.bg_volume = function(vol) {
 
 
 //pause media with GUI feedback
-YARNTALE.pause = function(then) {
+YARNTALE.pause = function(opt) {
+  opt = opt || {}
+  if(!opt.no_icon_fade)
+    $(".state_icon.pause").show().fadeOut(1000)
+
   $(this.el).removeClass("playing").removeClass("pending_next")
   this.el.find(".control .play").show()
   this.el.find(".control .pause").hide()
   YARNTALE.bg_pause()
 
-  return YARNTALE.pause_media(then)
+  return YARNTALE.pause_media()
 }
 
 YARNTALE.pause_media = function(then) {

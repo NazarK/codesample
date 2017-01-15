@@ -18,7 +18,7 @@ body.no-cursor {
     top: calc(50% - 7vw);
     left: calc(50% - 7vw);
     text-align: center;
-    width: 120px;
+    width: 14vw;
     font-size: 14vw;
     font-weight: lighter;
     line-height: 14vw;
@@ -37,6 +37,7 @@ body.no-cursor {
 
 
 .yarntale {
+  cursor: pointer;
 
   &.playing {
     .slide_view .slide.youtube img {
@@ -310,19 +311,20 @@ body.no-cursor {
         position: absolute;
         transition: visilibity 0s, opacity 0.15s ease-out;
 
-        top: 40%;
+        top: 50%;
         padding: 2%;
         &.next {
           right: 10px;
         }
         i {
           cursor: pointer;
-          font-size: 120px;
+          font-size: 14vw;
+          line-height: 14vw;
           text-shadow:
-                  -1px -1px 0 #000,
-                  1px -1px 0 #000,
-                  -1px 1px 0 #000,
-                  1px 1px 0 #000;
+                  -1px -1px 0 #888,
+                  1px -1px 0 #888,
+                  -1px 1px 0 #888,
+                  1px 1px 0 #888;
           color: #fff;
         }
       }
