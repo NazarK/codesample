@@ -428,6 +428,7 @@ YARNTALE.cur_slide_el = function() {
 
 YARNTALE.play = function(opt) {
     opt = opt || {}
+    console.log("play, opt:",opt)
 
     var play_icon = $(".state_icon.play")
     if(play_icon.is(":visible")) {
@@ -647,7 +648,7 @@ YARNTALE.do_while_keeping_play_state  = (yield) => {
   YARNTALE.pause_media(() => {
     console.log("was playing")
     yield()
-    YARNTALE.play()
+    YARNTALE.play({no_icon_fade:true})
   })
   return this;
 }
