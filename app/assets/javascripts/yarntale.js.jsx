@@ -231,7 +231,14 @@ YARNTALE.ui_event_handlers_attach = function() {
       $(".state_icon.pause").show().fadeOut(1000)
       YARNTALE.pause()
     } else {
-      $(".state_icon.play").show().fadeOut(1000)
+      var play_icon = $(".state_icon.play")
+
+      if(play_icon.is(":visible")) {
+        play_icon.hide()
+      } else {
+        play_icon.show().fadeOut(1000)
+      }
+
       YARNTALE.play()
     }
   })
