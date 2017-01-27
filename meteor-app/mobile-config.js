@@ -5,8 +5,8 @@ App.info({
   author: 'author',
   email: 'dev@yarntale.com',
   website: 'http://yarntale.cloudspaint.com',
-  version: "0.5",
-  buildNumber: '1'
+  version: "0.52",
+  buildNumber: '2'
 });
 
 App.appendToConfig(`
@@ -19,6 +19,9 @@ App.appendToConfig(`
     </config-file>
     <config-file platform="ios" target="*-Info.plist" parent="NSPhotoLibraryUsageDescription">
         <string>Create slide show.</string>
+    </config-file>
+    <config-file platform="ios" target="*-Info.plist" parent="ITSAppUsesNonExemptEncryption">
+        <false/>
     </config-file>
   </platform>
 `);

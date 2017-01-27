@@ -9,7 +9,7 @@ export default class MobileTales extends React.Component {
   }
 
   componentWillMount() {
-    console.log("MobileTales will mount, getting tales")    
+    console.log("MobileTales will mount, getting tales")
     $.ajax({
       url: `${DATA_HOST}/tales.json`
     }).done((resp)=> {
@@ -36,9 +36,10 @@ export default class MobileTales extends React.Component {
   }
 
   tale_view(event) {
-    var tale_id = $(event.currentTarget).attr("data-id")
-    window.open(`/t${tale_id}`, '_blank');
     event.preventDefault()
+    var tale_id = $(event.currentTarget).attr("data-id")
+    console.log(`view tale ${DATA_HOST}/t${tale_id}`)
+    cordova.InAppBrowser.open(encodeURI(`${DATA_HOST}/t${tale_id}`), '_system')
   }
 
   sign_out(event) {
