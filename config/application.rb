@@ -29,6 +29,19 @@ module Yarntale
       :storage => :s3,
       :bucket => "yarn-#{Rails.env[0]}"
     }
+
+    config.action_mailer.smtp_settings = {
+        :port           => 587,
+        :address        => 'smtp.sendgrid.net',
+        :user_name      => 'apikey',
+        :password       => ENV['SENDGRID_API_KEY'],
+        :domain         => ENV['DOMAIN'],
+        :enable_starttls_auto => true,
+        :authentication => 'login',
+    }
+
+    config.action_mailer.delivery_method = :smtp
+
   end
 end
 
