@@ -51,6 +51,11 @@ group :development do
   gem 'sqlite3'
 end
 
+group :production do
+  gem 'exception_notification'
+  gem 'exception_notification-rake', '~> 0.2.1'  
+end
+
 gem 'mina'
 
 gem 'rails_12factor', group: :production
@@ -85,4 +90,4 @@ gem 'strip_attributes'
 gem 'rails-assets-cropper', source: 'https://rails-assets.org'
 gem 'rails-assets-jqueryui-touch-punch-improved', source: 'https://rails-assets.org'
 gem 'rack-cors', :require => 'rack/cors'
-gem 'simple_token_authentication', '~> 1.0' 
+gem 'simple_token_authentication', '~> 1.0'

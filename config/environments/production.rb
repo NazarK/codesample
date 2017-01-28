@@ -76,6 +76,16 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.middleware.use ExceptionNotification::Rack,
+                        :email => {
+                            :email_prefix => "[yarntale] ",
+                            :sender_address => "exception-notification@yarntale.com",
+                            :exception_recipients => "nazar.kuliev@gmail.com"
+                        }
+
+  ExceptionNotifier::Rake.configure
+
 end
 
 Paperclip::Attachment.default_options[:path] = ":class/:attachment/:id/:style.:extension"
