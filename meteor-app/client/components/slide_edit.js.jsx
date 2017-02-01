@@ -224,8 +224,17 @@ export default class MobileSlideEdit extends React.Component {
   }
 
   file_chosen(e) {
-    $(e.currentTarget).parents(".btn").addClass("got-file")
+    var input = $(e.currentTarget)
+    input.parents(".btn").addClass("got-file")
     var other_inputs = $(e.currentTarget).parents(".list").find("input[type=file]").not(e.currentTarget)
+    if(input.attr("name")=="slide[image]") {
+      other_inputs = other_inputs.not("[name='slide[audio]']")
+    }
+    
+    if(input.attr("name")=="slide[audio]") {
+      other_inputs = other_inputs.not("[name='slide[image]']")
+    }
+
     other_inputs.each(function() {
       $(this).val("")
       $(this).parents(".btn").removeClass("got-file")
