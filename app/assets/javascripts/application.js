@@ -62,7 +62,7 @@ function embed_generate() {
   var w = $("#width").val()
   var h = $("#height").val()
   var id = $("#id").val()
-  code = "<iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no' allowfullscreen></iframe>"  
+  code = "<iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no' allowfullscreen></iframe>"
   $("textarea#code").html(code)
   clearTimeout(iframe_reload_timer)
   iframe_reload_timer = setTimeout(function() {
@@ -76,14 +76,14 @@ function embed_generate() {
 /* ready function to be called on each load (and page:load turbolinks event) */
 var ready = function() {
   console.log('ready')
-  
-  $(".flash_messages").show().delay(4000).fadeOut()  
+
+  $(".flash_messages").show().delay(4000).fadeOut()
   jquery_sortable_apply()
 
   if($("body").is(".tales.embed")) {
     embed_generate()
   }
-  
+
   $("#tale_captions_font").fontselect()
 
 };
@@ -94,16 +94,17 @@ $(function() {
     ready();
     $(document).on('page:load', ready);
     $(document)
-      .ajaxStart(function() { 
-        $.blockUI({ message: '' , fadeIn: 0, fadeOut:0, overlayCSS: { opacity: 0.1 } }) 
+      .ajaxStart(function() {
+        $.blockUI({ message: '' , fadeIn: 0, fadeOut:0, overlayCSS: { opacity: 0.1 } })
       })
       .ajaxStop(function() {
         $.unblockUI({fadeOut:0, fadeIn:0})
-      });    
+      });
 });
 
 
 tale_audio_vol_change = function() {
+  console.log("tale audio vol change", this.volume)
   $("#tale_audio_vol").val(this.volume)
 }
 

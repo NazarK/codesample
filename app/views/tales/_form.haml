@@ -37,7 +37,7 @@
           .row
             .col-sm-8
               = f.input :captions_font, label: false, input_html: { class: "col-sm-12"}
-              
+
         .col-sm-4
           = f.input :captions_font_size
     .row.panel.panel-default.padding
@@ -47,7 +47,7 @@
         - if f.object.cover.present?
           %a{href: f.object.cover.url(:crop), target: "_blank",style:"cursor:pointer;"}
             = image_tag f.object.cover.url(:thumb), style: "height:60px;"
-            
+
     .row.panel.panel-default.padding
       .row.col-sm-12
         %strong Background Audio
@@ -55,33 +55,36 @@
       .col-sm-5
         = f.input :audio, label: "audio file"
         - if f.object.audio.present?
-          %br
-          %audio#tale_audio_player{src: f.object.audio.url,
-            controls:true,
-            onloaded: "console.log('tale audio loaded')",
-            onloadedmetadata: "this.volume = #{@tale.audio_vol}",
-            onvolumechange: "tale_audio_vol_change.apply(this)"}
-          %br  
-          .col-sm-12.row
+          %div
+            .row
+              .audio_no_audio_control.pull-left
+                %audio#tale_audio_player{src: f.object.audio.url,
+                  controls:true,
+                  onloaded: "console.log('tale audio loaded')",
+                  onloadedmetadata: "this.volume = #{@tale.audio_vol}",
+                  onvolumechange: "tale_audio_vol_change.apply(this)"}
+              .pull-left
+                = react_component "AudioVolume", target: "#tale_audio_player", field: "#tale_audio_vol"
+          %div
             = f.input :bg_audio_delete, as: :boolean, label: "delete audio"
       .col-sm-3
         = f.input :bg_youtube, label: "or Youtube Video Link"
 
         - if f.object.bg_youtube.present?
           .youtube_thumb
-            = react_component "YoutubeThumb", videoId: f.object.bg_youtube_id        
+            = react_component "YoutubeThumb", videoId: f.object.bg_youtube_id
           volume:
-          %br  
+          %br
           %input{type:"range",
             onchange: "bg_youtube_vol_change.apply(this)",
             oninput: "bg_youtube_vol_change.apply(this)",
             value: @tale.audio_vol*100 }
-            
-      - if f.object.audio.present? || f.object.bg_youtube.present?      
+
+      - if f.object.audio.present? || f.object.bg_youtube.present?
         .col-sm-3.col-sm-offset-1
           %br
           = f.input :audio_snap_to_slides, label: "snap background audio to slides"
-        
+
     .row
       .col-sm-4
         = f.input :slide_duration, label: "Default Slide Duration (sec)", input_html: { style: "width: 100px"}
@@ -96,6 +99,6 @@
           = render 'slide_fields', f: slide
         .links
           = link_to_add_association '<i class="fa fa-plus" style="vertical-align:middle" aria-hidden="true"></i> add slide'.html_safe, f, :slides, class: "btn btn-default"
-          
+
 = react_component "ImageCrop"
 = react_component "ImageFilters"
