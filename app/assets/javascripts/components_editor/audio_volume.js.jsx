@@ -13,11 +13,24 @@ class AudioVolume extends React.Component {
       var volume_in_percent = Math.pow(10, value / 20) * 100
     }
     console.log("volume in percent: ", volume_in_percent)
-    $(this.props.target)[0].volume = volume_in_percent/100
-    $(this.props.field).val(volume_in_percent/100)
+    if(this.props.wrapper) {
+      var target =  $(this.refs.component).parents(this.props.wrapper).find(this.props.target)[0]
+      var field = $(this.refs.component).parents(this.props.wrapper).find(this.props.field)
+    } else {
+      var target =  $(this.props.target)[0]
+      var field = $(this.props.field)
+    }
+    target.volume = volume_in_percent/100
+    field.val(volume_in_percent/100)
   }
 
   componentDidMount() {
+    if(this.props.wrapper) {
+      var field = $(this.refs.component).parents(this.props.wrapper).find(this.props.field)
+    } else {
+      var field = $(this.props.field)
+    }
+
     var original_vol_in_percent = $(this.props.field).val()*100
     if(original_vol_in_percent==0) {
       var vol_in_db = $(this.refs.volume).attr('min')
@@ -32,11 +45,11 @@ class AudioVolume extends React.Component {
 
   render() {
     return (
-        <div id="audio-volume" className="audio-volume" style={{marginTop: "2px"}}>
+        <div ref="component" id="audio-volume" className="audio-volume" style={{marginTop: "2px"}}>
           <i className="fa fa-2x fa-volume-off" style={{marginLeft:"10px"}}></i>
           <input type="range" ref="volume" min="-100" max="0"
             onChange={this.volume_change.bind(this)}
-            style={{marginLeft:"10px", width:"100px",display:"inline-block"}} />
+            style={{marginLeft:"10px", width:this.props.width,display:"inline-block"}} />
         </div>
       )
 

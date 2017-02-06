@@ -31,6 +31,8 @@
 #  audio_processed_content_type :string
 #  audio_processed_file_size    :integer
 #  audio_processed_updated_at   :datetime
+#  crop                         :text             default({})
+#  filters                      :text             default({})
 #
 
 require 'test_helper'

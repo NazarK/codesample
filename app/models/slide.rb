@@ -31,6 +31,8 @@
 #  audio_processed_content_type :string
 #  audio_processed_file_size    :integer
 #  audio_processed_updated_at   :datetime
+#  crop                         :text             default({})
+#  filters                      :text             default({})
 #
 
 class Slide < ActiveRecord::Base
@@ -40,31 +42,32 @@ class Slide < ActiveRecord::Base
   default_scope -> { order(:position)}
   serialize :crop
   serialize :filters
+  serialize :text_overlay
   has_attached_file :image,
-                    :styles => { 
+                    :styles => {
                       original: "2048x2048>",
                       display: { :processors => [:cropper], thumb: "2048x2048>" },
-                      crop: "960x640#", 
+                      crop: "960x640#",
                       thumb: "150x100#" },
                     :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
-                    
 
-  
-  before_validation do 
-    self.crop.delete_if { |key, value| value.blank? }    
+
+
+  before_validation do
+    self.crop.delete_if { |key, value| value.blank? }
     if crop.blank? && crop_was.blank?
       self.restore_attributes([:crop])
-    end  
+    end
 
     if (crop_changed? || (image_updated_at_changed? && crop.present?))
       #instead of calling reprocess, which causes infinite callbacks loop
-      image.assign(image)      
+      image.assign(image)
       image.save
       #fix for cache buster
       self.image_updated_at = Time.now
     end
-  end  
-    
+  end
+
   validates_attachment_content_type :image, :content_type => /\Aimage\/.*\Z/
 
   has_attached_file :audio,
@@ -216,18 +219,18 @@ class Slide < ActiveRecord::Base
       end
     end
   end
-  
+
   def image_thumb
     image.url(:thumb)
-  end  
-  
+  end
+
   def audio_url
     audio.url
-  end  
-  
+  end
+
   def video_url
     video.url
-  end  
+  end
 
   def youtube_video_id
     regex = /(?:.be\/|\/watch\?v=|\/(?=p\/))([\w\/\-]+)/
@@ -242,7 +245,7 @@ class Slide < ActiveRecord::Base
       self.errors[:base] << "some media for the slide should be specified"
     end
   end
-  
+
   def as_json(options={})
     super(methods: [:image_thumb, :audio_url, :video_url])
   end

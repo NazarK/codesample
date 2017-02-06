@@ -64,7 +64,7 @@
                   onloadedmetadata: "this.volume = #{@tale.audio_vol}",
                   onvolumechange: "tale_audio_vol_change.apply(this)"}
               .pull-left
-                = react_component "AudioVolume", target: "#tale_audio_player", field: "#tale_audio_vol"
+                = react_component "AudioVolume", target: "#tale_audio_player", field: "#tale_audio_vol", width: "80px"
           %div
             = f.input :bg_audio_delete, as: :boolean, label: "delete audio"
       .col-sm-3
@@ -102,3 +102,4 @@
 
 = react_component "ImageCrop"
 = react_component "ImageFilters"
+= react_component "ImageText"
