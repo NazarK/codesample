@@ -52,6 +52,7 @@ class ImageText extends React.Component {
   }
 
 
+  //load data to component
   popup(slide_id, image_url) {
     this.setState({slide_id: slide_id, image_url: image_url})
 
@@ -60,9 +61,19 @@ class ImageText extends React.Component {
     var slide = $(`.slide[data-slide-id=${this.state.slide_id}]`)
     var textarea = $(this.refs.textarea)
 
+    var image_width = slide.find("img.thumb").data("width")
+    var image_height = slide.find("img.thumb").data("height")
+
+    var left = (slide.find("input[name$='[text_overlay][left]']").val() || 0)
+    var top = (slide.find("input[name$='[text_overlay][top]']").val() || 0)
+
+    //convert percents to pixels
+    left = 200*image_width/image_height*left/100
+    top = 200*top/100
+
     textarea.val(slide.find("input[name$='[text_overlay][text]']").val())
-    textarea.css({left: (slide.find("input[name$='[text_overlay][left]']").val() || 0) + "px"})
-    textarea.css({top: (slide.find("input[name$='[text_overlay][top]']").val() || 0) + "px"})
+    textarea.css({left: left + "px"})
+    textarea.css({top: top + "px"})
     textarea.css({width: (slide.find("input[name$='[text_overlay][width]']").val() || 100) + "px"})
     textarea.css({height: (slide.find("input[name$='[text_overlay][height]']").val() || 50) + "px"})
 
@@ -78,12 +89,25 @@ class ImageText extends React.Component {
     this.apply()
   }
 
+  //save data from component
   submit() {
     var slide = $(`.slide[data-slide-id=${this.state.slide_id}]`)
     var textarea = $(this.refs.textarea)
+
+    var image_width = slide.find("img.thumb").data("width")
+    var image_height = slide.find("img.thumb").data("height")
+
+    var left = textarea.position().left
+    var top = textarea.position().top
+
+    //convert pixels to percents
+
+    top = 100*top/200
+    left = 100*left/(200*image_width/image_height)
+
     slide.find("input[name$='[text_overlay][text]']").val($(textarea).val())
-    slide.find("input[name$='[text_overlay][left]']").val(textarea.position().left)
-    slide.find("input[name$='[text_overlay][top]']").val(textarea.position().top)
+    slide.find("input[name$='[text_overlay][left]']").val(left)
+    slide.find("input[name$='[text_overlay][top]']").val(top)
     slide.find("input[name$='[text_overlay][width]']").val(textarea.outerWidth())
     slide.find("input[name$='[text_overlay][height]']").val(textarea.outerHeight())
 
@@ -99,7 +123,7 @@ class ImageText extends React.Component {
 
     console.log("apply", this.refs.font.value)
     $(this.refs.textarea).css({"font-family": "'"+this.refs.font.value.replace("+",' ')+"'" })
-    $(this.refs.textarea).css({"font-size": this.refs.font_size.value+"px" })
+    $(this.refs.textarea).css({"font-size": this.refs.font_size.value*200/100+"px" })
     $(this.refs.textarea).css({"color": this.refs.color.value})
 
   }

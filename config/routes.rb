@@ -1,11 +1,12 @@
 Rails.application.routes.draw do
   get "/m(*path)" => "home#mobile_app"
-  
+  get "/text_overlay" => "home#text_overlay"
+
   devise_for :users, controllers: {
           sessions: 'users/sessions',
           registrations: 'users/registrations'
   }
-  
+
   devise_scope :user do
     authenticated :user do
       root 'tales#index', as: :authenticated_root
@@ -15,19 +16,21 @@ Rails.application.routes.draw do
       root 'users/sessions#new', as: :unauthenticated_root
     end
   end
-    
+
   devise_for :admin_users, ActiveAdmin::Devise.config
   ActiveAdmin.routes(self)
-  
-  
+
+
   resources :tales do
     get :embed, on: :member
     get :test, on: :collection
     #this is for internal testing only
     resources :slides, only: [:show, :create, :new, :index]
   end
-  
-  resources :slides
+
+  resources :slides do
+    get :text, on: :member
+  end
 
   get '/t:id/edit' => "tales#edit"
   get '/t:id(/:mode)' => "tales#show"

@@ -49,7 +49,11 @@
                     = text_overlay.input :height, as: :hidden, input_html: { value: f.object.text_overlay.dig(:height) }
 
               %a.no-decoration{href: f.object.image.url(:crop), target: "_blank",style:"cursor:pointer;"}
-                = image_tag f.object.image.url(:display), style: "vertical-align:top;max-height:80px;max-width:80px;filter: #{f.object.filters[:filters]};z-index:1;"
+                = image_tag f.object.image.url(:display),
+                  class: "thumb",
+                  style: "vertical-align:top;max-height:80px;max-width:80px;filter: #{f.object.filters[:filters]};z-index:1;",
+                  data: { width: (size = Paperclip::Geometry.from_file(f.object.image.path(:display))).width,
+                          height: size.height }
         .col-sm-7
           = f.input :audio, label: "Image Audio", input_html: { accept: "audio/*" }
           - if f.object.audio.present?

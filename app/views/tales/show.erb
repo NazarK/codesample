@@ -43,7 +43,14 @@
         <% end %>
         position: <%= position %>,
         duration: <%= slide.duration %>,
-        image: {url: "<%= slide.image.url(:display) %>",
+        <%
+          if slide.text_overlay.dig(:text).blank?
+            image_url = slide.image.url(:display)
+          else
+            image_url = text_slide_path(slide,{t:slide.updated_at.to_i})
+          end
+        %>
+        image: {url: "<%= image_url %>",
                 thumb: "<%= slide.image.url(:display) %>"},
         <% if slide.audio.present? %>
           <% if is_mobile_browser? %>

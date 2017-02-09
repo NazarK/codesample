@@ -1,20 +1,54 @@
 class SlidesController < ApplicationController
-  acts_as_token_authentication_handler_for User
+  acts_as_token_authentication_handler_for User, except: :text
 
-  before_action :set_slide, only: [:show, :edit, :update, :destroy]
+  before_action :set_slide, only: [:show, :edit, :update, :destroy, :text]
 
   skip_before_action :verify_authenticity_token
-  
+
   respond_to :html, :json
 
   before_filter :adjust_format, only: [:edit, :new, :create, :index]
-  
+
   private def adjust_format
     if params[:format]=="html" || params[:format].blank?
       set_mobile_format
-    end  
+    end
   end
-  
+
+  def text
+
+
+    text = @slide.text_overlay
+
+    require "RMagick"
+
+    image_path = @slide.image.path(:display)
+
+    img = Magick::Image.ping(image_path).first
+    width = img.columns
+    height = img.rows
+
+    img_list = Magick::ImageList.new(image_path)
+    txt = Magick::Draw.new
+
+    x = width * text[:left].to_f/100.0
+    y = height * text[:top].to_f/100.0
+    txt.pointsize = text[:font_size].to_f*height/100.0
+    txt.stroke = "#000000"
+    txt.fill = text[:color]
+    txt.font_weight = 700
+
+    img_list.annotate(txt, 0,0,x, y, text[:text]) {
+      #txt.gravity = Magick::SouthGravity
+      #txt.pointsize = size
+    }
+
+    img_list.format = "jpeg"
+    send_data img_list.to_blob, :stream => "false", :filename => "test.jpg", :type => "image/jpeg", :disposition => "inline"
+
+
+  end
+
   def index
     @slides = Slide.all
     respond_with(@slides)
@@ -40,12 +74,12 @@ class SlidesController < ApplicationController
     if !@slide.save
       if is_mobile_browser?
         return render json: {error: @slide.errors[:base].join(" / ")}, status: 400
-      end  
+      end
     else
       if is_mobile_browser?
         return render json: @slide
-      end  
-    end    
+      end
+    end
 
 
     respond_with(@slide)
@@ -57,13 +91,13 @@ class SlidesController < ApplicationController
         redirect_to edit_slide_path
         return
       end
-    end  
+    end
     render json: @slide
   end
 
   def destroy
     @slide.destroy
-    if is_mobile_browser?      
+    if is_mobile_browser?
       return render nothing: true
     end
     respond_with(@slide)
