@@ -4,73 +4,103 @@ class ImageText extends React.Component {
     this.state = {slide_id:null}
   }
 
-  componentDidMount() {
-    window.ImageTextRef = this
-    $(this.refs.left_top).draggable()
-    $(this.refs.right_bottom).draggable()
+
+  move_resizer() {
+    var textarea = $(this.refs.textarea)
+    var resizer = $(this.refs.resizer)
+    resizer.css({
+       left: textarea.position().left + textarea.width() - 8,
+       top: textarea.position().top + textarea.height() - 8
+    })
   }
 
-  reset(e) {
-    e && e.preventDefault()
-    this.refs.brightness.value = 100
-    this.refs.contrast.value = 100
-    this.refs.grayscale.value = 0
-    this.refs.blur.value = 0
-    this.refs.saturate.value = 10
-    this.preview()
+  componentDidMount() {
+    window.ImageTextRef = this
+    var self = this
+    var textarea = $(self.refs.textarea)
+    var resizer = $(self.refs.resizer)
+
+    $(this.refs.font).change(this.apply.bind(this))
+
+    $(textarea).draggable({
+       cursor      : "move",
+       scroll      : false,
+       containment : "parent",
+       cancel: "text",
+       drag: function() {
+         self.move_resizer()
+       },
+       stop: function() {
+         self.move_resizer()
+       }
+    })
+
+     resizer.draggable({
+       cursor: "se-resize",
+       containment: "parent",
+       drag: function() {
+         textarea.css({
+           width: resizer.position().left + resizer.width() - textarea.position().left,
+           height: resizer.position().top + resizer.height() - textarea.position().top
+         })
+       }
+     })
+
+     this.fontselect = $(this.refs.font).fontselect()
+
+
   }
+
 
   popup(slide_id, image_url) {
     this.setState({slide_id: slide_id, image_url: image_url})
 
     $("#text-overlay-modal").modal({keyboard: true})
 
-    this.reset()
-
     var slide = $(`.slide[data-slide-id=${this.state.slide_id}]`)
-    console.log(this.refs)
-    this.refs.grayscale.value = slide.find("input[name$='[filters][grayscale]']").val() || this.refs.grayscale.value
-    this.refs.contrast.value = slide.find("input[name$='[filters][contrast]']").val() || this.refs.contrast.value
-    this.refs.brightness.value = slide.find("input[name$='[filters][brightness]']").val() || this.refs.brightness.value
-    this.refs.blur.value = slide.find("input[name$='[filters][blur]']").val() || this.refs.blur.value
-    this.refs.saturate.value = slide.find("input[name$='[filters][saturate]']").val() || this.refs.saturate.value
-    this.preview()
+    var textarea = $(this.refs.textarea)
+
+    textarea.val(slide.find("input[name$='[text_overlay][text]']").val())
+    textarea.css({left: (slide.find("input[name$='[text_overlay][left]']").val() || 0) + "px"})
+    textarea.css({top: (slide.find("input[name$='[text_overlay][top]']").val() || 0) + "px"})
+    textarea.css({width: (slide.find("input[name$='[text_overlay][width]']").val() || 100) + "px"})
+    textarea.css({height: (slide.find("input[name$='[text_overlay][height]']").val() || 50) + "px"})
+
+    $(this.refs.font_size).val( slide.find("input[name$='[text_overlay][font_size]']").val() )
+    $(this.refs.font).val( slide.find("input[name$='[text_overlay][font]']").val()  )
+    $(this.refs.color).val(slide.find("input[name$='[text_overlay][color]']").val()  )
+    window.fontselect_objects.image_text_font.updateSelected()
+
+    console.log({left: slide.find("input[name$='[text_overlay][left]']").val() || 0 })
+    console.log({top: slide.find("input[name$='[text_overlay][top]']").val() || 0 })
+
+    this.move_resizer()
+    this.apply()
   }
 
   submit() {
     var slide = $(`.slide[data-slide-id=${this.state.slide_id}]`)
-    var data = this.data()
-    slide.find("input[name$='[filters][filters]']").val(this.filter())
-    slide.find("input[name$='[filters][grayscale]']").val(data.grayscale)
-    slide.find("input[name$='[filters][contrast]']").val(data.contrast)
-    slide.find("input[name$='[filters][brightness]']").val(data.brightness)
-    slide.find("input[name$='[filters][blur]']").val(data.blur)
-    slide.find("input[name$='[filters][saturate]']").val(data.saturate)
-    $("#image-filters-modal").modal("hide")
+    var textarea = $(this.refs.textarea)
+    slide.find("input[name$='[text_overlay][text]']").val($(textarea).val())
+    slide.find("input[name$='[text_overlay][left]']").val(textarea.position().left)
+    slide.find("input[name$='[text_overlay][top]']").val(textarea.position().top)
+    slide.find("input[name$='[text_overlay][width]']").val(textarea.outerWidth())
+    slide.find("input[name$='[text_overlay][height]']").val(textarea.outerHeight())
+
+    slide.find("input[name$='[text_overlay][font]']").val($(this.refs.font).val())
+    slide.find("input[name$='[text_overlay][font_size]']").val($(this.refs.font_size).val())
+    slide.find("input[name$='[text_overlay][color]']").val($(this.refs.color).val())
+
+    $("#text-overlay-modal").modal("hide")
     $(".tale-save").click()
   }
 
-  data() {
-    return {
-      brightness: this.refs.brightness.value,
-      contrast: this.refs.contrast.value,
-      grayscale: this.refs.grayscale.value,
-      blur: this.refs.blur.value,
-      saturate: this.refs.saturate.value,
-    }
-  }
+  apply() {
 
-  filter() {
-    data = this.data()
-    return `grayscale(${data.grayscale}%) brightness(${data.brightness}%) contrast(${data.contrast}%) blur(${data.blur}px) saturate(${data.saturate/10})`
-  }
-
-  preview() {
-    var data = this.data()
-
-    $("#image-filters-modal img.target").css({
-      filter: this.filter()
-    })
+    console.log("apply", this.refs.font.value)
+    $(this.refs.textarea).css({"font-family": "'"+this.refs.font.value.replace("+",' ')+"'" })
+    $(this.refs.textarea).css({"font-size": this.refs.font_size.value+"px" })
+    $(this.refs.textarea).css({"color": this.refs.color.value})
 
   }
 
@@ -84,60 +114,51 @@ class ImageText extends React.Component {
                 <h4 className="modal-title">Text Overlay</h4>
               </div>
               <div className="modal-body">
-
-                <div ref="left_top" style={{zIndex: "1", fontSize: "20px", color: "white", textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000", cursor: "move", width:"20px", height: "20px", position: "absolute"}}>
-                  <i className="fa fa-arrows"></i>
-                </div>
-                <div ref="right_bottom" style={{zIndex: "1", fontSize: "20px", color: "white", textShadow: "-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000", cursor: "move", width:"20px", height: "20px", position: "absolute"}}>
-                  <i className="fa fa-arrows"></i>
-                </div>
-                <textarea style={{position: 'absolute', background: 'transparent' }}>asdf</textarea>
-                <img className="target" src={this.state.image_url} style={{maxWidth:"100%",maxHeight:"200px"}} />
-
-                <div className="row margin-top-sm">
-
-                    <div className="form-group col-sm-6 row">
-                      <label className="col-sm-4 col-form-label">
-                        font
-                      </label>
-                      <div className="col-sm-6">
-                        <input type="range" ref="contrast" min="0" max="200" onChange={this.preview.bind(this)} />
+                <div className="row">
+                    <div className="row">
+                      <div className="form-group col-sm-8">
+                        <label className="col-sm-4 col-form-label">
+                          font
+                        </label>
+                        <div className="col-sm-6">
+                          <input type="text" id="image_text_font" ref="font" />
+                        </div>
                       </div>
                     </div>
 
-                    <div className="form-group col-sm-6 row">
-                      <label className="col-sm-4 col-form-label">
-                        font size
-                      </label>
-                      <div className="col-sm-6">
-                        <input type="range" ref="contrast" min="0" max="200" onChange={this.preview.bind(this)} />
-                      </div>
-                    </div>
-                </div>
+                    <div className="row">
 
-                <div className="row margin-top-sm">
-                    <div className="form-group row col-sm-6">
-                      <label className="col-sm-4 col-form-label">
-                        color
-                      </label>
-                      <div className="col-sm-6">
-                        <input type="range" ref="brightness" min="0" max="200" onChange={this.preview.bind(this)} />
+                      <div className="form-group col-sm-3 ">
+                        <label className="col-sm-4 col-form-label">
+                          size
+                        </label>
+                        <div className="col-sm-6">
+                          <input type="number" ref="font_size" min="1" max="200" onChange={this.apply.bind(this)} />
+                        </div>
                       </div>
-                    </div>
 
-                    <div className="form-group row col-sm-6">
-                      <label className="col-sm-4 col-form-label">
-                        outline
-                      </label>
-                      <div className="col-sm-6">
-                        <input type="range" ref="contrast" min="0" max="200" onChange={this.preview.bind(this)} />
+                      <div className="form-group col-sm-3 ">
+                        <label className="col-sm-4 col-form-label">
+                          color
+                        </label>
+                        <div className="col-sm-6">
+                          <input type="color" ref="color" onChange={this.apply.bind(this)} />
+                        </div>
                       </div>
                     </div>
 
                 </div>
+
+
+
+                <div className="img_wrapper" style={{position:"relative", width: "100%", height: "200px"}}>
+                  <textarea ref="textarea" id="text" style={{zIndex: '10', position: 'absolute', background: 'transparent', border: "1px dotted black", resize: "none" }}></textarea>
+                  <div ref="resizer" className="ui-icon ui-icon-gripsmall-diagonal-se" style={{position:'absolute', zIndex: 90, cursor: "se-resize" }}></div>
+                  <img className="target" src={this.state.image_url} style={{maxWidth:"100%",maxHeight:"200px"}} />
+                </div>
+
               </div>
               <div className="modal-footer">
-                <button type="button" className="btn btn-default pull-left" onClick={this.reset.bind(this)}>Reset</button>
                 <button type="button" className="btn btn-default" onClick={this.submit.bind(this)}>Ok</button>
                 <button type="button" className="btn btn-default" data-dismiss="modal">Cancel</button>
               </div>
