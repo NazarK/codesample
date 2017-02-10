@@ -39,8 +39,13 @@ class SlidesController < ApplicationController
 
     txt.stroke = params[:stroke_color] || text[:stroke_color]
     txt.fill = params[:color] || text[:color]
-    txt.font_weight = 700
-    txt.font = params[:font] || text[:font]
+    txt.font_weight = 400
+    font = params[:font] || text[:font]
+    if (params[:bold] || text[:bold])=="true"
+      font += "-Bold"
+    end
+
+    txt.font = font
     require 'uri'
     text_text = URI.unescape(params[:text] || text[:text])
 
@@ -50,6 +55,7 @@ class SlidesController < ApplicationController
     }
 
     img_list.format = "png"
+    
     send_data img_list.to_blob, :stream => "false", :filename => "text_overlay.png", :type => "image/png", :disposition => "inline"
 
   end

@@ -4,20 +4,7 @@ class ImageText extends React.Component {
     this.state = {slide_id:null}
   }
 
-  text_edit() {
-
-    $(this.refs.edit_btn).hide()
-    $(this.refs.render_btn).show()
-    $(this.refs.hint).show()
-    this.setState({image_url: this.state.orig_image_url})
-    $(this.refs.textarea).css({opacity: 1, zIndex: 10})
-    $(this.refs.textarea).focus()
-  }
-
-  text_render() {
-    $(this.refs.render_btn).hide()
-    $(this.refs.edit_btn).show()
-    $(this.refs.hint).hide()
+  params() {
     var slide = $(`.slide[data-slide-id=${this.state.slide_id}]`)
     var textarea = $(this.refs.textarea)
 
@@ -39,11 +26,30 @@ class ImageText extends React.Component {
       font_size: this.refs.font_size.value,
       left: left,
       top: top,
-      text: this.refs.textarea.value
+      text: encodeURIComponent(this.refs.textarea.value),
+      bold: $(this.refs.bold).prop("checked")+""
     }
+    return params
+  }
+
+  text_edit() {
+
+    $(this.refs.edit_btn).hide()
+    $(this.refs.render_btn).show()
+    $(this.refs.hint).show()
+    this.setState({image_url: this.state.orig_image_url})
+    $(this.refs.textarea).css({opacity: 1, zIndex: 10})
+    $(this.refs.textarea).focus()
+  }
+
+  text_render() {
+    $(this.refs.render_btn).hide()
+    $(this.refs.edit_btn).show()
+    $(this.refs.hint).hide()
+
     $(this.refs.textarea).css({opacity: 0, zIndex: -1})
 
-    var image_url = `/slides/${this.state.slide_id}/text?`+$.param(params)
+    var image_url = `/slides/${this.state.slide_id}/text?`+$.param(this.params())
     console.log(image_url)
     this.setState({image_url: image_url})
 
@@ -108,6 +114,7 @@ class ImageText extends React.Component {
     $(this.refs.font).val( slide.find("input[name$='[text_overlay][font]']").val() || "Helvetica" )
     $(this.refs.color).val(slide.find("input[name$='[text_overlay][color]']").val()  )
     $(this.refs.stroke_color).val(slide.find("input[name$='[text_overlay][stroke_color]']").val() || "#ffffff"  )
+    $(this.refs.bold).prop("checked", (slide.find("input[name$='[text_overlay][bold]']").val() || "true")=="true"  )
 
     console.log({left: slide.find("input[name$='[text_overlay][left]']").val() || 0 })
     console.log({top: slide.find("input[name$='[text_overlay][top]']").val() || 0 })
@@ -118,39 +125,37 @@ class ImageText extends React.Component {
 
   //save data from component
   submit() {
+    var params = this.params()
     var slide = $(`.slide[data-slide-id=${this.state.slide_id}]`)
-    var textarea = $(this.refs.textarea)
 
-    var image_width = slide.find("img.thumb").data("width")
-    var image_height = slide.find("img.thumb").data("height")
 
-    var left = textarea.position().left
-    var top = textarea.position().top
+    slide.find("input[name$='[text_overlay][text]']").val(params.text)
+    slide.find("input[name$='[text_overlay][left]']").val(params.left)
+    slide.find("input[name$='[text_overlay][top]']").val(params.top)
 
-    //convert pixels to percents
-
-    top = 100*top/200
-    left = 100*left/(200*image_width/image_height)
-
-    slide.find("input[name$='[text_overlay][text]']").val(encodeURIComponent($(textarea).val()))
-    slide.find("input[name$='[text_overlay][left]']").val(left)
-    slide.find("input[name$='[text_overlay][top]']").val(top)
-
-    slide.find("input[name$='[text_overlay][font]']").val($(this.refs.font).val())
-    slide.find("input[name$='[text_overlay][font_size]']").val($(this.refs.font_size).val())
-    slide.find("input[name$='[text_overlay][color]']").val($(this.refs.color).val())
-    slide.find("input[name$='[text_overlay][stroke_color]']").val($(this.refs.stroke_color).val())
+    slide.find("input[name$='[text_overlay][font]']").val(params.font)
+    slide.find("input[name$='[text_overlay][font_size]']").val(params.font_size)
+    slide.find("input[name$='[text_overlay][color]']").val(params.color)
+    slide.find("input[name$='[text_overlay][stroke_color]']").val(params.stroke_color)
+    slide.find("input[name$='[text_overlay][font_weight]']").val(params.font_weight)
+    slide.find("input[name$='[text_overlay][bold]']").val(params.bold)
 
     $("#text-overlay-modal").modal("hide")
     $(".tale-save").click()
   }
 
   apply() {
-
+    params = this.params()
     console.log("apply", this.refs.font.value)
     $(this.refs.textarea).css({"font-family": "'"+this.refs.font.value.replace("+",' ')+"'" })
     var font_size = this.refs.font_size.value*200/100+"px"
     $(this.refs.textarea).css({"font-size": font_size, "line-height": font_size })
+    if(params.bold=="true") {
+      $(this.refs.textarea).css({"font-weight":"bold"})
+    } else {
+      $(this.refs.textarea).css({"font-weight":"normal"})
+    }
+
     $(this.refs.textarea).css({"color": this.refs.color.value})
     $(this.refs.textarea).css({"-webkit-text-stroke-width": 1, "-webkit-text-stroke-color": this.refs.stroke_color.value})
 
@@ -184,7 +189,6 @@ class ImageText extends React.Component {
                         </label>
                         <div className="col-sm-6">
                           <select id="image_text_font" ref="font">
-                            <option value="Arial">Arial</option>
                             <option value="Courier">Courier</option>
                             <option value="Helvetica">Helvetica</option>
                           </select>
@@ -192,7 +196,16 @@ class ImageText extends React.Component {
                       </div>
 
 
-                      <div className="form-group col-sm-3 ">
+                      <div className="form-group col-sm-2">
+                        <label className="col-sm-4 col-form-label" htmlFor="font_bold">
+                          bold
+                        </label>
+                        <div className="col-sm-6">
+                          <input id="font_bold" type="checkbox" ref="bold" onChange={this.apply.bind(this)} value="true" />
+                        </div>
+                      </div>
+
+                      <div className="form-group col-sm-2">
                         <label className="col-sm-4 col-form-label">
                           size
                         </label>
@@ -201,8 +214,8 @@ class ImageText extends React.Component {
                         </div>
                       </div>
 
-                      <div className="form-group col-sm-3 ">
-                        <label className="col-sm-4 col-form-label">
+                      <div className="form-group col-sm-2">
+                        <label className="col-sm-6 col-form-label">
                           color
                         </label>
                         <div className="col-sm-6">
@@ -210,12 +223,14 @@ class ImageText extends React.Component {
                         </div>
                       </div>
 
-                      <div className="form-group col-sm-3 ">
-                        <label className="col-sm-4 col-form-label">
-                          stroke
-                        </label>
-                        <div className="col-sm-6">
-                          <input type="color" ref="stroke_color" onChange={this.apply.bind(this)} />
+                      <div className="form-group col-sm-2 ">
+                        <div className="row">
+                          <label className="col-sm-6 col-form-label" style={{textAlign:"right"}}>
+                            stroke
+                          </label>
+                          <div className="col-sm-6">
+                            <input type="color" ref="stroke_color" onChange={this.apply.bind(this)} />
+                          </div>
                         </div>
                       </div>
 
