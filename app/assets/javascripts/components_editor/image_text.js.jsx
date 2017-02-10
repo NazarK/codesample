@@ -156,7 +156,12 @@ class ImageText extends React.Component {
 
     //in render mode
     if($(this.refs.edit_btn).is(":visible")) {
-      this.text_render()
+      clearTimeout(this.render_delay)
+      this.render_delay = setTimeout(()=> {
+          this.text_render()
+      }, 500)
+
+
     }
 
   }
