@@ -4,14 +4,49 @@ class ImageText extends React.Component {
     this.state = {slide_id:null}
   }
 
+  text_edit() {
 
-  move_resizer() {
+    $(this.refs.edit_btn).hide()
+    $(this.refs.render_btn).show()
+    $(this.refs.hint).show()
+    this.setState({image_url: this.state.orig_image_url})
+    $(this.refs.textarea).css({opacity: 1, zIndex: 10})
+    $(this.refs.textarea).focus()
+  }
+
+  text_render() {
+    $(this.refs.render_btn).hide()
+    $(this.refs.edit_btn).show()
+    $(this.refs.hint).hide()
+    var slide = $(`.slide[data-slide-id=${this.state.slide_id}]`)
     var textarea = $(this.refs.textarea)
-    var resizer = $(this.refs.resizer)
-    resizer.css({
-       left: textarea.position().left + textarea.width() - 8,
-       top: textarea.position().top + textarea.height() - 8
-    })
+
+    var image_width = slide.find("img.thumb").data("width")
+    var image_height = slide.find("img.thumb").data("height")
+
+    var left = textarea.position().left
+    var top = textarea.position().top
+
+    //convert pixels to percents
+
+    top = 100*top/200
+    left = 100*left/(200*image_width/image_height)
+
+    var params = {
+      color: this.refs.color.value,
+      stroke_color: this.refs.stroke_color.value,
+      font: this.refs.font.value,
+      font_size: this.refs.font_size.value,
+      left: left,
+      top: top,
+      text: this.refs.textarea.value
+    }
+    $(this.refs.textarea).css({opacity: 0, zIndex: -1})
+
+    var image_url = `/slides/${this.state.slide_id}/text?`+$.param(params)
+    console.log(image_url)
+    this.setState({image_url: image_url})
+
   }
 
   componentDidMount() {
@@ -25,14 +60,7 @@ class ImageText extends React.Component {
     $(textarea).draggable({
        cursor      : "move",
        scroll      : false,
-       containment : "parent",
-       cancel: "text",
-       drag: function() {
-         self.move_resizer()
-       },
-       stop: function() {
-         self.move_resizer()
-       }
+       cancel: "text"
     })
 
      resizer.draggable({
@@ -46,15 +74,12 @@ class ImageText extends React.Component {
        }
      })
 
-     this.fontselect = $(this.refs.font).fontselect()
-
-
   }
 
 
   //load data to component
   popup(slide_id, image_url) {
-    this.setState({slide_id: slide_id, image_url: image_url})
+    this.setState({slide_id: slide_id, image_url: image_url, orig_image_url: image_url})
 
     $("#text-overlay-modal").modal({keyboard: true})
 
@@ -64,6 +89,8 @@ class ImageText extends React.Component {
     var image_width = slide.find("img.thumb").data("width")
     var image_height = slide.find("img.thumb").data("height")
 
+
+
     var left = (slide.find("input[name$='[text_overlay][left]']").val() || 0)
     var top = (slide.find("input[name$='[text_overlay][top]']").val() || 0)
 
@@ -71,22 +98,22 @@ class ImageText extends React.Component {
     left = 200*image_width/image_height*left/100
     top = 200*top/100
 
-    textarea.val(slide.find("input[name$='[text_overlay][text]']").val())
+    textarea.val(decodeURIComponent(slide.find("input[name$='[text_overlay][text]']").val()))
     textarea.css({left: left + "px"})
     textarea.css({top: top + "px"})
-    textarea.css({width: (slide.find("input[name$='[text_overlay][width]']").val() || 100) + "px"})
-    textarea.css({height: (slide.find("input[name$='[text_overlay][height]']").val() || 50) + "px"})
+    textarea.css({width: 200 * image_width/image_height + "px"})
+    textarea.css({height: "200px"})
 
-    $(this.refs.font_size).val( slide.find("input[name$='[text_overlay][font_size]']").val() )
-    $(this.refs.font).val( slide.find("input[name$='[text_overlay][font]']").val()  )
+    $(this.refs.font_size).val( slide.find("input[name$='[text_overlay][font_size]']").val() || 10 )
+    $(this.refs.font).val( slide.find("input[name$='[text_overlay][font]']").val() || "Helvetica" )
     $(this.refs.color).val(slide.find("input[name$='[text_overlay][color]']").val()  )
-    window.fontselect_objects.image_text_font.updateSelected()
+    $(this.refs.stroke_color).val(slide.find("input[name$='[text_overlay][stroke_color]']").val() || "#ffffff"  )
 
     console.log({left: slide.find("input[name$='[text_overlay][left]']").val() || 0 })
     console.log({top: slide.find("input[name$='[text_overlay][top]']").val() || 0 })
 
-    this.move_resizer()
     this.apply()
+    this.text_render()
   }
 
   //save data from component
@@ -105,15 +132,14 @@ class ImageText extends React.Component {
     top = 100*top/200
     left = 100*left/(200*image_width/image_height)
 
-    slide.find("input[name$='[text_overlay][text]']").val($(textarea).val())
+    slide.find("input[name$='[text_overlay][text]']").val(encodeURIComponent($(textarea).val()))
     slide.find("input[name$='[text_overlay][left]']").val(left)
     slide.find("input[name$='[text_overlay][top]']").val(top)
-    slide.find("input[name$='[text_overlay][width]']").val(textarea.outerWidth())
-    slide.find("input[name$='[text_overlay][height]']").val(textarea.outerHeight())
 
     slide.find("input[name$='[text_overlay][font]']").val($(this.refs.font).val())
     slide.find("input[name$='[text_overlay][font_size]']").val($(this.refs.font_size).val())
     slide.find("input[name$='[text_overlay][color]']").val($(this.refs.color).val())
+    slide.find("input[name$='[text_overlay][stroke_color]']").val($(this.refs.stroke_color).val())
 
     $("#text-overlay-modal").modal("hide")
     $(".tale-save").click()
@@ -123,8 +149,15 @@ class ImageText extends React.Component {
 
     console.log("apply", this.refs.font.value)
     $(this.refs.textarea).css({"font-family": "'"+this.refs.font.value.replace("+",' ')+"'" })
-    $(this.refs.textarea).css({"font-size": this.refs.font_size.value*200/100+"px" })
+    var font_size = this.refs.font_size.value*200/100+"px"
+    $(this.refs.textarea).css({"font-size": font_size, "line-height": font_size })
     $(this.refs.textarea).css({"color": this.refs.color.value})
+    $(this.refs.textarea).css({"-webkit-text-stroke-width": 1, "-webkit-text-stroke-color": this.refs.stroke_color.value})
+
+    //in render mode
+    if($(this.refs.edit_btn).is(":visible")) {
+      this.text_render()
+    }
 
   }
 
@@ -140,17 +173,19 @@ class ImageText extends React.Component {
               <div className="modal-body">
                 <div className="row">
                     <div className="row">
-                      <div className="form-group col-sm-8">
+                      <div className="form-group col-sm-3">
                         <label className="col-sm-4 col-form-label">
                           font
                         </label>
                         <div className="col-sm-6">
-                          <input type="text" id="image_text_font" ref="font" />
+                          <select id="image_text_font" ref="font">
+                            <option value="Arial">Arial</option>
+                            <option value="Courier">Courier</option>
+                            <option value="Helvetica">Helvetica</option>
+                          </select>
                         </div>
                       </div>
-                    </div>
 
-                    <div className="row">
 
                       <div className="form-group col-sm-3 ">
                         <label className="col-sm-4 col-form-label">
@@ -169,17 +204,38 @@ class ImageText extends React.Component {
                           <input type="color" ref="color" onChange={this.apply.bind(this)} />
                         </div>
                       </div>
+
+                      <div className="form-group col-sm-3 ">
+                        <label className="col-sm-4 col-form-label">
+                          stroke
+                        </label>
+                        <div className="col-sm-6">
+                          <input type="color" ref="stroke_color" onChange={this.apply.bind(this)} />
+                        </div>
+                      </div>
+
                     </div>
 
                 </div>
 
 
+                  <div className="row">
+                    <div className="col-sm-12" style={{marginBottom: 10}}>
+                      <button ref="edit_btn" className="btn btn-default" onClick={this.text_edit.bind(this)}>edit text</button>
+                      <button ref="render_btn" className="btn btn-danger" onClick={this.text_render.bind(this)}>apply</button>
+                      <span ref="hint" style={{fontSize: 10,marginLeft: 20}}>* - now edit text and change position by dragging</span>
+                    </div>
+                  </div>
 
-                <div className="img_wrapper" style={{position:"relative", width: "100%", height: "200px"}}>
-                  <textarea ref="textarea" id="text" style={{zIndex: '10', position: 'absolute', background: 'transparent', border: "1px dotted black", resize: "none" }}></textarea>
-                  <div ref="resizer" className="ui-icon ui-icon-gripsmall-diagonal-se" style={{position:'absolute', zIndex: 90, cursor: "se-resize" }}></div>
-                  <img className="target" src={this.state.image_url} style={{maxWidth:"100%",maxHeight:"200px"}} />
-                </div>
+                  <div className="row">
+                    <div className="col-sm-12">
+                      <div className="img_wrapper" style={{position:"relative", height: "200px"}}>
+                        <textarea ref="textarea" id="text" style={{position: 'absolute', background: 'transparent', border: "1px dotted black", resize: "none" }}></textarea>
+                        <img ref="image" className="target" src={this.state.image_url} style={{maxWidth:"100%",height:"200px"}} />
+                      </div>
+                    </div>
+                  </div>
+
 
               </div>
               <div className="modal-footer">

@@ -20,7 +20,7 @@ class SlidesController < ApplicationController
 
     text = @slide.text_overlay
 
-    require "RMagick"
+    require "rmagick"
 
     image_path = @slide.image.path(:display)
 
@@ -30,22 +30,27 @@ class SlidesController < ApplicationController
 
     img_list = Magick::ImageList.new(image_path)
     txt = Magick::Draw.new
+    txt.gravity = Magick::NorthWestGravity
 
-    x = width * text[:left].to_f/100.0
-    y = height * text[:top].to_f/100.0
-    txt.pointsize = text[:font_size].to_f*height/100.0
-    txt.stroke = "#000000"
-    txt.fill = text[:color]
+    x = width * (params[:left] || text[:left]).to_f/100.0
+    y = height * (params[:top] || text[:top]).to_f/100.0
+
+    txt.pointsize = (params[:font_size] || text[:font_size]).to_f*height/100.0
+
+    txt.stroke = params[:stroke_color] || text[:stroke_color]
+    txt.fill = params[:color] || text[:color]
     txt.font_weight = 700
+    txt.font = params[:font] || text[:font]
+    require 'uri'
+    text_text = URI.unescape(params[:text] || text[:text])
 
-    img_list.annotate(txt, 0,0,x, y, text[:text]) {
+    img_list.annotate(txt, 0,0, x, y, text_text) {
       #txt.gravity = Magick::SouthGravity
       #txt.pointsize = size
     }
 
-    img_list.format = "jpeg"
-    send_data img_list.to_blob, :stream => "false", :filename => "test.jpg", :type => "image/jpeg", :disposition => "inline"
-
+    img_list.format = "png"
+    send_data img_list.to_blob, :stream => "false", :filename => "text_overlay.png", :type => "image/png", :disposition => "inline"
 
   end
 
