@@ -41,8 +41,11 @@
 
     - if f.object.youtube_video_link.present?
       .col-sm-12.row.youtube_thumb
-        = react_component "YoutubeThumb", videoId: f.object.youtube_video_id
-        %span{style: "vertical-align:top"}
-          = Time.at(f.object.media_duration).utc.strftime("%M:%S") rescue ''
+        .pull-left
+          = react_component "YoutubeThumb", videoId: f.object.youtube_video_id
+        .pull-left{style:"margin-left:20px"}
+          %sub
+            length:
+            = Time.at(f.object.media_duration).utc.strftime("%M:%S") rescue ''
 
 = f.hidden_field :audio_vol, class: "audio_vol"

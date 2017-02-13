@@ -36,6 +36,6 @@
   %a.no-decoration{href: f.object.image.url(:crop), target: "_blank",style:"cursor:pointer;"}
     = image_tag f.object.image.url(:display),
       class: "thumb",
-      style: "vertical-align:top;max-height:80px;max-width:80px;filter: #{f.object.filters[:filters]};z-index:1;",
+      style: "vertical-align:top;max-height:120px;max-width:120px;filter: #{f.object.filters[:filters]};z-index:1;",
       data: { width: (size = Paperclip::Geometry.from_file(f.object.image.path(:display))).width,
               height: size.height }
