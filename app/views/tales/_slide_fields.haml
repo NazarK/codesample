@@ -1,4 +1,4 @@
-.nested-fields.well.padding.slide{data: {slide_id: f.object.id}}
+.nested-fields.well.padding.slide{data: {slide_id: f.object.id}, style: "padding:10px"}
   .row
     - if Rails.env.development?
       %div{style:"position:absolute;right:0px;"}
@@ -8,9 +8,9 @@
     .col-sm-1
       %i.sort-handle.cursor-move.color-gray.fa.fa-sort.fa-2x{"aria-hidden" => "true", title: "drag to reorder"}
       = link_to_remove_association "<i class='fa fa-2x fa-remove color-red margin-top-sm'></i>".html_safe, f, data: { confirmation: "Delete slide?"}
-    .col-sm-5
+    .col-sm-5{style:"margin-left:-15px"}
       = f.input :caption, input_html: { style: "vertical-align:top;width:90%;", rows: 14}
-    .col-sm-6
+    .col-sm-6{style:"margin-left:-15px"}
       .row
         .col-sm-5
           = f.input :image, input_html: { style: "margin:0"}
@@ -69,9 +69,9 @@
                 = react_component "AudioVolume", wrapper: ".slide", target: "audio", field: ".audio_vol", width: "50px"
             .row.col-sm-12
               = f.input :delete_audio, as: :boolean, label: "delete audio"
-      .row
+      .row{style:"border-top:1px solid #bbb;margin-top:15px;"}
         .col-sm-7
-          = f.input :youtube_video_link, label: "or Youtube Video Link"
+          = f.input :youtube_video_link, label: "or Youtube Video", input_html: { placeholder: "youtube video url" }
         .col-sm-2.col-sm-offset-1
           = f.input :youtube_video_start, label: "Start", input_html: { value: (Time.at(f.object.youtube_video_start.to_i).utc.strftime("%M:%S") if f.object.youtube_video_start.present?), placeholder: "min:sec"  }
         .col-sm-2
@@ -82,7 +82,7 @@
             = react_component "YoutubeThumb", videoId: f.object.youtube_video_id
             %span{style: "vertical-align:top"}
               = Time.at(f.object.media_duration).utc.strftime("%M:%S") rescue ''
-      .row
+      .row{style:"border-top:1px solid #bbb;"}
         .col-sm-12
           = f.input :video, label: "or Video", input_html: { accept: "video/*" }
           - if f.object.video.present?
@@ -92,10 +92,13 @@
                     ontimeupdate: "slide_video_pos_change.apply(this)",
                     onvolumechange: "slide_vol_change.apply(this)",
                     onloadedmetadata: "this.currentTime = #{f.object.video_thumb_pos}; this.volume = #{f.object.audio_vol}"}
-      .row
+              %br
+              %sub{style:"color:#aaa"}
+                * - adjust video position to set thumb
+      .row{style:"border-top:1px solid #bbb;margin-top:10px"}
         .col-sm-12
-          .pull-right
-            = f.input :mute_background_audio, label: "mute tale background audio"
+          .pull-right{style:"margin-top:20px"}
+            = f.input :mute_background_audio, label: "mute tale audio", label_html: { title: "mute tale audio while this slide is playing" }
 
 
       = f.hidden_field :video_thumb_pos, class: "video_thumb_pos"
