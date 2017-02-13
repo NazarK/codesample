@@ -50,8 +50,10 @@
             image_url = text_slide_path(slide,{t:slide.updated_at.to_i})
           end
         %>
+        <% if slide.image.present? %>
         image: {url: "<%= image_url %>",
                 thumb: "<%= slide.image.url(:display) %>"},
+        <% end %>
         <% if slide.audio.present? %>
           <% if is_mobile_browser? %>
             audio: "<%= slide.audio_processed.url %>",

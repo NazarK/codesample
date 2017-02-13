@@ -15,91 +15,94 @@
       redirect(document.referrer)
   }, false);
 
-.col-sm-12
-  = simple_form_for(@tale, html: { class: 'form-horizontal' }, remote: true) do |f|
-    %div{style: "top: 15px;position:fixed;right:15px;z-index:1;background: #fff;padding: 10px;border-radius: 10px;"}
-      - if !@tale.new_record?
-        = link_to "<i class='fa fa-eye'></i> Show".html_safe, "/t#{@tale.id}", class: "btn btn-default", target: ("_blank" if !is_mobile_browser?)
-      %button.btn.btn-default.tale-save{type: :submit}
-        %i.fa.fa-check
-        Save
-    - if f.object.errors.any?
-      .row.alert.alert-danger
-        Please fix errors below
-    .row
-      .col-sm-7
-        = f.input :name, label: "Title"
-      .col-sm-5
-        .col-sm-12
-          .row
-            %label.string.option.control-label
-              Captions font
-          .row
-            .col-sm-8
-              = f.input :captions_font, label: false, input_html: { class: "col-sm-12"}
+.row
+  .col-sm-12
+    = simple_form_for(@tale, html: { class: 'form-horizontal' }, remote: true) do |f|
+      %div{style: "top: 15px;position:fixed;right:15px;z-index:1;background: #fff;padding: 10px;border-radius: 10px;"}
+        - if !@tale.new_record?
+          = link_to "<i class='fa fa-eye'></i> Show".html_safe, "/t#{@tale.id}", class: "btn btn-default", target: ("_blank" if !is_mobile_browser?)
+        %button.btn.btn-default.tale-save{type: :submit}
+          %i.fa.fa-check
+          Save
+      - if f.object.errors.any?
+        .row.alert.alert-danger
+          Please fix errors below
 
-        .col-sm-4
-          = f.input :captions_font_size
-    .row.panel.panel-default.padding
-      .col-sm-4
-        = f.input :cover, label: "Cover Image"
-      .col-sm-6
-        - if f.object.cover.present?
-          %a{href: f.object.cover.url(:crop), target: "_blank",style:"cursor:pointer;"}
-            = image_tag f.object.cover.url(:thumb), style: "height:60px;"
-
-    .row.panel.panel-default.padding
-      .row.col-sm-12
-        %strong Background Audio
-        = f.hidden_field :audio_vol, type: :hidden, input_html: { min: 0, max: 100 }, label: "Background Audio Volume (1-100)"
-      .col-sm-5
-        = f.input :audio, label: "audio file"
-        - if f.object.audio.present?
-          %div
+      .row{style:"margin:0"}
+        .col-sm-7
+          = f.input :name, label: "Title"
+        .col-sm-5
+          .col-sm-12
             .row
-              .audio_no_audio_control.pull-left
-                %audio#tale_audio_player{src: f.object.audio.url,
-                  controls:true,
-                  onloaded: "console.log('tale audio loaded')",
-                  onloadedmetadata: "this.volume = #{@tale.audio_vol}",
-                  onvolumechange: "tale_audio_vol_change.apply(this)"}
-              .pull-left
-                = react_component "AudioVolume", target: "#tale_audio_player", field: "#tale_audio_vol", width: "80px"
-          %div
-            = f.input :bg_audio_delete, as: :boolean, label: "delete audio"
-      .col-sm-3
-        = f.input :bg_youtube, label: "or Youtube Video Link"
+              %label.string.option.control-label
+                Captions font
+            .row
+              .col-sm-8
+                = f.input :captions_font, label: false, input_html: { class: "col-sm-12"}
 
-        - if f.object.bg_youtube.present?
-          .youtube_thumb
-            = react_component "YoutubeThumb", videoId: f.object.bg_youtube_id
-          volume:
-          %br
-          %input{type:"range",
-            onchange: "bg_youtube_vol_change.apply(this)",
-            oninput: "bg_youtube_vol_change.apply(this)",
-            value: @tale.audio_vol*100 }
+          .col-sm-4
+            = f.input :captions_font_size
 
-      - if f.object.audio.present? || f.object.bg_youtube.present?
-        .col-sm-3.col-sm-offset-1
-          %br
-          = f.input :audio_snap_to_slides, label: "snap background audio to slides"
+      .row.panel.panel-default.padding{style:"margin:0;margin-bottom:20px;"}
+        .col-sm-4
+          = f.input :cover, label: "Cover Image"
+        .col-sm-6
+          - if f.object.cover.present?
+            %a{href: f.object.cover.url(:crop), target: "_blank",style:"cursor:pointer;"}
+              = image_tag f.object.cover.url(:thumb), style: "height:60px;"
 
-    .row
-      .col-sm-4
-        = f.input :slide_duration, label: "Default Slide Duration (sec)", input_html: { style: "width: 100px"}
-      .col-sm-4.col-sm-offset-3
-        = f.input :media_fit_mode, collection: Tale.media_fit_modes.keys, include_blank: false, label: "Slide fit mode"
+      .row.panel.panel-default.padding{style:"margin:0;margin-bottom:20px;"}
+        .row.col-sm-12
+          %strong Background Audio
+          = f.hidden_field :audio_vol, type: :hidden, input_html: { min: 0, max: 100 }, label: "Background Audio Volume (1-100)"
+        .col-sm-5
+          = f.input :audio, label: "audio file"
+          - if f.object.audio.present?
+            %div
+              .row
+                .audio_no_audio_control.pull-left
+                  %audio#tale_audio_player{src: f.object.audio.url,
+                    controls:true,
+                    onloaded: "console.log('tale audio loaded')",
+                    onloadedmetadata: "this.volume = #{@tale.audio_vol}",
+                    onvolumechange: "tale_audio_vol_change.apply(this)"}
+                .pull-left
+                  = react_component "AudioVolume", target: "#tale_audio_player", field: "#tale_audio_vol", width: "80px"
+            %div
+              = f.input :bg_audio_delete, as: :boolean, label: "delete audio"
+        .col-sm-3
+          = f.input :bg_youtube, label: "or Youtube Video Link"
+
+          - if f.object.bg_youtube.present?
+            .youtube_thumb
+              = react_component "YoutubeThumb", videoId: f.object.bg_youtube_id
+            volume:
+            %br
+            %input{type:"range",
+              onchange: "bg_youtube_vol_change.apply(this)",
+              oninput: "bg_youtube_vol_change.apply(this)",
+              value: @tale.audio_vol*100 }
+
+        - if f.object.audio.present? || f.object.bg_youtube.present?
+          .col-sm-3.col-sm-offset-1
+            %br
+            = f.input :audio_snap_to_slides, label: "snap background audio to slides"
+
+      .row{style:"margin:0"}
+        .col-sm-4
+          = f.input :slide_duration, label: "Default Slide Duration (sec)", input_html: { style: "width: 100px"}
+        .col-sm-4.col-sm-offset-3
+          = f.input :media_fit_mode, collection: Tale.media_fit_modes.keys, include_blank: false, label: "Slide fit mode"
 
 
-    %h3 Slides
-    #slides{style:"margin-bottom: 20px"}
-      .jquery-sortable
-        = f.simple_fields_for :slides, include_id: false do |slide|
-          = render 'slide_fields', f: slide
-        .links
-          = link_to_add_association '<i class="fa fa-plus" style="vertical-align:middle" aria-hidden="true"></i> add slide'.html_safe, f, :slides, class: "btn btn-default"
+      %h3 Slides
+      #slides{style:"margin-bottom: 20px"}
+        .jquery-sortable
+          = f.simple_fields_for :slides, include_id: false do |slide|
+            = render 'slide_fields', f: slide
+          .links
+            = link_to_add_association '<i class="fa fa-plus" style="vertical-align:middle" aria-hidden="true"></i> add slide'.html_safe, f, :slides, class: "btn btn-default"
 
-= react_component "ImageCrop"
-= react_component "ImageFilters"
-= react_component "ImageText"
+  = react_component "ImageCrop"
+  = react_component "ImageFilters"
+  = react_component "ImageText"
