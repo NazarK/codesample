@@ -290,9 +290,9 @@ YARNTALE.ui_event_handlers_attach = function() {
 
     if(e.key==" ") {
       if(YARNTALE.playing) {
-        YARNTALE.pause()
+        YARNTALE.pause({icon_fade:true})
       } else {
-        YARNTALE.play()
+        YARNTALE.play({icon_fade:true})
       }
     }
   })
