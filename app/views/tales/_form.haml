@@ -70,23 +70,15 @@
                   = react_component "AudioVolume", target: "#tale_audio_player", field: "#tale_audio_vol", width: "80px"
             %div
               = f.input :bg_audio_delete, as: :boolean, label: "delete audio"
+            = f.input :audio_snap_to_slides, label: "snap background audio to slides"
+
         .col-sm-3
           = f.input :bg_youtube, label: "or Youtube Video Link"
 
           - if f.object.bg_youtube.present?
             .youtube_thumb
               = react_component "YoutubeThumb", videoId: f.object.bg_youtube_id
-            volume:
-            %br
-            %input{type:"range",
-              onchange: "bg_youtube_vol_change.apply(this)",
-              oninput: "bg_youtube_vol_change.apply(this)",
-              value: @tale.audio_vol*100 }
-
-        - if f.object.audio.present? || f.object.bg_youtube.present?
-          .col-sm-3.col-sm-offset-1
-            %br
-            = f.input :audio_snap_to_slides, label: "snap background audio to slides"
+            = react_component "AudioVolume", field: "#tale_audio_vol", width: "80px"
 
       .row{style:"margin:0"}
         .col-sm-4

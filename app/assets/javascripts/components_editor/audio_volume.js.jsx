@@ -20,7 +20,8 @@ class AudioVolume extends React.Component {
       var target =  $(this.props.target)[0]
       var field = $(this.props.field)
     }
-    target.volume = volume_in_percent/100
+    if(target)
+      target.volume = volume_in_percent/100
     field.val(volume_in_percent/100)
   }
 
@@ -47,7 +48,7 @@ class AudioVolume extends React.Component {
     return (
         <div ref="component" id="audio-volume" className="audio-volume" style={{marginTop: "2px"}}>
           <i className="fa fa-2x fa-volume-off" style={{marginLeft:"10px"}}></i>
-          <input type="range" ref="volume" min="-100" max="0"
+          <input type="range" ref="volume" min="-70" max="0"
             onChange={this.volume_change.bind(this)}
             style={{marginLeft:"10px", width:this.props.width,display:"inline-block"}} />
         </div>
