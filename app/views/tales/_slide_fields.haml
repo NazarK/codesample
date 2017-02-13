@@ -5,101 +5,16 @@
         = f.object.id
     = f.hidden_field :id
     = f.hidden_field :position
+
     .col-sm-1
       %i.sort-handle.cursor-move.color-gray.fa.fa-sort.fa-2x{"aria-hidden" => "true", title: "drag to reorder"}
       = link_to_remove_association "<i class='fa fa-2x fa-remove color-red margin-top-sm'></i>".html_safe, f, data: { confirmation: "Delete slide?"}
-    .col-sm-5{style:"margin-left:-15px"}
-      = f.input :caption, input_html: { style: "vertical-align:top;width:90%;", rows: 14}
-    .col-sm-6{style:"margin-left:-15px"}
-      .row
-        .col-sm-5
-          = f.input :image, input_html: { style: "margin:0"}
-          - if f.object.image.present?
-            .row
-              %div{style:"position:absolute;padding:5px;z-index:2;"}
-                %span
-                  %button.btn.btn-xs.btn-default{onclick: "ImageCropComp.popup(#{f.object.id}, '#{f.object.image.url}');return false;"}
-                    %i.fa.fa-crop{title: "crop image"}
-                  = f.simple_fields_for :crop do |crop|
-                    = crop.input :w, as: :hidden, input_html: { value: f.object.crop.dig(:w) }
-                    = crop.input :h, as: :hidden, input_html: { value: f.object.crop.dig(:h) }
-                    = crop.input :x, as: :hidden, input_html: { value: f.object.crop.dig(:x) }
-                    = crop.input :y, as: :hidden, input_html: { value: f.object.crop.dig(:y) }
-                %span
-                  %button.btn.btn-xs.btn-default{onclick: "ImageFiltersComp.popup(#{f.object.id}, '#{f.object.image.url(:display)}');return false;"}
-                    %i.fa.fa-adjust{title: "image filters"}
-                  = f.simple_fields_for :filters do |filters|
-                    = filters.input :filters, as: :hidden, input_html: { value: f.object.filters.dig(:filters) }
-                    = filters.input :brightness, as: :hidden, input_html: { value: f.object.filters.dig(:brightness) }
-                    = filters.input :contrast, as: :hidden, input_html: { value: f.object.filters.dig(:contrast) }
-                    = filters.input :grayscale, as: :hidden, input_html: { value: f.object.filters.dig(:grayscale) }
-                    = filters.input :saturate, as: :hidden, input_html: { value: f.object.filters.dig(:saturate) }
-                    = filters.input :blur, as: :hidden, input_html: { value: f.object.filters.dig(:blur) }
-                %span
-                  %button.btn.btn-xs.btn-default{onclick: "ImageTextRef.popup(#{f.object.id}, '#{f.object.image.url(:display)}');return false;"}
-                    %i.fa.fa-font{title: "text overlay"}
-                  = f.simple_fields_for :text_overlay do |text_overlay|
-                    = text_overlay.input :text, as: :hidden, input_html: { value: f.object.text_overlay.dig(:text) }
-                    = text_overlay.input :font, as: :hidden, input_html: { value: f.object.text_overlay.dig(:font) }
-                    = text_overlay.input :font_size, as: :hidden, input_html: { value: f.object.text_overlay.dig(:font_size) }
-                    = text_overlay.input :bold, as: :hidden, input_html: { value: f.object.text_overlay.dig(:bold) }
-                    = text_overlay.input :color, as: :hidden, input_html: { value: f.object.text_overlay.dig(:color) }
-                    = text_overlay.input :stroke_color, as: :hidden, input_html: { value: f.object.text_overlay.dig(:stroke_color) }
-                    = text_overlay.input :left, as: :hidden, input_html: { value: f.object.text_overlay.dig(:left) }
-                    = text_overlay.input :top, as: :hidden, input_html: { value: f.object.text_overlay.dig(:top) }
-                    = text_overlay.input :width, as: :hidden, input_html: { value: f.object.text_overlay.dig(:width) }
-                    = text_overlay.input :height, as: :hidden, input_html: { value: f.object.text_overlay.dig(:height) }
 
-              %a.no-decoration{href: f.object.image.url(:crop), target: "_blank",style:"cursor:pointer;"}
-                = image_tag f.object.image.url(:display),
-                  class: "thumb",
-                  style: "vertical-align:top;max-height:80px;max-width:80px;filter: #{f.object.filters[:filters]};z-index:1;",
-                  data: { width: (size = Paperclip::Geometry.from_file(f.object.image.path(:display))).width,
-                          height: size.height }
-        .col-sm-7
-          = f.input :audio, label: "Image Audio", input_html: { accept: "audio/*" }
-          - if f.object.audio.present?
-            .row
-              .audio_no_audio_control.pull-left
-                = audio_tag f.object.audio.url,
-                  { controls: true,
-                    onvolumechange: "slide_vol_change.apply(this)",
-                    onloadedmetadata: "this.volume = #{f.object.audio_vol}"  }
-              .pull-left
-                = react_component "AudioVolume", wrapper: ".slide", target: "audio", field: ".audio_vol", width: "50px"
-            .row.col-sm-12
-              = f.input :delete_audio, as: :boolean, label: "delete audio"
-      .row{style:"border-top:1px solid #bbb;margin-top:15px;"}
-        .col-sm-7
-          = f.input :youtube_video_link, label: "or Youtube Video", input_html: { placeholder: "youtube video url" }
-        .col-sm-2.col-sm-offset-1
-          = f.input :youtube_video_start, label: "Start", input_html: { value: (Time.at(f.object.youtube_video_start.to_i).utc.strftime("%M:%S") if f.object.youtube_video_start.present?), placeholder: "min:sec"  }
-        .col-sm-2
-          = f.input :youtube_video_end, label: "End", input_html: { value: (Time.at(f.object.youtube_video_end.to_i).utc.strftime("%M:%S") if f.object.youtube_video_end.present?), placeholder: "min:sec" }
+    .col-sm-7{style:"margin-left:0"}
+      = render "slide_media", f: f
 
-        - if f.object.youtube_video_link.present?
-          .col-sm-12.row.youtube_thumb
-            = react_component "YoutubeThumb", videoId: f.object.youtube_video_id
-            %span{style: "vertical-align:top"}
-              = Time.at(f.object.media_duration).utc.strftime("%M:%S") rescue ''
-      .row{style:"border-top:1px solid #bbb;"}
-        .col-sm-12
-          = f.input :video, label: "or Video", input_html: { accept: "video/*" }
-          - if f.object.video.present?
-            .row
-              = video_tag f.object.video.url,
-                  { controls: true, style: "height:120px",
-                    ontimeupdate: "slide_video_pos_change.apply(this)",
-                    onvolumechange: "slide_vol_change.apply(this)",
-                    onloadedmetadata: "this.currentTime = #{f.object.video_thumb_pos}; this.volume = #{f.object.audio_vol}"}
-              %br
-              %sub{style:"color:#aaa"}
-                * - adjust video position to set thumb
-      .row{style:"border-top:1px solid #bbb;margin-top:10px"}
-        .col-sm-12
-          .pull-right{style:"margin-top:20px"}
-            = f.input :mute_background_audio, label: "mute tale audio", label_html: { title: "mute tale audio while this slide is playing" }
-
-
-      = f.hidden_field :video_thumb_pos, class: "video_thumb_pos"
-      = f.hidden_field :audio_vol, class: "audio_vol"
+    .col-sm-4
+      = f.input :caption, input_html: { style: "vertical-align:top;width:90%;", rows: 10}
+  .row
+    .col-sm-offset-1.col-sm-11
+      = f.input :mute_background_audio, label: "mute tale audio", label_html: { title: "mute tale audio during this slide" }

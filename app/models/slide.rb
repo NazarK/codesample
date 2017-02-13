@@ -249,4 +249,8 @@ class Slide < ActiveRecord::Base
   def as_json(options={})
     super(methods: [:image_thumb, :audio_url, :video_url])
   end
+
+  def no_media?
+    self.youtube_video_link.blank? && self.video.blank? && self.image.blank?
+  end
 end

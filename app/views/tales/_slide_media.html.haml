@@ -1,0 +1,48 @@
+%ul.nav.nav-tabs
+  %li{class: ("active" if (f.object.image.present? || f.object.no_media?) )}
+    %a{ "aria-expanded"=>"true", "data-toggle" => "tab", :href => "#image-tab-#{f.object.id}"} Image
+  %li{class: ("active" if f.object.video.present?)}
+    %a{ "aria-expanded"=>"true", "data-toggle" => "tab", :href => "#video-tab-#{f.object.id}"} Video
+  %li{class: ("active" if f.object.youtube_video_link.present?)}
+    %a{"data-toggle" => "tab", :href => "#youtube-tab-#{f.object.id}"} Youtube
+.tab-content{style:"margin-top:10px"}
+
+  .tab-pane{id:"image-tab-#{f.object.id}", class: ("active" if (f.object.image.present? || f.object.no_media?)  )}
+    .col-sm-5
+      = f.input :image, input_html: { style: "margin:0"}
+      - if f.object.image.present?
+        = render "image_present", f: f
+    .col-sm-7
+      = f.input :audio, label: "Image Audio", input_html: { accept: "audio/*" }
+      - if f.object.audio.present?
+        = render "audio_present", f: f
+  .tab-pane{id:"video-tab-#{f.object.id}", class: ("active" if f.object.video.present?)}
+    .col-sm-12
+      = f.input :video, label: "Video", input_html: { accept: "video/*" }
+      - if f.object.video.present?
+        .row
+          = video_tag f.object.video.url,
+              { controls: true, style: "height:120px",
+                ontimeupdate: "slide_video_pos_change.apply(this)",
+                onvolumechange: "slide_vol_change.apply(this)",
+                onloadedmetadata: "this.currentTime = #{f.object.video_thumb_pos}; this.volume = #{f.object.audio_vol}"}
+          %br
+          %sub{style:"color:#aaa"}
+            * - adjust video position to set thumb
+      = f.hidden_field :video_thumb_pos, class: "video_thumb_pos"
+
+  .tab-pane{id:"youtube-tab-#{f.object.id}", class: ("active" if f.object.youtube_video_link.present?)}
+    .col-sm-7
+      = f.input :youtube_video_link, label: "Youtube Video", input_html: { placeholder: "youtube video url" }
+    .col-sm-2.col-sm-offset-1
+      = f.input :youtube_video_start, label: "Start", input_html: { value: (Time.at(f.object.youtube_video_start.to_i).utc.strftime("%M:%S") if f.object.youtube_video_start.present?), placeholder: "min:sec"  }
+    .col-sm-2
+      = f.input :youtube_video_end, label: "End", input_html: { value: (Time.at(f.object.youtube_video_end.to_i).utc.strftime("%M:%S") if f.object.youtube_video_end.present?), placeholder: "min:sec" }
+
+    - if f.object.youtube_video_link.present?
+      .col-sm-12.row.youtube_thumb
+        = react_component "YoutubeThumb", videoId: f.object.youtube_video_id
+        %span{style: "vertical-align:top"}
+          = Time.at(f.object.media_duration).utc.strftime("%M:%S") rescue ''
+
+= f.hidden_field :audio_vol, class: "audio_vol"

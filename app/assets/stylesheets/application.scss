@@ -106,3 +106,22 @@ body.desktop.devise_sessions {
     border-top-right-radius: 0.5em 0.5em;
     border-bottom-right-radius: 1em 0.7em;
 }
+
+
+#slides {
+  .nav-tabs {
+    li.active a {
+      &:hover {
+        color: black;
+      }
+      color: black;
+    }
+
+    a {
+      color: #555;
+    }
+    a:hover {
+      color: black;
+    }
+  }
+}

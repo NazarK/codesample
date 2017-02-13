@@ -1,0 +1,10 @@
+.row
+  .audio_no_audio_control.pull-left
+    = audio_tag f.object.audio.url,
+      { controls: true,
+        onvolumechange: "slide_vol_change.apply(this)",
+        onloadedmetadata: "this.volume = #{f.object.audio_vol}"  }
+  .pull-left
+    = react_component "AudioVolume", wrapper: ".slide", target: "audio", field: ".audio_vol", width: "50px"
+.row.col-sm-12
+  = f.input :delete_audio, as: :boolean, label: "delete audio"
