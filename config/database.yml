@@ -8,8 +8,6 @@ default: &default
   encoding: unicode
   adapter: postgresql
   database: yarntale
-  username: root
-  password: root
 
 development:
   <<: *default
@@ -23,3 +21,5 @@ test:
 
 production:
   <<: *default
+  username: root
+  password: root

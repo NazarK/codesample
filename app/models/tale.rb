@@ -38,6 +38,7 @@ class Tale < ActiveRecord::Base
   accepts_nested_attributes_for :slides, :allow_destroy => true
   validates_associated :slides
   enum media_fit_mode: [:contain,:cover]
+  validates_presence_of :user
 
   has_attached_file :cover,
                     :styles => { original: "2048x2048>", crop: "960x640#", :medium => "450x300>", :thumb => "150x100#" },
@@ -102,7 +103,7 @@ class Tale < ActiveRecord::Base
       end
     end
   end
-  
+
   def cover_thumb_url
     if cover.present?
       self.cover.url(:thumb)
@@ -129,18 +130,18 @@ class Tale < ActiveRecord::Base
 
   def bg_audio_url
     audio.url
-  end  
-  
+  end
+
   def as_json_hash
-    { methods: [:bg_audio_url], 
-    
+    { methods: [:bg_audio_url],
+
       include: {
           slides: { methods: [:audio_url, :video_url, :image_thumb]}
-        
+
       }
     }
   end
-  
-  
-  
+
+
+
 end

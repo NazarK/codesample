@@ -66,11 +66,11 @@ tale = User.find_by_email("demo@demo.com").tales.create name: "loop background a
 tale.audio = File.open("#{Rails.root}/test/data/1.mp3")
 tale.audio_vol = 0.5
 tale.save
-tale.slides.create! image: File.open("#{Rails.root}/test/data/1.png"), 
+tale.slides.create! image: File.open("#{Rails.root}/test/data/1.png"),
                    caption: "slide number 1 - "+Faker::Hipster.paragraphs(1+rand(3)).first
-tale.slides.create! image: File.open("#{Rails.root}/test/data/2.png"), 
+tale.slides.create! image: File.open("#{Rails.root}/test/data/2.png"),
                   caption: "slide number 2 - "+Faker::Hipster.paragraphs(1+rand(3)).first
-tale.slides.create! image: File.open("#{Rails.root}/test/data/3.png"), 
+tale.slides.create! image: File.open("#{Rails.root}/test/data/3.png"),
                    caption: "slide number 3 - "+Faker::Hipster.paragraphs(1+rand(3)).first
 
 
