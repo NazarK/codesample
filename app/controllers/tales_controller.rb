@@ -85,6 +85,8 @@ class TalesController < ApplicationController
   end
 
   def destroy
+    #can destroy only your own tales
+    @tale = current_user.tales.find(@tale)
     @tale.destroy
     if is_mobile_browser?
       return render nothing: true
