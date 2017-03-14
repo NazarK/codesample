@@ -132,9 +132,9 @@ body.desktop.devise_sessions {
 
 
 li.dropdown  {
-  a {
+  a.dropdown-toggle {
     background: none!important;
-    color: black!important;
+    color: #333!important;
   }
 }
 
