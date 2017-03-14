@@ -1,0 +1,14 @@
+.pull-right
+  %nav.navbar
+    %ul.nav.navbar-nav.navbar-right
+      %li.dropdown
+        %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+          = current_user.email
+          %span.caret
+        %ul.dropdown-menu{"aria-labelledby" => "dropdownMenu1"}
+          %li
+            = link_to "<i class='fa fa-television'></i> Tales".html_safe, tales_path
+          %li
+            = link_to "<i class='fa fa-users'></i> Team".html_safe, collaborations_path
+          %li
+            = link_to "<i class='fa fa-sign-out'></i> Logout".html_safe, destroy_user_session_path, method: :delete

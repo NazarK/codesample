@@ -1,0 +1,9 @@
+%div{style:"max-width:400px"}
+  = simple_form_for(@collaboration) do |f|
+    = f.error_notification
+
+    .form-inputs
+      = f.input :collaborator_email
+
+    .form-actions
+      = f.button :submit

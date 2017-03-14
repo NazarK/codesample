@@ -33,6 +33,7 @@
 #  audio_processed_updated_at   :datetime
 #  crop                         :text             default({})
 #  filters                      :text             default({})
+#  text_overlay                 :text             default({})
 #
 
 require 'test_helper'

@@ -32,6 +32,9 @@ Rails.application.routes.draw do
     get :text, on: :member
   end
 
+  resources :collaborations
+
+
   get '/t:id/edit' => "tales#edit"
   get '/t:id(/:mode)' => "tales#show"
 

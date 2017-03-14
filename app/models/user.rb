@@ -26,6 +26,10 @@ class User < ActiveRecord::Base
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
   has_many :tales, dependent: :destroy
+  has_many :collaborations
+  has_many :collaborators, through: :collaborations, source: :collaborator
+  has_many :teams, class_name: "Collaboration", foreign_key: :collaborator_id
+  has_many :chiefs, through: :teams, source: :user
 
   def display_name
     "#{self.email}"

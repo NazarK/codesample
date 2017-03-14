@@ -36,9 +36,9 @@ body.users_registrations, body.users_sessions {
 
 
 body.desktop {
-  &.tales.index, &.tales.edit, &.tales.new  {
+  &.tales.index, &.tales.edit, &.tales.new, &.collaborations  {
     .yield {
-      padding: 20px;
+      padding-top: 20px;
     }
   }
 }
@@ -127,5 +127,25 @@ body.desktop.devise_sessions {
     a:hover {
       color: black;
     }
+  }
+}
+
+
+li.dropdown  {
+  a {
+    background: none!important;
+    color: black!important;
+  }
+}
+
+.dropdown-menu {
+  i {
+    width: 20px;
+    margin-right: 10px;
+    text-align: center;
+  }
+
+  > li > a {
+    line-height: 2.5;
   }
 }

@@ -1,0 +1,17 @@
+%h1 Team
+
+%table.table.table-hover
+  %thead
+    %tr
+      %th
+      %th
+
+  %tbody
+    - @collaborations.each do |collaboration|
+      %tr
+        %td= collaboration.collaborator&.email
+        %td= link_to 'Remove', collaboration, :method => :delete, :data => { :confirm => 'Remove from your team?' }, class: "btn btn-default"
+
+%br
+
+= link_to 'Add Collaborator', new_collaboration_path, class: "btn btn-default"

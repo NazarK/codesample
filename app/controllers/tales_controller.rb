@@ -7,7 +7,7 @@ class TalesController < ApplicationController
 
 
   respond_to :html, :json
-  
+
   before_filter do
     if is_mobile_browser? && !params[:format]=="json"
       redirect_to "/m"
@@ -16,21 +16,25 @@ class TalesController < ApplicationController
   end
 
   before_filter :adjust_format, only: [:test,:edit,:new, :update]
-  
+
   private def adjust_format
     if params[:format]=="html" || params[:format].blank?
       set_mobile_format
-    end  
+    end
   end
 
   def test
   end
-  
+
   def embed
   end
 
   def index
-    @tales = current_user.tales.order("id desc")
+    @tales = current_user.tales.order("id desc").to_a
+    current_user.chiefs.each do |chief|
+      @tales += chief.tales.to_a
+    end
+
     respond_with(@tales)
   end
 
@@ -38,8 +42,8 @@ class TalesController < ApplicationController
     if params[:format]=="json"
       render json: @tale.to_json(@tale.as_json_hash)
       return
-    end  
-    
+    end
+
     @tale.update_attributes page_views: (@tale.page_views+1)
     response.headers.delete('X-Frame-Options')
     render layout: "show"
@@ -69,12 +73,12 @@ class TalesController < ApplicationController
         @tale.slides.find(id).update_attributes position: (i+1)
       end
       return render nothing: true
-    end  
-    
+    end
+
     if @tale.update(tale_params)
       if is_mobile_browser?
         return  redirect_to edit_tale_path(@tale)
-      end  
+      end
       flash.now[:notice] = 'Tale was successfully updated.'
     end
     render :edit
@@ -82,18 +86,21 @@ class TalesController < ApplicationController
 
   def destroy
     @tale.destroy
-    if is_mobile_browser?      
+    if is_mobile_browser?
       return render nothing: true
     end
     respond_with(@tale)
   end
-  
+
   private
     def set_tale
       if params[:action] == "show"
         @tale = Tale.find(params[:id])
       else
-        @tale = current_user.tales.find(params[:id])
+        @tale = Tale.find(params[:id])
+        if ! (current_user == @tale.user || current_user.chiefs.include?(@tale.user))
+          render text: "access denied"
+        end
       end
     end
 

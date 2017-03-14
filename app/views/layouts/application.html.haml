@@ -13,7 +13,10 @@
     - if is_mobile_browser?
       %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
   %body{class: [params[:controller].gsub("/","_"),params[:action]].compact.join(" ")+(is_mobile_browser? ? " mobile" : " desktop")}
-    .flash_messages
-      = render "layouts/flash_messages"
-    .yield
-      = yield
+    .wrap{style:"margin: 0 auto; width: 980px"}
+      .flash_messages
+        = render "layouts/flash_messages"
+      .yield
+        - if @layout_user_menu
+          = render "layouts/menu"
+        = yield
