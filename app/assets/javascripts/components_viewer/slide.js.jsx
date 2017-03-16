@@ -30,7 +30,7 @@ class Slide extends React.Component {
     if(slide.image) {
 
           return (
-          <img className='slide' data-index={i} data-src={slide.image.url} style={{filter: slide.css_filters}}/>
+            <div className='slide' data-index={i}><img data-src={slide.image.url} style={{filter: slide.css_filters}}/></div>
         )
 
     }
