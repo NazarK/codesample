@@ -24,7 +24,7 @@ class TimelineThumb extends React.Component {
       <div className='slide' data-index={i} onClick={this.on_thumb_click}>
 
         { slide.video && (
-          <video data-video-thumb-pos={slide.video_thumb_pos}
+          <video className="object-fit-contain" data-video-thumb-pos={slide.video_thumb_pos}
             onLoadedMetadata={this.video_set_position}
             data-src={slide.video} />
         )}
@@ -34,7 +34,7 @@ class TimelineThumb extends React.Component {
         )}
 
         { slide.image && (
-          <img data-src={slide.image.thumb} style={{filter: slide.css_filters}}/>
+          <img data-src={slide.image.thumb} className="object-fit-contain" style={{filter: slide.css_filters}}/>
         )}
 
       </div>

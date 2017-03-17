@@ -84,7 +84,7 @@
         .col-sm-4
           = f.input :slide_duration, label: "Default Slide Duration (sec)", input_html: { style: "width: 100px"}
         .col-sm-4.col-sm-offset-3
-          = f.input :media_fit_mode, collection: Tale.media_fit_modes.keys, include_blank: false, label: "Slide fit mode"
+          = f.input :media_fit_mode, collection: {"slide fully visible"=>"contain", "slide cover view"=>"cover" }, include_blank: false, label: "Slide fit mode"
 
 
       %h3 Slides

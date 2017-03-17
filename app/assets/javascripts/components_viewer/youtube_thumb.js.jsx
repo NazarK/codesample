@@ -6,8 +6,9 @@ class YoutubeThumb extends React.Component {
   }
 
   render() {
+    var objectFit = this.props.objectFit || "contain"
     return (
-       <img className={'youtube_thumb'+(this.props.dimmed ? ' dimmed' : '')} src={`http://img.youtube.com/vi/${this.props.videoId}/0.jpg`}></img>
+       <img className={'object-fit-'+objectFit+' youtube_thumb'+(this.props.dimmed ? ' dimmed' : '')} src={`http://img.youtube.com/vi/${this.props.videoId}/0.jpg`}></img>
     )
   }
 }

@@ -7,9 +7,6 @@ class Cover extends React.Component {
   }
 
   componentDidMount(event) {
-    if(this.props.cover && this.props.firstSlide.youtube) {
-      window.fitie.apply()
-    }
 
     $(".slide_view").find("img.slide.cover, .slide.cover img").load(function() {
       console.log("cover loaded")
@@ -24,13 +21,13 @@ class Cover extends React.Component {
 
     if(this.props.cover) {
       return (
-        <div className='slide cover'><img src={this.props.cover} /></div>
+        <div className='slide cover'><img className={"object-fit-"+YARNTALE.media_fit_mode} src={this.props.cover} /></div>
       )
     } else {
       if(firstSlide.youtube) {
         return (
           <div className='slide cover'>
-            <YoutubeThumb videoId={firstSlide.youtube.video_id} />
+            <YoutubeThumb objectFit={YARNTALE.media_fit_mode} videoId={firstSlide.youtube.video_id} />
           </div>
         )
       } else if(firstSlide.video) {
@@ -43,7 +40,7 @@ class Cover extends React.Component {
         )
       } else {
         return (
-          <div className='slide cover'><img src={firstSlide.image.url} /></div>
+          <div className='slide cover'><img className={"object-fit-"+YARNTALE.media_fit_mode} src={firstSlide.image.url} /></div>
         )
       }
     }

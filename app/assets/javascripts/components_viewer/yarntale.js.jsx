@@ -5,6 +5,10 @@ class YarnTale extends React.Component {
       this.state = {}
     }
 
+    componentDidMount() {
+      window.object_fit_classes_process()  
+    }
+
     render() {
 
       var bg_youtube_src=`//www.youtube.com/embed/${this.props.bg_youtube_id}?enablejsapi=1&origin=http://${window.location.host}&showinfo=0&controls=0&loop=1`

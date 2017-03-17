@@ -246,16 +246,14 @@ body.no-cursor {
               display: inline-block;
               margin: 0px 2px;
               overflow: hidden;
+              position: relative;
+
               img, video, iframe {
-                object-fit: cover;
                 width:  100%;
                 height: 100%;
                 vertical-align: top
               }
-              img {
-                object-fit: cover;
-                vertical-align: top;
-              }
+
               &.current {
                 border: 4px solid #EFEFEF !important;
               }
@@ -347,25 +345,18 @@ body.no-cursor {
     .slide {
       width: 100%;
       height: 100%;
-      object-fit: contain;
       overflow: hidden;
       display: block;
       position: absolute;
       z-index: 1;
 
       img, video, iframe {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
       }
 
       &.youtube iframe {
         display: none;
       }
 
-      &.youtube.active iframe {
-        display: block;
-      }
 
       opacity: 0;
       transition: opacity 0.2s;
@@ -379,7 +370,14 @@ body.no-cursor {
 }
 
 
+.yarntale.playing .youtube.active iframe {
+  display: block;
+}
 
+
+.youtube_thumb {
+  z-index: 1;
+}
 .youtube_thumb.dimmed {
   opacity: 0.1;
 }

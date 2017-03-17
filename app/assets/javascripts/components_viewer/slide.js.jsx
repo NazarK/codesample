@@ -7,7 +7,7 @@ class Slide extends React.Component {
 
     if(slide.video) {
       return (
-        <div className='slide' data-index={i} ><video data-src={slide.video}></video></div>
+        <div className='slide' data-index={i} ><video className={"object-fit-"+YARNTALE.media_fit_mode} data-src={slide.video}></video></div>
       )
     }
 
@@ -19,8 +19,8 @@ class Slide extends React.Component {
       }
       return (
         <div className='slide youtube' data-index={i} >
-          <YoutubeThumb videoId={slide.youtube.video_id} />
-          <iframe className='youtube play_toggle youtube-player' data-index={i} id={`youtube-slide-${i}`} type='text/html'
+          <YoutubeThumb objectFit={YARNTALE.media_fit_mode} videoId={slide.youtube.video_id} />
+          <iframe className={'youtube play_toggle youtube-player'+" object-fit-"+YARNTALE.media_fit_mode} data-index={i} id={`youtube-slide-${i}`} type='text/html'
             src={youtube_src}
           frameBorder='0'></iframe>
         </div>
@@ -30,7 +30,7 @@ class Slide extends React.Component {
     if(slide.image) {
 
           return (
-            <div className='slide' data-index={i}><img data-src={slide.image.url} style={{filter: slide.css_filters}}/></div>
+            <div className='slide' data-index={i}><img className={"object-fit-"+YARNTALE.media_fit_mode} data-src={slide.image.url} style={{filter: slide.css_filters}}/></div>
         )
 
     }

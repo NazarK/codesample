@@ -15,6 +15,9 @@
         <% end %>
       <% end %>
 
+      media_fit_mode: '<%= @tale.media_fit_mode %>',
+
+
       <% if @tale.bg_youtube_id.present? %>
           bg_youtube_id: "<%= @tale.bg_youtube_id %>",
           audio_vol: <%= @tale.audio_vol %>,
@@ -96,15 +99,6 @@
       letter-spacing: <%= @tale.captions_letter_spacing %>px;
     <% end %>
   }
-
-  <% if @tale.media_fit_mode=="cover" %>
-    .yarntale .slide_view .slide {
-      object-fit: cover;
-    }
-    .yarntale .slide_view .slide img, .yarntale .slide_view .slide video, .yarntale .slide_view .slide iframe {
-      object-fit: cover;
-    }
-  <% end %>
 </style>
 
 <div class="yarntale_container" style="width:100%;margin:0 auto;height:100%;">

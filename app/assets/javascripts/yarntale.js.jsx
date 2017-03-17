@@ -1,13 +1,12 @@
 //= require jquery
 //= require jquery-ui
-//= require fitie
-//= require fitie.apply
 //= require jquery.fullscreen
 //= require cursor-auto-hide
 //= require react
 //= require react_ujs
 //= require_tree ./components_viewer
 //= require jquery-touchswipe
+//= require my_object_fit
 
 window.YARNTALE = {
     el: null, //hosting DOM element
@@ -636,7 +635,6 @@ YARNTALE.process_data_src = function() {
   this.el.find("*[data-src]").each(function() {
     $(this).attr('src',$(this).attr("data-src"))
   })
-  window.fitie.apply()
 }
 
 YARNTALE.do_while_keeping_play_state  = (yield) => {
