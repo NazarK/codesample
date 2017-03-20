@@ -25,7 +25,9 @@ Rails.application.routes.draw do
     get :embed, on: :member
     get :test, on: :collection
     #this is for internal testing only
-    resources :slides, only: [:show, :create, :new, :index]
+    resources :slides, only: [:show, :create, :new, :index] do
+      get :audio_edit, on: :member
+    end
   end
 
   resources :slides do

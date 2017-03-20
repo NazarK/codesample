@@ -1,7 +1,7 @@
 class SlidesController < ApplicationController
   acts_as_token_authentication_handler_for User, except: :text
 
-  before_action :set_slide, only: [:show, :edit, :update, :destroy, :text]
+  before_action :set_slide, only: [:show, :edit, :update, :destroy, :text, :audio_edit]
 
   skip_before_action :verify_authenticity_token
 
@@ -13,6 +13,9 @@ class SlidesController < ApplicationController
     if params[:format]=="html" || params[:format].blank?
       set_mobile_format
     end
+  end
+
+  def audio_edit
   end
 
   def text
@@ -55,7 +58,7 @@ class SlidesController < ApplicationController
     }
 
     img_list.format = "png"
-    
+
     send_data img_list.to_blob, :stream => "false", :filename => "text_overlay.png", :type => "image/png", :disposition => "inline"
 
   end
