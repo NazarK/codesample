@@ -30,6 +30,7 @@ class TalesController < ApplicationController
   end
 
   def index
+    @page_title = " | Tales"
     @tales = current_user.tales.order("id desc").to_a
     current_user.chiefs.each do |chief|
       @tales += chief.tales.to_a
@@ -55,6 +56,7 @@ class TalesController < ApplicationController
   end
 
   def edit
+    @page_title  = " | Tale"
   end
 
   def create

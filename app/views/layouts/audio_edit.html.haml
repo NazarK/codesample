@@ -7,17 +7,9 @@
       Yarntale#{yield(:title)}#{@page_title}
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
-    = stylesheet_link_tag "https://fonts.googleapis.com/css?family=Mallanna"
     = csrf_meta_tags
-    :javascript
-      APP_HOST="#{request.protocol + request.host_with_port}"
-    - if is_mobile_browser?
-      %meta{:content => "width=device-width, initial-scale=1", :name => "viewport"}/
   %body{class: [params[:controller].gsub("/","_"),params[:action]].compact.join(" ")+(is_mobile_browser? ? " mobile" : " desktop")}
-    .wrap{style:"margin: 0 auto; width: 980px"}
-      .flash_messages
-        = render "layouts/flash_messages"
-      .yield
-        - if @layout_user_menu
-          = render "layouts/menu"
-        = yield
+    .flash_messages
+      = render "layouts/flash_messages"
+    .yield
+      = yield

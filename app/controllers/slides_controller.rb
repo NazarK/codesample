@@ -19,6 +19,7 @@ class SlidesController < ApplicationController
     if request.post?
       @slide.audio_trim params[:trim][:start].to_f, params[:trim][:duration].to_f
     end
+    render layout: "audio_edit"
   end
 
   def text

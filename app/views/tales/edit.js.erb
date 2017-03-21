@@ -4,5 +4,6 @@ $(document).trigger("page:load")
 ReactRailsUJS.mountComponents()
 
 var edit_tale_path = "<%= edit_tale_path(@tale) %>"
-if(window.location != edit_tale_path)
+if(window.location != edit_tale_path) {
   history.replaceState({},'',edit_tale_path)
+}

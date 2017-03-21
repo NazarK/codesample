@@ -16,6 +16,8 @@
       = f.input :audio, label: "Image Audio", input_html: { accept: "audio/*" }
       - if f.object.audio.present?
         = render "audio_present", f: f
+        %div.btn.btn-default.pull-left{onClick: "IFRAME_DIALOG('Audio Editor', '#{audio_trim_tale_slide_path(f.object.tale,f.object)}')"}
+          edit audio
   .tab-pane{id:"video-tab-#{f.object.id}", class: ("active" if f.object.video.present?)}
     .col-sm-12
       = f.input :video, label: "Video", input_html: { accept: "video/*" }
