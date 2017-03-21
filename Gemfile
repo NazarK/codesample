@@ -92,3 +92,4 @@ gem 'rails-assets-jqueryui-touch-punch-improved', source: 'https://rails-assets.
 gem 'rack-cors', :require => 'rack/cors'
 gem 'simple_token_authentication', '~> 1.0'
 gem 'rmagick'
+gem 'audio-trimmer', require: false

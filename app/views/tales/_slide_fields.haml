@@ -1,7 +1,8 @@
 .nested-fields.well.padding.slide{data: {slide_id: f.object.id}, style: "padding:10px"}
   .row
     - if Rails.env.development?
-      %div{style:"position:absolute;right:0px;"}
+      %div{style:"position:absolute;right:0px;color:#888"}
+        id:
         = f.object.id
     = f.hidden_field :id
     = f.hidden_field :position

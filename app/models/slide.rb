@@ -254,4 +254,27 @@ class Slide < ActiveRecord::Base
   def no_media?
     self.youtube_video_link.blank? && self.video.blank? && self.image.blank?
   end
+
+  #server side audio trim
+  #apt install sox
+  #apt install libsox-fmt-mp3
+  def audio_trim start_sec, len_sec
+    ext = File.extname(self.audio.path)
+    tempfile = Tempfile.new(['',ext])
+    self.audio.copy_to_local_file :original, tempfile
+
+    require 'audio_trimmer'
+    trimmer = AudioTrimmer.new input: tempfile.path
+    trimmed = Tempfile.new(['',ext])
+    trimmer.trim start: start_sec, finish: start_sec + len_sec, output: trimmed.path
+
+    self.audio = trimmed
+    self.save
+    tempfile.delete
+    trimmed.delete
+  end
+
+  def self.[] i
+    Slide.find(i)
+  end
 end
