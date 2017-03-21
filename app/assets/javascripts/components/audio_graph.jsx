@@ -11,7 +11,7 @@ class AudioGraph extends React.Component {
 
 
         self = this
-        wavesurfer.on('ready', function () {
+        wavesurfer.on('ready', () => {
             wavesurfer.enableDragSelection({});
             var timeline = Object.create(WaveSurfer.Timeline);
 
@@ -19,6 +19,8 @@ class AudioGraph extends React.Component {
                 wavesurfer: wavesurfer,
                 container: '#waveform-timeline'
             });
+
+            this.full_zoom = $("#waveform").width()/wavesurfer.getDuration()
             self.full()
 
         });
@@ -36,7 +38,6 @@ class AudioGraph extends React.Component {
 
         wavesurfer.load(this.props.audio)
 
-
     }
 
     play() {
@@ -51,16 +52,25 @@ class AudioGraph extends React.Component {
         this.zoom *= 1.1;
         wavesurfer.zoom(this.zoom)
         console.log(this.zoom)
+        $(this.refs.out).removeClass("disabled")
+        $(this.refs.full).removeClass("disabled")
     }
 
     zoomOut() {
         this.zoom /= 1.1
+        if(this.zoom<this.full_zoom) {
+            this.full()
+            return
+        }
         wavesurfer.zoom(this.zoom)
     }
 
     full() {
-        this.zoom = 360
+        this.zoom = this.full_zoom;
+        console.log("full: ", this.zoom)
         wavesurfer.zoom(this.zoom)
+        $(this.refs.out).addClass("disabled")
+        $(this.refs.full).addClass("disabled")
     }
 
     region() {
@@ -87,10 +97,11 @@ class AudioGraph extends React.Component {
                 <div id="waveform-timeline"></div>
                 <div className="btn btn-default" onClick={this.play.bind(this)}>Play</div>
                 <div className="btn btn-default" onClick={this.stop.bind(this)}>Stop</div>
-                <div className="btn btn-default" onClick={this.zoom.bind(this)}>Zoom In</div>
-                <div className="btn btn-default" onClick={this.zoomOut.bind(this)}>Zoom Out</div>
-                <div className="btn btn-default" onClick={this.full.bind(this)}>Full</div>
-                <div className="btn btn-default" onClick={this.trim.bind(this)}>Trim</div>
+                <div className="btn btn-default" ref="in" style={{marginLeft: "10px"}} onClick={this.zoom.bind(this)}>Zoom In</div>
+                <div className="btn btn-default" ref="out" onClick={this.zoomOut.bind(this)}>Zoom Out</div>
+                <div className="btn btn-default" ref="full" onClick={this.full.bind(this)}>Full</div>
+                <div className="btn btn-default" style={{marginLeft: "10px"}} onClick={this.trim.bind(this)}>Trim</div>
+                <div className="btn btn-default" onClick={this.trim.bind(this)}>Cut</div>
             </div>
         )
 

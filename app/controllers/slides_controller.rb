@@ -1,7 +1,7 @@
 class SlidesController < ApplicationController
   acts_as_token_authentication_handler_for User, except: :text
 
-  before_action :set_slide, only: [:show, :edit, :update, :destroy, :text, :audio_trim]
+  before_action :set_slide, only: [:show, :edit, :update, :destroy, :text, :audio_edit]
 
   skip_before_action :verify_authenticity_token
 
@@ -15,9 +15,9 @@ class SlidesController < ApplicationController
     end
   end
 
-  def audio_trim
+  def audio_edit
     if request.post?
-      @slide.audio_trim params[:trim][:start].to_f, params[:trim][:duration].to_f
+      @slide.audio_edit params[:trim][:start].to_f, params[:trim][:duration].to_f
     end
     render layout: "audio_edit"
   end

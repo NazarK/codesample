@@ -26,7 +26,7 @@ Rails.application.routes.draw do
     get :test, on: :collection
     #this is for internal testing only
     resources :slides, only: [:show, :create, :new, :index] do
-      match :audio_trim, on: :member, via: :all
+      match :audio_edit, on: :member, via: :all
     end
   end
 
