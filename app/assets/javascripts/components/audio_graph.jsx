@@ -41,7 +41,7 @@ class AudioGraph extends React.Component {
     }
 
     play() {
-        wavesurfer.play(this.region().start, this.region().end)
+        wavesurfer.play()
     }
 
     stop() {
