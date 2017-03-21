@@ -21,6 +21,7 @@
 //= require react
 //= require react_ujs
 //= require jquery.blockUI
+//= require_tree ./components
 //= require_tree ./components_viewer
 //= require_tree ./components_editor
 //= require cropper

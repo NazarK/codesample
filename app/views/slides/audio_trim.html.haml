@@ -1,0 +1,13 @@
+= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.3.2/wavesurfer.min.js"
+= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.regions.min.js"
+= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.timeline.min.js"
+= javascript_include_tag "//cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/1.2.3/plugin/wavesurfer.regions.min.js"
+= react_component "AudioGraph", audio: "#{@slide.audio.url}"
+
+= simple_form_for "trim", url: "" do |f|
+  = f.input :start, as: :hidden
+  = f.input :duration, as: :hidden
+
+:javascript
+  $(function() {
+  })
