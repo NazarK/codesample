@@ -263,15 +263,63 @@ class Slide < ActiveRecord::Base
     tempfile = Tempfile.new(['',ext])
     self.audio.copy_to_local_file :original, tempfile
 
-    require 'audio_trimmer'
-    trimmer = AudioTrimmer.new input: tempfile.path
+    ratestring = nil
+    if ext.downcase==".mp3"
+      require 'mp3info'
+      Mp3Info.open(tempfile.path) do |mp3|
+        ratestring = "rate #{mp3.bitrate}k"
+      end
+    end
+
     trimmed = Tempfile.new(['',ext])
-    trimmer.trim start: start_sec, finish: start_sec + len_sec, output: trimmed.path
+    `sox #{tempfile.path} #{trimmed.path} trim #{start_sec} #{len_sec} #{ratestring}`
 
     self.audio = trimmed
     self.save
     tempfile.delete
     trimmed.delete
+  end
+
+
+  def audio_cut start_sec, len_sec
+    require 'audio_trimmer'
+    ext = File.extname(self.audio.path)
+    tempfile = Tempfile.new(['',ext])
+    self.audio.copy_to_local_file :original, tempfile
+
+    ratestring = nil
+    if ext.downcase==".mp3"
+      require 'mp3info'
+      Mp3Info.open(tempfile.path) do |mp3|
+        ratestring = "-C #{mp3.header[:bitrate]}"
+      end
+    end
+
+    part1 = Tempfile.new(['',ext])
+
+    puts cmd = "sox #{tempfile.path} #{ratestring} #{part1.path} trim 0 #{start_sec}"
+    puts `#{cmd}`
+
+
+    part2 = Tempfile.new(['',ext])
+
+    total = `soxi -D #{tempfile.path}`.to_f
+
+    puts cmd = "sox #{tempfile.path} #{ratestring} #{part2.path} trim #{start_sec+len_sec} =#{total}"
+    puts `#{cmd}`
+
+    result = Tempfile.new(['',ext])
+
+    puts cmd = `sox #{part1.path} #{part2.path} #{ratestring} #{result.path}`
+    puts `#{cmd}`
+
+    puts result.path
+    self.audio = result
+    self.save
+
+    part1.delete
+    part2.delete
+    result.delete
   end
 
   def self.[] i

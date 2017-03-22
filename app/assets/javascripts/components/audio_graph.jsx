@@ -41,7 +41,7 @@ class AudioGraph extends React.Component {
     }
 
     play() {
-        wavesurfer.play()
+        wavesurfer.play(this.region().start,this.region().end)
     }
 
     stop() {
@@ -90,6 +90,18 @@ class AudioGraph extends React.Component {
 
     }
 
+    cut() {
+        if(Object.keys(wavesurfer.regions.list).length==0) {
+            return alert("Please select region")
+        }
+        if(!confirm("Cut audio?"))
+            return;
+        console.log("trimming", this.region().start, this.region().end - this.region().start)
+        $("form.cut input[name='cut[start]']").val(this.region().start)
+        $("form.cut input[name='cut[duration]']").val(this.region().end - this.region().start)
+        $("form.cut").submit()
+    }
+
     render() {
         return (
             <div>
@@ -101,7 +113,7 @@ class AudioGraph extends React.Component {
                 <div className="btn btn-default" ref="out" onClick={this.zoomOut.bind(this)}>Zoom Out</div>
                 <div className="btn btn-default" ref="full" onClick={this.full.bind(this)}>Full</div>
                 <div className="btn btn-default" style={{marginLeft: "10px"}} onClick={this.trim.bind(this)}>Trim</div>
-                <div className="btn btn-default" onClick={this.trim.bind(this)}>Cut</div>
+                <div className="btn btn-default" onClick={this.cut.bind(this)}>Cut</div>
             </div>
         )
 
