@@ -115,9 +115,17 @@ bg_youtube_vol_change = function() {
 
 slide_video_pos_change = function() {
   $(this).parents(".slide").find(".video_thumb_pos").val(this.currentTime)
-
 }
 
 slide_vol_change = function() {
   $(this).parents(".slide").find(".audio_vol").val(this.volume)
+}
+
+slide_audio_url_update = function(slide_id) {
+  console.log("slide_url_update")
+  console.log($(".slide_audio[data-slide-id="+slide_id+"]"))
+  $.getJSON("/slides/"+slide_id+".json",function(resp) {
+    console.log("new slide audio src: ",resp.audio_url)
+    $(".slide[data-slide-id="+slide_id+"] audio").attr("src", resp.audio_url)
+  })
 }

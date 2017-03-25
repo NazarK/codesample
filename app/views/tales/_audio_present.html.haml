@@ -6,5 +6,9 @@
         onloadedmetadata: "this.volume = #{f.object.audio_vol}"  }
   .pull-left
     = react_component "AudioVolume", wrapper: ".slide", target: "audio", field: ".audio_vol", width: "50px"
-.row.col-sm-12
-  = f.input :delete_audio, as: :boolean, label: "delete audio"
+.row
+  .col-sm-6
+    = f.input :delete_audio, as: :boolean, label: "delete audio"
+  .col-sm-6
+    %a.btn.btn-default.pull-left.iframe-href{href:"#{audio_edit_tale_slide_path(f.object.tale,f.object)}", title: "edit audio", data: { on_iframe_close: "slide_audio_url_update(#{f.object.id})", iframe_header: "Audio Editor"}}
+      %i.fa.fa-scissors

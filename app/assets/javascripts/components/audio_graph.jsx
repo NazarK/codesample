@@ -5,6 +5,7 @@ class AudioGraph extends React.Component {
         window.wavesurfer = WaveSurfer.create({
             container: "#waveform",
             waveColor: "black",
+            height: 140,
             //barWidth: 2,
             progressColor: "black"
         })
@@ -31,7 +32,14 @@ class AudioGraph extends React.Component {
         })
 
         wavesurfer.on('region-created', function() {
+            console.log("region created")
             wavesurfer.clearRegions()
+        })
+        wavesurfer.on("region-update-end",function(e,ee) {
+          console.log("region update end")
+          setTimeout(() => {
+            wavesurfer.seekTo(self.region().start/wavesurfer.getDuration())
+          },50)
 
         })
 
@@ -107,13 +115,27 @@ class AudioGraph extends React.Component {
             <div>
                 <div id="waveform"></div>
                 <div id="waveform-timeline"></div>
-                <div className="btn btn-default" onClick={this.play.bind(this)}>Play</div>
-                <div className="btn btn-default" onClick={this.stop.bind(this)}>Stop</div>
-                <div className="btn btn-default" ref="in" style={{marginLeft: "10px"}} onClick={this.zoom.bind(this)}>Zoom In</div>
-                <div className="btn btn-default" ref="out" onClick={this.zoomOut.bind(this)}>Zoom Out</div>
-                <div className="btn btn-default" ref="full" onClick={this.full.bind(this)}>Full</div>
-                <div className="btn btn-default" style={{marginLeft: "10px"}} onClick={this.trim.bind(this)}>Trim</div>
-                <div className="btn btn-default" onClick={this.cut.bind(this)}>Cut</div>
+                <div style={{marginTop:"5px"}}>
+                  <div className="btn btn-default" onClick={this.play.bind(this)} title='play'>
+                    <i className='fa fa-play'></i>
+                  </div>
+                  <div className="btn btn-default" onClick={this.stop.bind(this)} title="stop">
+                    <i className='fa fa-stop'></i>
+                  </div>
+                  <div className="btn btn-default" ref="in" style={{marginLeft: "10px"}} onClick={this.zoom.bind(this)} title="zoom in">
+                    <i className='fa fa-search-plus'></i>
+                  </div>
+                  <div className="btn btn-default" ref="out" onClick={this.zoomOut.bind(this)} title="zoom out">
+                    <i className='fa fa-search-minus'></i>
+                  </div>
+                  <div className="btn btn-default" ref="full" onClick={this.full.bind(this)}>Full</div>
+                  <div className="btn btn-default" style={{marginLeft: "10px"}} onClick={this.trim.bind(this)} title="trim">
+                    <i className='fa fa-crop'></i> Trim
+                  </div>
+                  <div className="btn btn-default" onClick={this.cut.bind(this)} title="cut selected region">
+                    <i className='fa fa-cut'></i> Cut
+                  </div>
+                </div>
             </div>
         )
 
