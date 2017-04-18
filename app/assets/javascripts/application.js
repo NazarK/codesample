@@ -63,8 +63,10 @@ function embed_generate() {
   var w = $("#width").val()
   var h = $("#height").val()
   var id = $("#id").val()
-  code = "<iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no' allowfullscreen webkitAllowFullScreen mozAllowFullScreen allowFullScreen></iframe>"
-  $("textarea#code").html(code)
+  code = "<script type='text/javascript' src='"+APP_HOST+"/embed.js?w="+w+"&h="+h+"'></script>\n<iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no' allowfullscreen></iframe>"
+  //code = "<script ></script><iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no' allowfullscreen></iframe>"
+  console.log("embed code:",code)
+  $("#code").text(code)
   clearTimeout(iframe_reload_timer)
   iframe_reload_timer = setTimeout(function() {
     $("#preview").html(code)

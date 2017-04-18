@@ -10,6 +10,30 @@ class Timeline extends React.Component {
 
   fullScreen() {
     console.log("toggling full screen")
+
+    function is_IOS_Safari() {
+      return (/iP(ad|hone|od)/i.test(navigator.userAgent) && /safari/i.test(navigator.userAgent))
+    }
+    console.log("(/iP(ad|hone|od)/i.test(navigator.userAgent) && /safari/i.test(navigator.userAgent))")
+    console.log("navigator.userAgent", navigator.userAgent)
+
+    if(is_IOS_Safari()) {
+      console.log("ios safari detected")
+      var sender_iframe_src=window.frameElement.getAttribute("src")
+      if(window.YARNTALE_FULLSCREEN) {
+        parent.postMessage({message: "YARNTALE_EXIT_FULLSCREEN", sender_iframe_src: sender_iframe_src },"*")
+        window.YARNTALE_FULLSCREEN = false
+        $(".fullscreen").addClass("disabled")
+      } else {
+        parent.postMessage({message: "YARNTALE_GO_FULLSCREEN", sender_iframe_src: sender_iframe_src },"*")
+        window.YARNTALE_FULLSCREEN = true
+        $(".fullscreen").removeClass("disabled")
+      }
+      return
+    } else {
+      console.log("not ios safari")
+    }
+
     $(YARNTALE.el).toggleFullScreen()
   }
 
