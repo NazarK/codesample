@@ -63,7 +63,7 @@ function embed_generate() {
   var w = $("#width").val()
   var h = $("#height").val()
   var id = $("#id").val()
-  code = "<script type='text/javascript' src='"+APP_HOST+"/embed.js?w="+w+"&h="+h+"'></script>\n<iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no' allowfullscreen></iframe>"
+  code = "<script type='text/javascript' src='"+APP_HOST+"/embed.js' />\n<iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no' allowfullscreen />"
   //code = "<script ></script><iframe width='"+w+"' height='"+h+"' src='"+APP_HOST+"/t"+id+"/embed' frameborder='0' scrolling='no' allowfullscreen></iframe>"
   console.log("embed code:",code)
   $("#code").text(code)
