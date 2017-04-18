@@ -1,15 +1,26 @@
 %div{style:"padding:20px"}
-  .col-sm-4
-    %input#id{type: :hidden, value: @tale.id}
-    width:
-    %input#width.form-control{type: :number, style: "width:80px;display:inline-block",value: 960}
-    px
-    height:
-    %input#height.form-control{type: :number, style: "width:80px;display:inline-block", value: 640}
-    px
-  .col-sm-8
-    Code for embeding:
-    %textarea#code.form-control{readonly: true,rows:4}
+  .row
+    .col-sm-3
+      %strong Edit
+      %br
+      %input#id{type: :hidden, value: @tale.id}
+      %div{style:"width:40px;display:inline-block;"}
+        width:
+      %input#width.form-control{type: :number, style: "width:80px;display:inline-block",value: 960}
+      px
+      %br
+      %div{style:"width:40px;display:inline-block;"}
+        height:
+      %input#height.form-control{type: :number, style: "width:80px;display:inline-block", value: 640}
+      px
+    .col-sm-9
+      %strong
+        Code for embeding
+      %textarea#code.form-control{readonly: true,rows:4}
+      %sub
+        * - paste it in your page html
 
     %br
-  #preview
+  .row.col-sm-12
+    %strong Preview
+    #preview
