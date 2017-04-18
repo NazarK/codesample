@@ -337,10 +337,6 @@ YARNTALE.ui_event_handlers_attach = function() {
 
   })
 
-  $('.fullscreen').click(function() {
-    $(YARNTALE.el).toggleFullScreen()
-  })
-
   $('.cc').click(function() {
     YARNTALE.cc_enabled(!YARNTALE.cc_enabled())
   })

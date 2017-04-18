@@ -8,6 +8,11 @@ class Timeline extends React.Component {
     YARNTALE.play()
   }
 
+  fullScreen() {
+    console.log("toggling full screen")
+    $(YARNTALE.el).toggleFullScreen()
+  }
+
   render() {
     //timeline height
     const {height, slides} = this.props;
@@ -89,7 +94,7 @@ class Timeline extends React.Component {
           <i className="fa fa-angle-right" aria-hidden="true"></i>
         </div>
 
-        <div className="fullscreen disabled" style={{width:height, right: height}}>
+        <div className="fullscreen disabled" style={{width:height, right: height}} onClick={this.fullScreen.bind(this)}>
           <i className="fa fa-arrows-alt" aria-hidden="true"></i>
         </div>
 
