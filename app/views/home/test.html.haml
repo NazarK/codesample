@@ -1,0 +1,25 @@
+:javascript
+  $(function() {
+    $(".full").click(function() {
+      $(this)[0].webkitRequestFullScreen();
+    })
+
+    $(".btn").click(function() {
+      console.log(".btn click")
+      $(".video")[0].webkitEnterFullScreen()
+    })
+  })
+
+.full{style:"background:black;color:white"}
+  click me for fullscreen
+
+
+%video.video{src: "/test/video_8_sec.mp4"}
+
+%button.btn
+  click me
+
+
+:erb
+  <script src="/embed.js"></script>
+  <iframe width='960' height='640' src='/t4/embed' frameborder='0' scrolling='no' allowfullscreen webkitAllowFullScreen mozAllowFullScreen allowFullScreen></iframe>
