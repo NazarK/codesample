@@ -95,9 +95,16 @@
                                 this.numChannels, this.numChannels);
         this.input.connect(this.processor);
         this.processor.connect(this.context.destination);
+        var self = this
         this.processor.onaudioprocess = function(event) {
-          for (var ch = 0; ch < numChannels; ++ch)
+          var channel_peak = []
+          for (var ch = 0; ch < numChannels; ++ch) {
             buffer[ch] = event.inputBuffer.getChannelData(ch);
+            channel_peak[ch] = Math.abs(Math.max.apply(null,buffer[ch]))
+          }
+          //getti
+          self.audioPeak = Math.abs(Math.max.apply(null,channel_peak))
+          self.onAudioPeak && self.onAudioPeak(self.audioPeak)
           worker.postMessage({ command: "record", buffer: buffer });
         };
         this.worker.postMessage({

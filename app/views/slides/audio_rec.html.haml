@@ -1,8 +1,32 @@
 = javascript_include_tag "/audio-rec-lib/WebAudioRecorder.js"
+= javascript_include_tag "/jquery.form.js"
 = javascript_include_tag "slide-audio-rec"
 
-%btn.btn.btn-default#record_btn{onClick: "startRecording()"}
-  record
+.row
+  .col-sm-2
+    %btn.btn.btn-default#rec{onClick: "startRecording()"}
+      record
+
+    %btn.btn.btn-default#stop{style:"display:none",onClick: "stopRecording()"}
+      stop
+
+  .col-sm-2
+    #info
+
+  .col-sm-2
+    %canvas#audio_peak{width:100,height:10,style:"border:1px solid black"}
+
+.row
+  .col-sm-12
+    #rec_list
 
 
-#rec_list
+.row
+  .col-sm-12
+    %btn.btn.btn-default#done{style:"display:none", onClick: "save()"}
+      save
+
+
+%div{style:"display:none"}
+  = simple_form_for @slide, url: "/slides/#{@slide.id}.json", html: { multipart: true } do |f|
+    = f.submit "save"

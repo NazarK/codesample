@@ -1,7 +1,7 @@
 class SlidesController < ApplicationController
   acts_as_token_authentication_handler_for User, except: :text
 
-  before_action :set_slide, only: [:show, :edit, :update, :destroy, :text, :audio_edit]
+  before_action :set_slide, only: [:show, :edit, :update, :destroy, :text, :audio_edit, :audio_rec]
 
   skip_before_action :verify_authenticity_token
 
