@@ -15,6 +15,11 @@ class SlidesController < ApplicationController
     end
   end
 
+  #audio recorder view (to be used as iframe in desktop tale editor)
+  def audio_rec
+
+  end
+
   def audio_edit
     if request.post?
       if params[:trim].present?

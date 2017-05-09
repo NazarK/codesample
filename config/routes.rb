@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     #this is for internal testing only
     resources :slides, only: [:show, :create, :new, :index] do
       match :audio_edit, on: :member, via: :all
+      match :audio_rec, on: :member, via: :all
     end
   end
 
