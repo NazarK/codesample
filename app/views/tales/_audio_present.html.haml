@@ -10,7 +10,7 @@
   .col-sm-6
     = f.input :delete_audio, as: :boolean, label: "delete audio"
   .col-sm-6
-    %a.btn.btn-default.pull-left.iframe-href{href:"#{audio_rec_tale_slide_path(f.object.tale,f.object)}", title: "record audio", data: { on_iframe_close: "slide_audio_url_update(#{f.object.id})", iframe_header: "Audio Recorder"}}
+    %a.btn.btn-default.pull-left.iframe-href{style: "width:40px;color:red", href:"#{audio_rec_tale_slide_path(f.object.tale,f.object)}", title: "record audio", data: { on_iframe_close: "slide_audio_url_update(#{f.object.id})", iframe_header: "Audio Recorder"}}
       %i.fa.fa-microphone
-    %a.btn.btn-default.pull-left.iframe-href{style:"margin-left:10px",href:"#{audio_edit_tale_slide_path(f.object.tale,f.object)}", title: "edit audio", data: { on_iframe_close: "slide_audio_url_update(#{f.object.id})", iframe_header: "Audio Editor"}}
+    %a.btn.btn-default.pull-left.iframe-href{style:"margin-left:10px;width:40px;",href:"#{audio_edit_tale_slide_path(f.object.tale,f.object)}", title: "edit audio", data: { on_iframe_close: "slide_audio_url_update(#{f.object.id})", iframe_header: "Audio Editor"}}
       %i.fa.fa-scissors

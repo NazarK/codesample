@@ -1,32 +1,39 @@
 = javascript_include_tag "/audio-rec-lib/WebAudioRecorder.js"
 = javascript_include_tag "/jquery.form.js"
 = javascript_include_tag "slide-audio-rec"
+:css
+  .audio_no_audio_control {
+    width: 200px;
+  }
 
-.row
-  .col-sm-2
-    %btn.btn.btn-default#rec{onClick: "startRecording()"}
-      record
+%div{style:"padding:20px"}
+  .row
+    .col-xs-12
+      %btn.btn.btn-default.pull-left#rec{onClick: "startRecording()", style:"width:100px;height:50px;line-height:35px;color:red"}
+        %i.fa.fa-microphone
+        record
 
-    %btn.btn.btn-default#stop{style:"display:none",onClick: "stopRecording()"}
-      stop
+      %btn.btn.btn-default.pull-left#stop{style:"display:none;width:100px;height:50px;line-height:35px;color:red",onClick: "stopRecording()"}
+        %i.fa.fa-stop
+        stop
 
-  .col-sm-2
-    #info
+      #level.pull-left{style:"display:none;margin-left:10px"}
+        %canvas#audio_peak{width:20,height:48,style:"border:1px solid rgb(204,204,204)"}
 
-  .col-sm-2
-    %canvas#audio_peak{width:100,height:10,style:"border:1px solid black"}
+      #progress.pull-left{style:"display:none;margin-left:10px;line-height:45px;font-size:30px"}
 
-.row
-  .col-sm-12
-    #rec_list
-
-
-.row
-  .col-sm-12
-    %btn.btn.btn-default#done{style:"display:none", onClick: "save()"}
-      save
+      #recorded.pull-left{style:"display:none;margin-top:10px;margin-left:10px"}
+        #rec_list
 
 
-%div{style:"display:none"}
-  = simple_form_for @slide, url: "/slides/#{@slide.id}.json", html: { multipart: true } do |f|
-    = f.submit "save"
+
+  .row{style:"margin-top:10px"}
+    .col-sm-12
+      %btn.btn.btn-default#done{style:"display:none;height:50px;line-height:35px;width:100px", onClick: "save()"}
+        %i.fa.fa-check
+        save
+
+
+  %div{style:"display:none"}
+    = simple_form_for @slide, url: "/slides/#{@slide.id}.json", html: { multipart: true } do |f|
+      = f.submit "save"

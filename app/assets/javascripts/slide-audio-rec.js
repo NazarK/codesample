@@ -50,6 +50,7 @@ if (audioContext.createScriptProcessor == null)
   audioContext.createScriptProcessor = audioContext.createJavaScriptNode;
 
 
+
 var microphone = undefined,
     record_node = audioContext.createGain();
 
@@ -81,6 +82,8 @@ var audioRecorder = new WebAudioRecorder(record_node, {
 });
 
 
+audioRecorder.setEncoding('mp3');
+
 
 audioRecorder.onEncodingProgress = function(recorder, progress) {
   console.log("encoding progress", progress)
@@ -99,7 +102,7 @@ audioRecorder.onError = function(recorder, message) {
 
 function buildAudioControl(blob, encoding) {
   var url = URL.createObjectURL(blob),
-      html = "<audio controls src='" + url + "'></audio> "
+      html = "<div class='audio_no_audio_control pull-left'><audio controls='controls' src='" + url + "'></audio></div>"
   $("#rec_list").html($(html));
 }
 
@@ -107,11 +110,13 @@ $(function() {
 
   var peak_canvas = document.getElementById("audio_peak");
   peak_context = peak_canvas.getContext('2d')
-  peak_context.fillStyle = "red"
+  peak_context.fillStyle = "#6f6"
+
+  const h = 48, w = 20
 
   audioRecorder.onAudioPeak = function(peak) {
-    peak_context.clearRect(0,0,100,10)
-    peak_context.fillRect(0,0,peak*100,10)
+    peak_context.clearRect(0,0,w,h)
+    peak_context.fillRect(0,h-peak*h,w,h)
   }
 
 })
@@ -122,7 +127,7 @@ var INFO_UPDATE;
 
 function updateInfo() {
   var sec = audioRecorder.recordingTime() | 0;
-  $("#info").html(sec+" sec")
+  $("#progress").html(sec+" sec")
 }
 
 //PUBLIC FUNCTIONS
@@ -136,14 +141,17 @@ function startRecording() {
     mp3: { bitRate: 192 }
   });
   audioRecorder.startRecording();
-  $("#stop").show()
-  $("#rec").hide()
+  $("#rec, #recorded, #done").hide()
+  $("#stop, #level, #progress").show()
+  $("#progress").html("")
+
 }
 
 function stopRecording() {
-  $("#rec").show()
-  $("#stop").hide()
-  $("#done").show()
+  $("#rec, #done, #recorded").show()
+
+  $("#stop, #level, #progress").hide()
+
   clearInterval(INFO_UPDATE)
   audioRecorder.finishRecording()
 }
@@ -170,4 +178,16 @@ function save() {
   }).done( (resp)=>{
       console.log("submitted",resp)
   })
+}
+
+
+function on_load() {
+  $("#done, #recorded").hide()
+}
+
+function on_close() {
+  console.log("on close")
+  if(audioRecorder.isRecording()) {
+    stopRecording()
+  }
 }
