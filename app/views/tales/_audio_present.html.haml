@@ -10,5 +10,6 @@
   .col-sm-6
     = f.input :delete_audio, as: :boolean, label: "delete audio"
   .col-sm-6
+    -#TODO: audio editor: set position, click play - it still plays from beginning, expected to play from  position specified
     %a.btn.btn-default.pull-left.iframe-href{style:"margin-left:10px;width:40px;",href:"#{audio_edit_tale_slide_path(f.object.tale,f.object)}", title: "edit audio", data: { on_iframe_close: "slide_audio_url_update(#{f.object.id})", iframe_header: "Audio Editor"}}
       %i.fa.fa-scissors
