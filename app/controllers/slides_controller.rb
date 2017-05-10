@@ -2,6 +2,7 @@ class SlidesController < ApplicationController
   acts_as_token_authentication_handler_for User, except: :text
 
   before_action :set_slide, only: [:show, :edit, :update, :destroy, :text, :audio_edit, :audio_rec]
+  before_action :current_user_ownership, only: [:audio_rec,:audio_edit]
 
   skip_before_action :verify_authenticity_token
 
@@ -12,6 +13,12 @@ class SlidesController < ApplicationController
   private def adjust_format
     if params[:format]=="html" || params[:format].blank?
       set_mobile_format
+    end
+  end
+
+  def current_user_ownership
+    if @slide.tale.user!=current_user
+      render status: :unauthorized, text: "access denied"
     end
   end
 

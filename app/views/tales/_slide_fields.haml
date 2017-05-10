@@ -12,7 +12,7 @@
       = link_to_remove_association "<i class='fa fa-2x fa-remove color-red margin-top-sm'></i>".html_safe, f, data: { confirmation: "Delete slide?"}
 
     .col-sm-7{style:"margin-left:0"}
-      = render "slide_media", f: f
+      = render "/tales/slide_media", f: f
 
     .col-sm-4
       = f.input :caption, input_html: { style: "vertical-align:top;width:90%;", rows: 10}

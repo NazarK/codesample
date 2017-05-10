@@ -11,11 +11,15 @@
     .col-sm-5
       = f.input :image, input_html: { style: "margin:0"}
       - if f.object.image.present?
-        = render "image_present", f: f
+        = render "/tales/image_present", f: f
     .col-sm-7
-      = f.input :audio, label: "Image Audio", input_html: { accept: "audio/*" }
+      .pull-left
+        = f.input :audio, label: "Image Audio", input_html: { accept: "audio/*" }
+      - if !f.object.new_record?
+        %a.btn.btn-default.pull-left.iframe-href{style: "width:40px;color:red;margin-top:14px;", href:"#{audio_rec_tale_slide_path(f.object.tale,f.object)}", title: "record audio", data: { on_iframe_close: "$('.tale-save').click()", iframe_header: "Audio Recorder"}}
+          %i.fa.fa-microphone
       - if f.object.audio.present?
-        = render "audio_present", f: f
+        = render "/tales/audio_present", f: f
   .tab-pane{id:"video-tab-#{f.object.id}", class: ("active" if f.object.video.present?)}
     .col-sm-12
       = f.input :video, label: "Video", input_html: { accept: "video/*" }

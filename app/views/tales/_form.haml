@@ -17,6 +17,7 @@
 
 .row
   .col-sm-12
+    -#TODO: multipart form (with input[file] specified) doesn't allow remote:true, is posted as html action (refreshing whole page)
     = simple_form_for(@tale, html: { class: 'form-horizontal' }, remote: true) do |f|
       %div{style: "top: 15px;position:fixed;right:15px;z-index:1;background: #fff;padding: 10px;border-radius: 10px;"}
         - if !@tale.new_record?
