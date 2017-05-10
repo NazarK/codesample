@@ -175,7 +175,7 @@ function save() {
       type: 'POST',
       contentType: false,
       processData: false,
-  }).done( (resp)=>{
+  }).done( function(resp){
       console.log("submitted",resp)
   })
 }
