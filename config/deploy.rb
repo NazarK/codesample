@@ -22,7 +22,7 @@ set :rvm_path, '/usr/local/rvm/scripts/rvm'
 # They will be linked in the 'deploy:link_shared_paths' step.
 set :shared_paths, ['config/secrets.yml', 'log', 'config/application.yml', 'public/system']
 
-set :launch_cmd, "cd #{deploy_to}/current && thin start -e production -p 8080 -d   -d --threaded --threadpool-size 3"
+set :launch_cmd, "cd #{deploy_to}/current; thin start -e production -p 8080 -d --threaded --threadpool-size 3"
 set :shutdown_cmd, "cd #{deploy_to}/current; thin stop -e production || true"
 
 # Optional settings:
@@ -91,18 +91,18 @@ task :deploy => :environment do
   deploy do
     # Put things that will set up an empty directory into a fully set-up
     # instance of your project.
+    queue shutdown_cmd
     invoke :'git:clone'
     invoke :'deploy:link_shared_paths'
     invoke :'bundle:install'
+    queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job stop || true"
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
-    queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job stop || true"
 
     to :launch do
-      queue shutdown_cmd
       queue launch_cmd
-      queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job start"
+      queue "cd #{deploy_to}/current; RAILS_ENV=production bin/delayed_job start"
     end
   end
 end
