@@ -22,8 +22,8 @@ set :rvm_path, '/usr/local/rvm/scripts/rvm'
 # They will be linked in the 'deploy:link_shared_paths' step.
 set :shared_paths, ['config/secrets.yml', 'log', 'config/application.yml', 'public/system']
 
-set :launch_cmd, "cd #{deploy_to}/current; thin start -e production -p 8080 -d --threaded --threadpool-size 3"
-set :shutdown_cmd, "cd #{deploy_to}/current; thin stop -e production || true"
+set :launch_cmd, "cd #{deploy_to}/current; RAILS_ENV=production bundle exec thin start -e production -p 8080 -d --threaded --threadpool-size 3"
+set :shutdown_cmd, "cd #{deploy_to}/current; RAILS_ENV=production bundle exec thin stop -e production || true"
 
 # Optional settings:
 set :user, 'root'    # Username in the server to SSH to.
