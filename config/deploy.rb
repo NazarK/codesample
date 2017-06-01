@@ -20,7 +20,7 @@ set :rvm_path, '/usr/local/rvm/scripts/rvm'
 
 # Manually create these paths in shared/ (eg: shared/config/database.yml) in your server.
 # They will be linked in the 'deploy:link_shared_paths' step.
-set :shared_paths, ['config/secrets.yml', 'log', 'config/application.yml', 'public/system', 'tmp/pids']
+set :shared_paths, ['config/secrets.yml', 'log', 'config/application.yml', 'public/system']
 
 set :launch_cmd, "cd #{deploy_to}/current; RAILS_ENV=production bundle exec thin start -e production -p 8080 -d --threaded --threadpool-size 3"
 set :shutdown_cmd, "cd #{deploy_to}/current; RAILS_ENV=production bundle exec thin stop -e production || true"
@@ -53,9 +53,6 @@ task :setup => :environment do
 
   queue! %[mkdir -p "#{deploy_to}/#{shared_path}/config"]
   queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/config"]
-
-  queue! %[mkdir -p "#{deploy_to}/#{shared_path}/tmp/pids"]
-  queue! %[chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/pids"]
 
   queue! %[touch "#{deploy_to}/#{shared_path}/config/application.yml"]
   queue! %[touch "#{deploy_to}/#{shared_path}/config/database.yml"]
