@@ -22,8 +22,8 @@ set :rvm_path, '/usr/local/rvm/scripts/rvm'
 # They will be linked in the 'deploy:link_shared_paths' step.
 set :shared_paths, ['config/secrets.yml', 'log', 'config/application.yml', 'public/system']
 
-set :launch_cmd, "cd #{deploy_to}/current && thin start -e production -p 8080 -d  --servers 1"
-set :shutdown_cmd, "ps ax | grep 808 | grep -v grep | awk '{print $1}' | xargs kill || true"
+set :launch_cmd, "cd #{deploy_to}/current && thin start -e production -p 8080 -d   -d --threaded --threadpool-size 3"
+set :shutdown_cmd, "cd #{deploy_to}/current; thin stop -e production || true"
 
 # Optional settings:
 set :user, 'root'    # Username in the server to SSH to.
@@ -97,7 +97,7 @@ task :deploy => :environment do
     invoke :'rails:db_migrate'
     invoke :'rails:assets_precompile'
     invoke :'deploy:cleanup'
-    queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job stop"
+    queue "cd #{deploy_to}/current ; RAILS_ENV=production bin/delayed_job stop || true"
 
     to :launch do
       queue shutdown_cmd
