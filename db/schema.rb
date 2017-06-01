@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170314043901) do
+ActiveRecord::Schema.define(version: 20170601084415) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -108,6 +108,10 @@ ActiveRecord::Schema.define(version: 20170314043901) do
     t.text     "crop",                         default: "--- {}\n"
     t.text     "filters",                      default: "--- {}\n"
     t.text     "text_overlay",                 default: "--- {}\n"
+    t.string   "thumb_file_name"
+    t.string   "thumb_content_type"
+    t.integer  "thumb_file_size"
+    t.datetime "thumb_updated_at"
   end
 
   add_index "slides", ["tale_id"], name: "index_slides_on_tale_id", using: :btree

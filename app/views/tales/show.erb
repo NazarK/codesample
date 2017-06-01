@@ -55,7 +55,7 @@
         %>
         <% if slide.image.present? %>
         image: {url: "<%= image_url %>",
-                thumb: "<%= slide.image.url(:display) %>"},
+                thumb: "<%= slide.thumb.url(:original) %>"},
         <% end %>
         <% if slide.audio.present? %>
           <% if is_mobile_browser? %>

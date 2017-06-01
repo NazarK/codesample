@@ -56,7 +56,7 @@ class TalesController < ApplicationController
   end
 
   def edit
-    @page_title  = " | Tale"
+    @page_title  = " Edit | #{@tale.name}"
   end
 
   def create

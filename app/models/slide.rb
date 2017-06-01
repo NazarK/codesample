@@ -52,7 +52,19 @@ class Slide < ActiveRecord::Base
                       thumb: "150x100#" },
                     :storage => ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
 
+  #this is thumb of image ( style: display, with cropper applied)
+  #this thumb is smaller size to be displayed in yarntale timeline
+  #it is postprocessed image attachment
+  has_attached_file :thumb,
+                    styles: { original: "67x42#" },
+                    storage: ENV['S3_STORAGE']=='true' ? :s3 : :filesystem
 
+  after_save do
+    if self.image_updated_at_changed? && !self.thumb_updated_at_changed?
+      self.thumb = File.open(self.image.path(:display))
+      self.save
+    end
+  end
 
   before_validation do
     self.crop.delete_if { |key, value| value.blank? }
