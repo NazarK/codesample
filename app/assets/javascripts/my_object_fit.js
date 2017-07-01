@@ -32,7 +32,7 @@ window.object_fit_classes_process = function() {
   }
 
   object_fit_cover_apply = function() {
-    console.log("loaded")
+    console.log("object fit cover apply: loaded")
     var parent_width = $(this).parent().width()
     var parent_height = $(this).parent().height()
 

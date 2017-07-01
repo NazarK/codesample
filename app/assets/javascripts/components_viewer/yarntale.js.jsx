@@ -17,12 +17,12 @@ class YarnTale extends React.Component {
         <div className="yarntale">
 
           <div className="sensor top left">
-            <div className="nav prev" onClick={YARNTALE.prev_keep_playing}><i className="fa fa-angle-left" aria-hidden="true"></i></div>
+            <div className="nav prev" onClick={YARNTALE.prev_keep_playing}><i className="fa fa-angle-left"></i></div>
           </div>
 
           <div className="sensor top right">
             <div className="nav next" onClick={YARNTALE.next_keep_playing}>
-              <i className="fa fa-angle-right" aria-hidden="true"></i>
+              <i className="fa fa-angle-right"></i>
             </div>
           </div>
 
@@ -33,7 +33,7 @@ class YarnTale extends React.Component {
                 <div className="button drag-enabled"></div>
                 <div className="line"></div>
               </div>
-              <div className="volume"><i className="fa fa-volume-down" aria-hidden="true"></i></div>
+              <div className="volume"><i className="fa fa-volume-down" ></i></div>
             </div>
 
             <div className="caption">

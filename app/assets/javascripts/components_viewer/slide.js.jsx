@@ -11,6 +11,7 @@ class Slide extends React.Component {
       )
     }
 
+
     if(slide.youtube) {
       var youtube_src=`//www.youtube.com/embed/${slide.youtube.video_id}?enablejsapi=1&origin=http://${window.location.host}&showinfo=0&controls=0`
 
@@ -27,6 +28,7 @@ class Slide extends React.Component {
       )
     }
 
+
     if(slide.image) {
 
           return (
@@ -34,6 +36,9 @@ class Slide extends React.Component {
         )
 
     }
+
+
+
   }
 
 }

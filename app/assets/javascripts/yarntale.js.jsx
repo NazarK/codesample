@@ -633,6 +633,25 @@ YARNTALE.process_data_src = function() {
   })
 }
 
+
+YARNTALE.chain_process_data_src = function() {
+
+    //first time
+    this.el.find("*[data-src]").each(function() {
+        $(this).attr("chain-data-src",$(this).attr("data-src"))
+        $(this).removeAttr("data-src")
+    })
+
+    dataSrcEl = this.el.find("*[chain-data-src]").not(".chain-data-src-processed").first()
+    $(dataSrcEl).load(function() {
+        $(this).addClass("chain-data-src-processed")
+        YARNTALE.chain_process_data_src()
+    })
+    $(dataSrcEl).attr('src',$(dataSrcEl).attr("chain-data-src"))
+
+}
+
+
 YARNTALE.do_while_keeping_play_state  = (yield) => {
   if(!YARNTALE.playing) {
     yield()

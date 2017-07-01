@@ -10,7 +10,7 @@ class Cover extends React.Component {
 
     $(".slide_view").find("img.slide.cover, .slide.cover img").load(function() {
       console.log("cover loaded")
-      YARNTALE.process_data_src()
+      YARNTALE.chain_process_data_src()
     })
 
   }
