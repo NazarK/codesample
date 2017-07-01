@@ -34,7 +34,7 @@ class TimelineThumb extends React.Component {
         )}
 
         { slide.image && (
-          <img data-src={slide.image.thumb} className="object-fit-contain" style={{filter: slide.css_filters}}/>
+          <img src={slide.image.thumb} className="object-fit-contain" style={{filter: slide.css_filters}}/>
         )}
 
       </div>
