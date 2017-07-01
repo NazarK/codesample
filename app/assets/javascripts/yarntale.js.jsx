@@ -450,7 +450,7 @@ YARNTALE.play = function(opt) {
       media.volume *= this.cur_slide().audio_vol
       media.play() //this will trigger next on media end
     } else {
-      this.el.find(".slide_audio").attr("src","")
+      this.el.find(".slide_audio").removeAttr("src")
     }
 
     //if there is video
