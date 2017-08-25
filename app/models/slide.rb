@@ -247,7 +247,7 @@ class Slide < ActiveRecord::Base
 
   def youtube_video_id
     regex = /(?:.be\/|\/watch\?v=|\/(?=p\/))([\w\/\-]+)/
-    youtube_id = youtube_video_link.match(regex)[1]
+    youtube_id = youtube_video_link&.match(regex)&.[](1)
   end
 
   validate do
