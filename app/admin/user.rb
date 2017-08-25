@@ -13,6 +13,12 @@ ActiveAdmin.register User do
 #   permitted << :other if params[:action] == 'create' && current_user.admin?
 #   permitted
 # end
+
+  member_action :become do
+    sign_in(:user, User.find(params[:id]))
+    redirect_to "/"
+  end
+
   index do
     column :email
     column :tales do |user|
@@ -20,7 +26,9 @@ ActiveAdmin.register User do
     end
     column :last_sign_in_at
     column :sign_in_count
-    actions
+    actions do |resource|
+      span link_to "Log in", become_admin_user_path(resource.id), data: {confirm: "Log in as this user?"}, title: "Login to site as this user"
+    end
   end
 
   form do |f|
