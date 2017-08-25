@@ -148,8 +148,16 @@ class Slide < ActiveRecord::Base
     true
   end
 
-  #keep only slide or video
+  #check video link
+  before_validation do
+    if self.youtube_video_link.present?
+      if self.youtube_video_id.blank?
+        self.errors[:youtube_video_link] << "wrong url. Is it YouTube video?"
+      end
+    end
+  end
 
+  #keep only slide or video
   before_validation do
     if self.youtube_video_start.to_s.include? ":"
       self.youtube_video_start = (Time.parse("0:"+self.youtube_video_start) - Time.parse("0:0:0")).to_i.to_s
@@ -165,10 +173,6 @@ class Slide < ActiveRecord::Base
         self.media_duration = video.duration
       end
     end
-
-
-
-
   end
 
   validate do
@@ -245,6 +249,7 @@ class Slide < ActiveRecord::Base
     video.url
   end
 
+  #TODO: add message - not youtube video url
   def youtube_video_id
     regex = /(?:.be\/|\/watch\?v=|\/(?=p\/))([\w\/\-]+)/
     youtube_id = youtube_video_link&.match(regex)&.[](1)
