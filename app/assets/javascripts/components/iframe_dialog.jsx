@@ -5,10 +5,15 @@
 $(function() {
   $(document).on("click",".iframe-href",function(e) {
     e.preventDefault()
+    trigger = $(this)
+    console.log("dialog class: "+trigger.data("dialog-class"))
+    IFRAME_DIALOG_COMPONENT.setState({modalClass: trigger.data("dialog-class") || "modal-wide" })
+
     IFRAME_DIALOG($(this).attr("data-iframe-header"),$(this).attr("href"),()=>{
       iframe_window = $("#iframe_dialog iframe")[0].contentWindow
       //calling function from iframe
       iframe_window.on_close && iframe_window.on_close()
+
 
       var on_iframe_close=$(this).attr("data-on-iframe-close")
       console.log("iframe dialog close", on_iframe_close)
@@ -27,6 +32,8 @@ class IFrameDialog extends React.Component {
 
     componentDidMount() {
       var self = this
+      window.IFRAME_DIALOG_COMPONENT = this
+      //main function
       window.IFRAME_DIALOG = (header,url,onclose) => {
         self.onClose = onclose;
         this.show(header,url)
@@ -64,8 +71,8 @@ class IFrameDialog extends React.Component {
     render() {
           return (
                 <div>
-                  <div id="iframe_dialog" className="modal modal-wide" role="dialog">
-                    <div className="modal-dialog">
+                  <div id="iframe_dialog" className="modal" role="dialog">
+                    <div className={"modal-dialog "+this.state.modalClass}>
                       {/* Modal content*/}
                       <div className="modal-content">
                         <div className="modal-header">
@@ -73,7 +80,7 @@ class IFrameDialog extends React.Component {
                           <h4 className="modal-title">{this.state.header}</h4>
                         </div>
                         <div className="modal-body">
-                          <iframe src={this.state.url} style={{width:"100%",height:"200px", border: "0"}} onLoad={this.on_iframe_load.bind(this)}></iframe>
+                          <iframe scrolling="no" src={this.state.url} style={{width:"100%",height:"200px", border: "0"}} onLoad={this.on_iframe_load.bind(this)}></iframe>
                         </div>
                         <div className="modal-footer">
                           <button type="button" className="btn btn-default" onClick={this.close.bind(this)}>Close</button>

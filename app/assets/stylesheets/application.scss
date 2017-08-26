@@ -152,6 +152,11 @@ li.dropdown  {
 }
 
 
-.modal.modal-wide .modal-dialog {
+.modal-dialog.modal-wide {
   width: 90%;
+}
+
+.modal-dialog.modal-md {
+  width: 500px;
+  overflow: hidden;
 }

@@ -17,17 +17,19 @@
         %i.fa.fa-stop
         stop
 
+      %btn.btn.btn-default#done.pull-left{style:"display:none;height:50px;line-height:35px;width:100px;margin-left:10px;", onClick: "save()"}
+        %i.fa.fa-check
+        save
+
       #level.pull-left{style:"display:none;margin-left:10px"}
         %canvas#audio_peak{width:20,height:48,style:"border:1px solid rgb(204,204,204)"}
 
       #progress.pull-left{style:"display:none;margin-left:10px;line-height:45px;font-size:30px"}
 
+      %div{style:"clear:both"}
       #recorded.pull-left{style:"display:none;margin-top:10px;margin-left:10px"}
         #rec_list
 
-      %btn.btn.btn-default#done.pull-left{style:"display:none;height:50px;line-height:35px;width:100px", onClick: "save()"}
-        %i.fa.fa-check
-        save
 
 
   %div{style:"display:none"}

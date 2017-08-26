@@ -16,7 +16,7 @@
       .pull-left
         = f.input :audio, label: "Image Audio", input_html: { accept: "audio/*" }
       - if !f.object.new_record?
-        %a.btn.btn-default.pull-left.iframe-href{style: "width:40px;color:red;margin-top:14px;", href:"#{audio_rec_tale_slide_path(f.object.tale,f.object)}", title: "record audio", data: { on_iframe_close: "$('.tale-save').click()", iframe_header: "Audio Recorder"}}
+        %a.btn.btn-default.pull-left.iframe-href{style: "width:40px;color:red;margin-top:14px;", href:"#{audio_rec_tale_slide_path(f.object.tale,f.object)}", title: "record audio", data: { on_iframe_close: "$('.tale-save').click()", iframe_header: "Audio Recorder", dialog_class: "modal-sm"}}
           %i.fa.fa-microphone
       - if f.object.audio.present?
         = render "/tales/audio_present", f: f
