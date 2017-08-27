@@ -108,6 +108,12 @@ function buildAudioControl(blob, encoding) {
 
 $(function() {
 
+    if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1){
+      $(".recorder").hide()
+      $(".alert.firefox").show()
+    }
+
+
   var peak_canvas = document.getElementById("audio_peak");
   peak_context = peak_canvas.getContext('2d')
   peak_context.fillStyle = "#6f6"
