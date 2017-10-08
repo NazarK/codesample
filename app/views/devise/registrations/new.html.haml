@@ -1,0 +1,25 @@
+.wrapper
+  .pull-right{style:"font-size:30px;color:#222;"}
+    yarntale.
+  %span{style:"border-bottom: 1px solid white;font-size:40px;padding-bottom:5px;"} Join
+  .margin-top Join YarnTale today to share an idea, tell a story or have fun with the life that is uniquelly yours
+  .margin-top
+    Already a member?
+    = link_to "Login here", new_user_session_path
+
+  .margin-top
+    %a.facebook-login{href: omniauth_authorize_path(resource_name, :facebook)}
+
+  .margin-top
+    or register
+
+  = simple_form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f|
+    = f.error_notification
+    .form-inputs
+      = f.input :email, required: true, autofocus: true
+      = f.input :password, required: true, hint: ("#{@minimum_password_length} characters minimum" if @minimum_password_length)
+    .margin-top
+      = f.button :submit, "Sign up", class: "pull-left"
+      %div.pull-left{style:"margin-left:20px;margin-top:10px;"}
+        * once you have registered, check your email for a confirmation link
+  %div{style:"clear:both"}

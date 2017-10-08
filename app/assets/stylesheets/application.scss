@@ -44,7 +44,7 @@ body.home.index {
 
 body.users_registrations, body.users_sessions {
   .wrapper {
-    width: 700px;
+    width: 750px;
     margin: 0 auto;
     background-color: rgba(0,0,0,0.9);
     padding: 50px 60px;
@@ -66,6 +66,10 @@ body.users_sessions.new, body.users_registrations, body.home.index {
     border-radius: 0;
     padding: 10px 40px;
   }
+  .form-inputs {
+    max-width:300px;
+  }
+
   .wrapper a {
     color: #59bbd7;
   }
