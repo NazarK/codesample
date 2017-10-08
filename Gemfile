@@ -94,3 +94,4 @@ gem 'simple_token_authentication', '~> 1.0'
 gem 'rmagick'
 gem 'audio-trimmer', require: false
 gem 'mp3info', require: false
+gem 'omniauth-facebook'

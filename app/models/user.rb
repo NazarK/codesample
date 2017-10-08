@@ -25,6 +25,9 @@ class User < ActiveRecord::Base
 
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
+
+  devise :omniauthable, :omniauth_providers => [:facebook]
+
   has_many :tales, dependent: :destroy
   has_many :collaborations
   has_many :collaborators, through: :collaborations, source: :collaborator
@@ -34,4 +37,20 @@ class User < ActiveRecord::Base
   def display_name
     "#{self.email}"
   end
+
+  def self.from_omniauth(auth)
+    user = User.find_by_email(auth.info.email)
+    if user.blank?
+      user = User.new
+      user.email = auth.info.email
+      user.password = Devise.friendly_token[0,20]
+#      user.first_name = auth.info&.first_name || auth.info.name.split(' ')[0]   # assuming the user model has a name
+#      user.last_name = auth.info&.last_name || (auth.info.name.split(' ').last if auth.info.name.split(' ').count>1)
+#      user.avatar = open(auth.info.image, allow_redirections: :all)
+      user.skip_confirmation!
+      user.save
+    end
+    user
+  end
+
 end
