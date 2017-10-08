@@ -26,6 +26,16 @@ i.sort-handle:hover {
     color: #000 !important;
 }
 
+.btn-white-on-black {
+  color: white;
+  font-size: 25px;
+  background: black;
+  padding: 10px 40px;
+  &:hover, &:active, &:focus {
+    color: white;
+    text-decoration: none;
+  }
+}
 
 body.users_registrations, body.users_sessions {
   .wrapper {
@@ -39,7 +49,7 @@ body.users_registrations, body.users_sessions {
 }
 
 
-body.users_sessions.new, body.users_registrations {
+body.users_sessions.new, body.users_registrations, body.home.index {
   background-image: image-url('bg') !important;
   background-repeat: no-repeat;
   background-attachment: fixed;
