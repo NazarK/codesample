@@ -47,7 +47,7 @@ class User < ActiveRecord::Base
 #      user.first_name = auth.info&.first_name || auth.info.name.split(' ')[0]   # assuming the user model has a name
 #      user.last_name = auth.info&.last_name || (auth.info.name.split(' ').last if auth.info.name.split(' ').count>1)
 #      user.avatar = open(auth.info.image, allow_redirections: :all)
-      user.skip_confirmation!
+#      user.skip_confirmation!
       user.save
     end
     user
