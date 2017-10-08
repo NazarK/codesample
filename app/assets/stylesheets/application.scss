@@ -26,6 +26,11 @@ i.sort-handle:hover {
     color: #000 !important;
 }
 
+body.home.index {
+  .wrap {
+    width: 100%!important;
+  }
+}
 .btn-white-on-black {
   color: white;
   font-size: 25px;
