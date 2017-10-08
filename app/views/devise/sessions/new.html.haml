@@ -1,0 +1,29 @@
+.wrapper
+  .pull-right{style:"font-size:30px;color:#222;"}
+    yarntale.
+  %span{style:"border-bottom: 1px solid white;font-size:40px;padding-bottom:5px;"} Login
+  .margin-top Login and share something dangit!
+  .margin-top
+    Not a member?
+    = link_to "Join here", new_registration_path(resource_name)
+
+  .margin-top
+    %a.facebook-login{href: omniauth_authorize_path(resource_name, :facebook)}
+
+  .margin-top
+    or login with your email
+
+  .margin-top
+    = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
+
+      .form-inputs{style:"max-width:300px"}
+        = f.input :email, required: false, autofocus: true
+        = f.input :password, required: false
+        = f.input :remember_me, :as => :hidden, :value => true if devise_mapping.rememberable?
+      .margin-top
+        = f.button :submit, "Login", class:"pull-left"
+        %div.pull-left{style:"margin-left:20px;margin-top:10px;"}
+          Forgot your password? Whoops! We all do.
+          = link_to "Recover it here.", new_password_path(resource_name)
+      %div{style:"clear:both"}
+

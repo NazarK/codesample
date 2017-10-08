@@ -29,11 +29,41 @@ i.sort-handle:hover {
 
 body.users_registrations, body.users_sessions {
   .wrapper {
-   width: 320px;
-   margin: 0 auto;
+    width: 700px;
+    margin: 0 auto;
+    background-color: rgba(0,0,0,0.9);
+    padding: 50px 60px;
+    color: white;
+    margin-top: 100px;
   }
 }
 
+
+body.users_sessions.new, body.users_registrations {
+  background-image: image-url('bg') !important;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+  form .btn {
+    color: white;
+    background: #921828;
+    border: none;
+    border-radius: 0;
+    padding: 10px 40px;
+  }
+  .wrapper a {
+    color: #59bbd7;
+  }
+  .facebook-login {
+    background: image-url('fblogin');
+    height: 45px;
+    width: 200px;
+    display: inline-block;
+  }
+  .margin-top {
+    margin-top: 30px;
+  }
+}
 
 body.desktop {
   &.tales.index, &.tales.edit, &.tales.new, &.collaborations  {
@@ -160,3 +190,5 @@ li.dropdown  {
   width: 500px;
   overflow: hidden;
 }
+
+
